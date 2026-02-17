@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل متابعة مشروع مسار - النسخة النهائية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        // --- إعدادات الحفظ والاختصارات ---
+        document.addEventListener('keydown', function(e) {
+            // تفعيل Ctrl + S
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveFile();
+            }
+        });
+
+        function saveFile() {
+            // إغلاق أي قوائم مفتوحة قبل الحفظ
+            closeAllPopups();
+            
+            // استنساخ محتوى الصفحة
+            const htmlContent = document.documentElement.outerHTML;
+            
+            // إنشاء ملف للتحميل
+            const blob = new Blob([htmlContent], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            // اسم الملف مع التاريخ والوقت
+            const date = new Date();
+            const fileName = `تقرير_مسار_محدث_${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}.html`;
+            
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            
+            // تنظيف
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // رسالة تأكيد صغيرة (اختياري)
+            alert('تم حفظ التعديلات بنجاح! \nتم تنزيل الملف المحدث في مجلد التنزيلات.');
+        }
+
+        // --- إعدادات الوسوم والألوان ---
+        let availableTags = [
+            { text: "Colliers", color: "bg-blue-100 text-blue-800" },
+            { text: "لجنة مسار", color: "bg-purple-100 text-purple-800" },
+            { text: "الفريق الداخلي", color: "bg-green-100 text-green-800" },
+            { text: "لجنة الاستثمار", color: "bg-emerald-100 text-emerald-800" },
+            { text: "المستشار القانوني", color: "bg-red-100 text-red-800" },
+            { text: "المشغلين", color: "bg-orange-100 text-orange-800" },
+            { text: "JLL", color: "bg-indigo-100 text-indigo-800" },
+            { text: "Wisefields", color: "bg-rose-100 text-rose-800" },
+            { text: "مجلس الإدارة", color: "bg-yellow-100 text-yellow-800" },
+            { text: "استشاري التصميم", color: "bg-gray-100 text-gray-800" }
+        ];
+
+        const tagColors = [
+            { name: "Blue", class: "bg-blue-100 text-blue-800", hex: "#dbeafe" },
+            { name: "Purple", class: "bg-purple-100 text-purple-800", hex: "#f3e8ff" },
+            { name: "Green", class: "bg-green-100 text-green-800", hex: "#dcfce7" },
+            { name: "Red", class: "bg-red-100 text-red-800", hex: "#fee2e2" },
+            { name: "Orange", class: "bg-orange-100 text-orange-800", hex: "#ffedd5" },
+            { name: "Yellow", class: "bg-yellow-100 text-yellow-800", hex: "#fef9c3" },
+            { name: "Gray", class: "bg-gray-100 text-gray-800", hex: "#f3f4f6" },
+            { name: "Gold", class: "bg-[#FEFCE8] text-[#854D0E]", hex: "#FEFCE8" }
+        ];
+
+        // --- دوال الجدول الأساسية ---
+        function deleteRow(btn) {
+            if(confirm('هل أنت متأكد من حذف هذا البند؟')) {
+                var row = btn.closest('tr');
+                row.parentNode.removeChild(row);
+                renumberTables();
+            }
+        }
+
+        function addRow(tableId) {
+            var table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow(table.rows.length);
+            fillNewRow(newRow);
+            renumberTables();
+        }
+
+        function addRowBefore(btn) {
+            var currentRow = btn.closest('tr');
+            var tableBody = currentRow.parentNode;
+            var newRow = tableBody.insertRow(currentRow.rowIndex - 1);
+            fillNewRow(newRow);
+            renumberTables();
+        }
+
+        function fillNewRow(row) {
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+
+            cell1.className = "relative";
+            cell1.innerHTML = `
+                <span class="row-index">#</span>
+                <div class="action-btn-group">
+                    <div class="row-btn insert-btn" onclick="addRowBefore(this)" title="إضافة سطر قبل"><i class="fa-solid fa-plus"></i></div>
+                    <div class="row-btn delete-btn" onclick="deleteRow(this)" title="حذف السطر"><i class="fa-solid fa-xmark"></i></div>
+                </div>`;
+            
+            cell2.onclick = function() { openTagSelector(this); };
+            cell2.className = "cursor-pointer";
+            cell2.innerHTML = '<span class="tag bg-gray-100 text-gray-800">اختر جهة</span>';
+            
+            cell3.innerHTML = 'وصف البند الجديد...';
+            cell3.contentEditable = "true";
+            
+            cell4.onclick = function() { openDatePicker(this); };
+            cell4.className = "cursor-pointer text-center";
+            cell4.dir = "ltr";
+            cell4.innerHTML = '--/--/----';
+        }
+
+        function renumberTables() {
+            var counter = 1;
+            var tables = ['table-1', 'table-2', 'table-3'];
+            tables.forEach(function(tableId) {
+                var table = document.getElementById(tableId);
+                if (!table) return;
+                var rows = table.getElementsByTagName('tbody')[0].rows;
+                for (var i = 0; i < rows.length; i++) {
+                    if (rows[i].classList.contains('stream-header')) continue;
+                    var indexSpan = rows[i].querySelector('.row-index');
+                    if (indexSpan) { indexSpan.innerText = counter; counter++; }
+                }
+            });
+        }
+
+        // --- منطق القوائم (Tags & Date) ---
+        let currentTagCell = null;
+        function openTagSelector(cell) {
+            currentTagCell = cell;
+            closeAllPopups();
+            const rect = cell.getBoundingClientRect();
+            const menu = document.createElement('div');
+            menu.className = 'tag-selector-menu no-print';
+            menu.style.top = (window.scrollY + rect.bottom + 5) + 'px';
+            menu.style.left = (window.scrollX + rect.left) + 'px';
+            menu.style.minWidth = rect.width + 'px';
+
+            let html = '<div class="p-2"><div class="text-xs font-bold text-gray-500 mb-2">اختر وسماً أو أضف جديداً:</div>';
+            html += '<div class="flex flex-wrap gap-1 mb-3 max-h-32 overflow-y-auto">';
+            availableTags.forEach(tag => {
+                html += `<span class="tag cursor-pointer hover:opacity-80 ${tag.color}" onclick="selectTag('${tag.text}', '${tag.color}')">${tag.text}</span>`;
+            });
+            html += '</div><div class="border-t pt-2">';
+            html += '<input type="text" id="newTagInput" placeholder="اسم الجهة..." class="w-full text-xs p-1 border rounded mb-2">';
+            html += '<div class="flex gap-1 mb-2">';
+            tagColors.forEach((c, idx) => {
+                html += `<div onclick="selectColor(this, '${c.class}')" class="color-swatch ${idx===0?'selected':''}" style="background-color:${c.hex}" data-class="${c.class}"></div>`;
+            });
+            html += '</div><button onclick="addNewTag()" class="w-full bg-[#D4AF37] text-white text-xs py-1 rounded hover:bg-[#b5952f]">إضافة واعتماد</button></div></div>';
+            menu.innerHTML = html;
+            document.body.appendChild(menu);
+            setTimeout(() => { document.addEventListener('click', closeTagSelectorOnOutside); }, 0);
+        }
+
+        let selectedColorClass = tagColors[0].class;
+        function selectColor(el, colorClass) {
+            document.querySelectorAll('.color-swatch').forEach(d => d.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedColorClass = colorClass;
+        }
+        function addNewTag() {
+            const input = document.getElementById('newTagInput');
+            const text = input.value.trim();
+            if(text) {
+                availableTags.push({ text: text, color: selectedColorClass });
+                selectTag(text, selectedColorClass);
+            }
+        }
+        function selectTag(text, colorClass) {
+            if(currentTagCell) currentTagCell.innerHTML = `<span class="tag ${colorClass}">${text}</span>`;
+            closeAllPopups();
+        }
+        function closeTagSelectorOnOutside(e) {
+            if (!e.target.closest('.tag-selector-menu')) closeAllPopups();
+        }
+
+        let currentDateCell = null;
+        let pickerDate = new Date();
+        function openDatePicker(cell) {
+            currentDateCell = cell;
+            closeAllPopups();
+            const currentText = cell.innerText.trim();
+            if (currentText && currentText.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) {
+                const parts = currentText.split('/');
+                pickerDate = new Date(parts[2], parts[1] - 1, parts[0]);
+            } else { pickerDate = new Date(); }
+
+            const rect = cell.getBoundingClientRect();
+            const calendar = document.createElement('div');
+            calendar.className = 'custom-datepicker no-print';
+            calendar.id = 'datePickerPopup';
+            calendar.style.top = (window.scrollY + rect.bottom + 5) + 'px';
+            calendar.style.left = (window.scrollX + rect.left) + 'px';
+            document.body.appendChild(calendar);
+            renderCalendar();
+            setTimeout(() => { document.addEventListener('click', closeDatePickerOnOutside); }, 0);
+        }
+
+        function renderCalendar() {
+            const container = document.getElementById('datePickerPopup');
+            if(!container) return;
+            const year = pickerDate.getFullYear();
+            const month = pickerDate.getMonth();
+            const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+            let html = `<div class="calendar-header"><span class="nav-btn" onclick="changeMonth(-1)">&#10094;</span><span class="font-bold">${monthNames[month]} ${year}</span><span class="nav-btn" onclick="changeMonth(1)">&#10095;</span></div><div class="calendar-grid"><div class="day-name">أحد</div><div class="day-name">إثنين</div><div class="day-name">ثلاثاء</div><div class="day-name">أربعاء</div><div class="day-name">خميس</div><div class="day-name">جمعة</div><div class="day-name">سبت</div>`;
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            for(let i=0; i<firstDay; i++) html += `<div></div>`;
+            for(let d=1; d<=daysInMonth; d++) {
+                const isSelected = (d === pickerDate.getDate());
+                let classes = "day-cell";
+                if(isSelected) classes += " selected";
+                html += `<div class="${classes}" onclick="selectDate(${d})">${d}</div>`;
+            }
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+        function changeMonth(delta) { pickerDate.setMonth(pickerDate.getMonth() + delta); renderCalendar(); }
+        function selectDate(day) {
+            pickerDate.setDate(day);
+            const d = String(pickerDate.getDate()).padStart(2, '0');
+            const m = String(pickerDate.getMonth() + 1).padStart(2, '0');
+            const y = pickerDate.getFullYear();
+            if(currentDateCell) currentDateCell.innerText = `${d}/${m}/${y}`;
+            closeAllPopups();
+        }
+        function closeDatePickerOnOutside(e) {
+            if (!e.target.closest('.custom-datepicker') && !e.target.closest('.calendar-header')) closeAllPopups();
+        }
+        function closeAllPopups() {
+            document.querySelectorAll('.tag-selector-menu').forEach(e => e.remove());
+            document.querySelectorAll('.custom-datepicker').forEach(e => e.remove());
+            document.removeEventListener('click', closeTagSelectorOnOutside);
+            document.removeEventListener('click', closeDatePickerOnOutside);
+        }
+    </script>
+
+    <style>
+        :root { --gold-light: #F9E79F; --gold-main: #D4AF37; --gold-dark: #8D6E23; --bg-dark: #333; --text-main: #1F2937; }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-dark); display: flex; flex-direction: column; align-items: center; padding: 20px; gap: 20px; margin: 0; color: var(--text-main); }
+        .page { width: 210mm; min-height: 297mm; background-color: #FFFFFF; position: relative; padding: 10mm 12mm 15mm 12mm; box-sizing: border-box; display: flex; flex-direction: column; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); overflow: hidden; }
+        header { border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 6px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: flex-end; }
+        footer { position: absolute; bottom: 10mm; left: 12mm; right: 12mm; height: 8mm; border-top: 1px solid #eee; padding-top: 5px; font-size: 0.65rem; color: #999; display: flex; justify-content: space-between; align-items: center; background-color: white; z-index: 50; }
+        h1 { font-size: 1.4rem; font-weight: 800; color: #111; line-height: 1.2; }
+        h2 { font-size: 0.85rem; color: var(--gold-main); font-weight: 700; margin-top: 2px; }
+        
+        /* Dashboard */
+        .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; flex-shrink: 0; }
+        .col-stack { display: flex; flex-direction: column; gap: 6px; }
+        .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .section-header { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; padding-bottom: 2px; border-bottom: 1px solid #f3f4f6; }
+        .section-num { background: var(--gold-main); color: white; font-weight: 800; font-size: 0.75rem; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+        .section-title { font-size: 0.8rem; font-weight: 800; color: #2d3748; }
+        .txt-content { font-size: 0.65rem; color: #4a5568; line-height: 1.4; }
+        .txt-gold { color: var(--gold-dark); font-weight: 700; display: block; margin-bottom: 2px; }
+        .highlight-box { background-color: #FEFCE8; border: 1px solid #FEF08A; padding: 3px; border-radius: 4px; margin-top: 3px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 3px; }
+        .info-box { background: #FAFAFA; border: 1px solid #f0f0f0; border-radius: 4px; padding: 3px; text-align: center; }
+        .info-val { font-size: 0.7rem; font-weight: 800; color: #1F2937; display: block; }
+        .info-lbl { font-size: 0.55rem; color: #6B7280; }
+        .status-bar { background: #FEFCE8; border: 1px dashed #EAB308; border-radius: 4px; padding: 2px; text-align: center; color: #854D0E; font-weight: 700; font-size: 0.65rem; }
+        .stakeholder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+        .stk-item { background: white; border: 1px solid #E5E7EB; border-radius: 4px; padding: 2px 5px; font-size: 0.6rem; font-weight: 700; display: flex; align-items: center; gap: 4px; justify-content: center; color: #374151; }
+        .stk-item.wide { grid-column: span 2; }
+        .dot { width: 5px; height: 5px; border-radius: 50%; }
+        .achievements-list { display: flex; flex-direction: column; gap: 2px; }
+        .ach-item { display: flex; align-items: center; gap: 4px; font-size: 0.65rem; color: #4B5563; }
+        .check-icon { color: #10B981; font-weight: bold; }
+        .sync-icon { color: #3B82F6; font-weight: bold; }
+
+        /* Table */
+        .matrix-container { background: transparent; flex-grow: 1; display: flex; flex-direction: column; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 3px; }
+        thead tr { background: var(--gold-main); height: 24px; }
+        thead th { color: white !important; font-weight: 800; font-size: 0.7rem; padding: 0 6px; text-align: center; }
+        th:nth-child(2) { text-align: right; padding-right: 12px; }
+        th:nth-child(3) { text-align: right; padding-right: 12px; }
+        tbody tr { background: white; transition: background 0.2s; }
+        tbody tr:hover { background-color: #f9fafb; }
+        td { border-bottom: 1px solid #f1f5f9; padding: 2px 8px; vertical-align: middle; font-size: 0.65rem; height: 20px; position: relative; }
+        td:nth-child(1) { width: 6%; font-weight: 800; color: var(--gold-dark); background: #fafafa; border-left: 1px solid #f1f5f9; text-align: center; overflow: visible; }
+        tr.stream-header td { background-color: #fcfbf7; border-bottom: 1px solid #D4AF37; color: var(--gold-dark); font-weight: 800; padding-top: 4px; padding-bottom: 4px; }
+        td:nth-child(2) { width: 18%; text-align: right; }
+        td:nth-child(3) { width: 60%; text-align: right; color: #2d3748; line-height: 1.3; }
+        td:nth-child(4) { width: 16%; text-align: center; color: #4a5568; font-family: 'Arial', sans-serif !important; direction: ltr; }
+        .tag { font-size: 0.55rem; padding: 1px 5px; border-radius: 4px; font-weight: 700; display: inline-block; white-space: nowrap; }
+
+        /* Save Button Style */
+        .save-page-btn {
+            position: absolute;
+            top: 25px; /* Aligned with header content */
+            left: 20px;
+            background-color: transparent;
+            color: #D4AF37;
+            border: 1px solid #D4AF37;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .save-page-btn:hover { background-color: #D4AF37; color: white; }
+
+        /* UI Controls */
+        .tag-selector-menu { position: absolute; background: white; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); border-radius: 6px; z-index: 1000; min-width: 200px; padding: 5px; animation: fadeIn 0.2s ease-out; }
+        .color-swatch { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 1px solid #ddd; transition: transform 0.1s; }
+        .color-swatch:hover { transform: scale(1.2); }
+        .color-swatch.selected { border: 2px solid #333; transform: scale(1.1); }
+        
+        .custom-datepicker { position: absolute; background: white; border: 1px solid #D4AF37; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 1000; width: 240px; overflow: hidden; font-family: 'Tajawal', sans-serif; animation: fadeIn 0.2s ease-out; }
+        .calendar-header { background-color: var(--gold-main); color: white; padding: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+        .nav-btn { cursor: pointer; padding: 0 5px; font-weight: bold; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 5px; gap: 2px; }
+        .day-name { font-size: 0.6rem; text-align: center; color: #8D6E23; font-weight: bold; padding-bottom: 4px; }
+        .day-cell { text-align: center; padding: 4px; font-size: 0.7rem; cursor: pointer; border-radius: 4px; color: #374151; }
+        .day-cell:hover { background-color: #FEFCE8; color: #D4AF37; }
+        .day-cell.selected { background-color: var(--gold-main); color: white; font-weight: bold; }
+
+        .action-btn-group { position: absolute; left: -32px; top: 50%; transform: translateY(-50%); display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s, left 0.2s; z-index: 100; }
+        tbody tr:hover .action-btn-group { opacity: 1; left: 2px; }
+        .row-btn { width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 9px; }
+        .delete-btn { color: #b91c1c; background: #fee2e2; border: 1px solid #fca5a5; }
+        .insert-btn { color: #15803d; background: #dcfce7; border: 1px solid #86efac; }
+        .add-row-btn { width: 100%; padding: 8px; margin-top: 5px; background-color: #f0fdf4; border: 1px dashed #22c55e; color: #15803d; font-size: 0.7rem; font-weight: bold; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .add-row-btn:hover { background-color: #dcfce7; }
+        
+        .edit-instructions { position: fixed; top: 20px; left: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 250px; z-index: 1000; border-right: 4px solid #D4AF37; font-size: 0.8rem; }
+        .edit-instructions h3 { font-weight: bold; color: #D4AF37; margin-bottom: 5px; }
+        .edit-instructions ul { list-style: disc; padding-right: 15px; color: #4b5563; }
+        .close-inst { float: left; cursor: pointer; color: #9ca3af; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        [contenteditable]:hover { background-color: #fffbeb; cursor: text; outline: 1px dashed #d1d5db; }
+        [contenteditable]:focus { background-color: #fff; outline: 2px solid #D4AF37; border-radius: 2px; z-index: 10; }
+
+        @media print {
+            @page { size: A4; margin: 0; }
+            body { background: white; padding: 0; gap: 0; display: block; }
+            .page { page-break-after: always; margin: 0; border: none; shadow: none; width: 210mm; height: 297mm; }
+            .page:last-child { page-break-after: auto; }
+            .add-row-btn, .action-btn-group, .edit-instructions, .no-print, .tag-selector-menu, .custom-datepicker, .save-page-btn { display: none !important; }
+            [contenteditable]:hover, [contenteditable]:focus { background-color: transparent; outline: none; cursor: default; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="edit-instructions no-print">
+    <span class="close-inst" onclick="this.parentElement.style.display='none'">&times;</span>
+    <h3>تعليمات الحفظ والتعديل</h3>
+    <ul>
+        <li><strong>الحفظ:</strong> استخدم <code>Ctrl + S</code> أو اضغط زر "حفظ" أعلى كل صفحة لتنزيل الملف المحدث.</li>
+        <li><strong>التعديل:</strong> اضغط على أي نص.</li>
+        <li><strong>الأدوات:</strong> تظهر عند تمرير الماوس فوق الأسطر.</li>
+        <li>يختفي كل هذا عند الطباعة/PDF.</li>
+    </ul>
+</div>
+
+<!-- ================= PAGE 1 ================= -->
+<div class="page">
+    <header>
+        <div>
+            <h1>سجل متابعة مشروع مسار</h1>
+            <h2>ملخص المشروع والدراسات الأولية (HBU)</h2>
+        </div>
+        <div class="text-left flex flex-col items-end">
+            <img src="Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/180x50/white/DAA520?text=ALRAJHI+Invest'" class="h-10 object-contain mb-1">
+            <div class="flex gap-1">
+                <span class="text-[0.65rem] bg-[#F2D06B] px-3 py-0.5 rounded-full text-white font-bold" contenteditable="true">2025 - 2026</span>
+            </div>
+        </div>
+        <!-- Save Button -->
+        <button onclick="saveFile()" class="save-page-btn no-print">
+            <i class="fa-solid fa-floppy-disk"></i> حفظ
+        </button>
+    </header>
+
+    <!-- لوحة المعلومات -->
+    <div class="top-grid">
+        <div class="col-stack">
+            <div class="card">
+                <div class="section-header">
+                    <span class="section-num">01</span>
+                    <span class="section-title">نطاق العمل</span>
+                </div>
+                <div class="txt-content" contenteditable="true">
+                    تنسيق وإدارة الدراسات الأولية واختيار الشركاء لتطوير <strong>مشروع مسار</strong>.
+                    <div class="highlight-box">
+                        <span class="txt-gold">المكونات الرئيسية:</span>
+                        دراسات أعلى وأفضل استخدام، اختيار المشغلين، المستشار القانوني، والتصاميم.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="section-header">
+                    <span class="section-num">02</span>
+                    <span class="section-title">بيانات الجدول الزمني</span>
+                </div>
+                <div class="info-grid">
+                    <div class="info-box"><span class="info-lbl">بداية التعاقد</span><span class="info-val" contenteditable="true">15 يناير 2025</span></div>
+                    <div class="info-box"><span class="info-lbl">آخر تحديث</span><span class="info-val" contenteditable="true">يناير 2026</span></div>
+                </div>
+                <div class="status-bar" contenteditable="true">حالة المشروع: قيد التنفيذ - مراحل متقدمة</div>
+            </div>
+        </div>
+
+        <div class="col-stack">
+            <div class="card">
+                <div class="section-header">
+                    <span class="section-num">03</span>
+                    <span class="section-title">أطراف المشروع</span>
+                </div>
+                <div class="stakeholder-grid" contenteditable="true">
+                    <div class="stk-item"><span class="dot bg-blue-500"></span>Colliers</div>
+                    <div class="stk-item"><span class="dot bg-purple-500"></span>لجنة مسار</div>
+                    <div class="stk-item"><span class="dot bg-green-500"></span>لجنة الاستثمار</div>
+                    <div class="stk-item"><span class="dot bg-red-500"></span>المستشار القانوني</div>
+                    <div class="stk-item wide"><span class="dot bg-orange-500"></span>المشغلين (Operators)</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="section-header">
+                    <span class="section-num">04</span>
+                    <span class="section-title">أبرز الإنجازات</span>
+                </div>
+                <div class="achievements-list" contenteditable="true">
+                    <div class="ach-item"><span class="check-icon">✓</span> اعتماد خيار التطوير الثالث.</div>
+                    <div class="ach-item"><span class="check-icon">✓</span> تحليل عروض المشغلين الأولية.</div>
+                    <div class="ach-item"><span class="sync-icon">⟳</span> التفاوض مع القائمة المختصرة.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="matrix-container">
+        <table id="table-1">
+            <thead><tr><th>م</th><th>الجهة</th><th>الحدث</th><th>التاريخ</th></tr></thead>
+            <tbody>
+                <tr class="stream-header"><td colspan="4" contenteditable="true">أولاً: دراسة السوق وأعلى وأفضل استخدام (Colliers)</td></tr>
+                <tr><td class="relative"><span class="row-index">1</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">التعاقد لإعداد دراسة HBU</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">15/01/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">2</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">تسليم Interim report (Site/Market assessment)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">06/02/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">3</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">مراجعة التقرير الأولي وإرسال الملاحظات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">11/02/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">4</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-purple-100 text-purple-800">لجنة مسار</span></td><td contenteditable="true">عقد اجتماع اللجنة مع كوليرز</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">20/02/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">5</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">تسليم Interim report بعد التعديلات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">24/02/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">6</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال المستندات إلى اللجنة للمراجعة والاعتماد</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">25/02/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">7</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-purple-100 text-purple-800">لجنة مسار</span></td><td contenteditable="true">عقد اجتماع لمناقشة Initial Recommendations</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">06/03/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">8</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">طلب ملخص تنفيذي لخيارات التطوير المبدئية</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">13/03/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">9</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">استلام الملخص التنفيذي لخيارات التطوير</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">16/03/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">10</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">مراجعة الملخص التنفيذي وإضافة الملاحظات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">17/03/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">11</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">استلام الملخص بعد الملاحظات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">18/03/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">12</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-purple-100 text-purple-800">لجنة مسار</span></td><td contenteditable="true">عقد الاجتماع (1) مع لجنة الدعم لمناقشة الخيارات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">18/03/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">13</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">استلام مستندات خيارات التطوير (10 خيارات)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">03/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">14</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">مراجعة الخيارات والدراسات المالية وإرسال الملاحظات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">06/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">15</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">استلام 10 خيارات بعد التعديل والاضافة</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">08/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">16</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-purple-100 text-purple-800">لجنة مسار</span></td><td contenteditable="true">عقد الاجتماع (2) مع لجنة الدعم لمناقشة الافتراضات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">09/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">17</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال بيانات العقارات المجاورة وأسعار البيع لكوليرز</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">14/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">18</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">عقد اجتماع لمناقشة وتوضيح التعديلات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">15/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">19</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">استلام خيارات التطوير بعد تغيير الأوزان (6 خيارات)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">16/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">20</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إعداد 3 خيارات تطوير ودراسات مالية داخلياً</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">19/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">21</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">استلام البرنامج المساحي والوظيفي المفصل لـ 3 خيارات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">22/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">22</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">عمل مواءمة بين الخيارات وإدارة المخاطر</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">23/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">23</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال الخيارات لشركة أم القرى مع الاستفسارات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">23/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">24</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال الخيارات لكوليرز</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">27/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">25</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">عقد اجتماع ثلاثي (كوليرز + أم القرى + الاتحاد)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">29/04/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">26</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">استلام الخيار الأول النهائي (بعد استبعاد السكني)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">01/05/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">27</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال الملاحظات على الخيار الأول</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">05/05/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">28</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">عقد اجتماع لمناقشة وتوضيح التعديلات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">07/05/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">29</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">استلام 3 خيارات تطوير نهائية (بدون سكني)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">16/05/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">30</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال الخيارات للجنة مع التوصية بالخيار الثالث</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">20/05/2025</td></tr>
+            </tbody>
+        </table>
+        <button class="add-row-btn" onclick="addRow('table-1')">
+            <i class="fa-solid fa-plus"></i> إضافة بند جديد في النهاية
+        </button>
+    </div>
+    <footer>
+        <div>شركة اتحاد الراجحي</div>
+        <div>صفحة 1 من 3</div>
+        <div>مشروع مسار</div>
+    </footer>
+</div>
+
+<!-- ================= PAGE 2 ================= -->
+<div class="page">
+    <header><h1>تابع: سجل المتابعة</h1><img src="Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/100x30/white/DAA520?text=ALRAJHI'" class="h-6">
+        <button onclick="saveFile()" class="save-page-btn no-print"><i class="fa-solid fa-floppy-disk"></i> حفظ</button>
+    </header>
+    <div class="matrix-container">
+        <table id="table-2">
+            <thead><tr><th>م</th><th>الجهة</th><th>الحدث</th><th>التاريخ</th></tr></thead>
+            <tbody>
+                <tr><td class="relative"><span class="row-index">31</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">استلام الخيارات بعد إضافة ملاحظات اللجنة</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">25/05/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">32</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-purple-100 text-purple-800">لجنة مسار</span></td><td contenteditable="true">طلب خيار مشتق من الثالث (3A)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">25/05/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">33</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">استلام الخيار المشتق (3A)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">25/05/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">34</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-purple-100 text-purple-800">لجنة مسار</span></td><td contenteditable="true">عقد الاجتماع (3) مع لجنة الدعم (المضي بـ 3A)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">28/05/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">35</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-purple-100 text-purple-800">لجنة مسار</span></td><td contenteditable="true">صدور موافقة اللجنة على (3A) مع تحاليل الحساسية</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">01/06/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">36</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">استلام مسودة الدراسة النهائية متضمنة (3A)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">04/06/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">37</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-emerald-100 text-emerald-800">لجنة الاستثمار</span></td><td contenteditable="true">عقد الاجتماع (4) مع لجنة الاستثمار (مراجعة النموذج)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">23/06/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">38</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-blue-100 text-blue-800">Colliers</span></td><td contenteditable="true">استلام الدراسة النهائية بعد التعديلات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">26/06/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">39</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال المسودة والإجابات لأعضاء اللجنة</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">27/06/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">40</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-purple-100 text-purple-800">لجنة مسار</span></td><td contenteditable="true">استلام رد الأعضاء بعدم وجود ملاحظات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">28/06/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">41</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-yellow-100 text-yellow-800">مجلس الإدارة</span></td><td contenteditable="true">اعتماد تطوير الخيار الثالث المحدث</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">14/08/2025</td></tr>
+                
+                <tr class="stream-header"><td colspan="4" contenteditable="true">ثانياً: استشاري اختيار المشغل (JLL)</td></tr>
+                
+                <tr><td class="relative"><span class="row-index">44</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">رفع توصية بتعيين استشاري اختيار المشغل</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">15/07/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">45</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-purple-100 text-purple-800">لجنة مسار</span></td><td contenteditable="true">موافقة اللجنة على التعاقد مع JLL</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">10/08/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">46</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال Compliance checklist</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">11/08/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">47</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام Compliance checklist</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">14/08/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">48</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال العقد والـ NDA للتوقيع</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">17/08/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">49</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">توقيع العقد والـ NDA</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">02/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">50</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال مستندات HBU للمراجعة والتحقق</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">03/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">51</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام قائمة المشغلين المرشحين والعلامات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">10/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">52</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">مراجعة القائمة وطلب إضافة مشغلين</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">11/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">53</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام القائمة المعدلة للمشغلين</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">16/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">54</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام الـ Teaser للمشغلين</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">18/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">55</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال ملاحظات على الـ Teaser</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">22/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">56</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام تقرير التحقق من دراسة السوق (Validation)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">22/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">57</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام البرنامج الوظيفي والمساحي والمالي من JLL</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">22/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">58</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام الـ Teaser النهائي</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">26/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">59</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-purple-100 text-purple-800">لجنة مسار</span></td><td contenteditable="true">عقد الاجتماع (8) مع لجنة الدعم لمناقشة التقرير</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">29/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">60</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">اعتماد برنامج كولييرز للمشغلين (JLL vs Colliers)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">01/10/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">61</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام قائمة المشغلين (مضافاً خبرات الشقق المعنونة)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">01/10/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">62</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام Scoring matrix criteria</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">06/10/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">63</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-orange-100 text-orange-800">المشغلين</span></td><td contenteditable="true">إرسال NDA لـ 12 مشغل</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">08/10/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">64</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">مراجعة وإضافة ملاحظات على Scoring matrix</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">12/10/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">65</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام Information Memorandum</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">17/10/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">66</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">مراجعة وإرسال ملاحظات الـ Information Memorandum</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">21/10/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">67</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إنشاء Data Room لبيانات المشروع</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">22/10/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">68</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام النسخة النهائية من Information Memorandum (بعد 3 جولات)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">13/11/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">69</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-orange-100 text-orange-800">المشغلين</span></td><td contenteditable="true">إرسال الـ RFP للمشغلين</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">13/11/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">70</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-orange-100 text-orange-800">المشغلين</span></td><td contenteditable="true">توقيع الـ NDA (عدد 11 مشغل)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">18/11/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">71</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-orange-100 text-orange-800">المشغلين</span></td><td contenteditable="true">إرسال البيانات لعمل Area Program & P&L</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">19/11/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">72</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">الإجابة على استفسارات المشغلين</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">20/11/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">73</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-orange-100 text-orange-800">المشغلين</span></td><td contenteditable="true">استلام التقديم الأول (الشروط التجارية الأولية)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">04/12/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">74</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">عقد ورش عمل مع المشغلين (اليوم 1)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">17/12/2025</td></tr>
+            </tbody>
+        </table>
+        <button class="add-row-btn" onclick="addRow('table-2')">
+            <i class="fa-solid fa-plus"></i> إضافة بند جديد في النهاية
+        </button>
+    </div>
+    <footer>
+        <div>شركة اتحاد الراجحي</div>
+        <div>صفحة 2 من 3</div>
+        <div>مشروع مسار</div>
+    </footer>
+</div>
+
+<!-- ================= PAGE 3 ================= -->
+<div class="page">
+    <header><h1>تابع: سجل المتابعة</h1><img src="Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/100x30/white/DAA520?text=ALRAJHI'" class="h-6">
+        <button onclick="saveFile()" class="save-page-btn no-print"><i class="fa-solid fa-floppy-disk"></i> حفظ</button>
+    </header>
+    <div class="matrix-container">
+        <table id="table-3">
+            <thead><tr><th>م</th><th>الجهة</th><th>الحدث</th><th>التاريخ</th></tr></thead>
+            <tbody>
+                <tr><td class="relative"><span class="row-index">75</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">عقد ورش عمل مع المشغلين (اليوم 2)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">18/12/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">76</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-orange-100 text-orange-800">المشغلين</span></td><td contenteditable="true">طلب استيفاء النواقص ومتطلبات إضافية</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">22/12/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">77</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">تحديث Scoring matrix بعد المتطلبات الإضافية</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">24/12/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">78</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">اعتماد Scoring matrix criteria</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">24/12/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">79</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-orange-100 text-orange-800">المشغلين</span></td><td contenteditable="true">استلام التقديم الثاني من المشغلين</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">25/12/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">80</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام تقرير تحليل العروض الأول</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">01/01/2026</td></tr>
+                <tr><td class="relative"><span class="row-index">81</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">مراجعة التقرير ومشاركة التعديلات مع الاستشاري</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">02/01/2026</td></tr>
+                <tr><td class="relative"><span class="row-index">82</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-indigo-100 text-indigo-800">JLL</span></td><td contenteditable="true">استلام تقرير التحليل بعد التعديل</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">04/01/2026</td></tr>
+                <tr><td class="relative"><span class="row-index">83</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-purple-100 text-purple-800">لجنة مسار</span></td><td contenteditable="true">عقد الاجتماع (11) مع لجنة الدعم (القائمة المختصرة)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">05/01/2026</td></tr>
+
+                <tr class="stream-header"><td colspan="4" contenteditable="true">ثالثاً: المستشار القانوني (Wisefields)</td></tr>
+                <tr><td class="relative"><span class="row-index">84</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">رفع توصية بالتعاقد مع المستشار القانوني</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">15/07/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">85</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-rose-100 text-rose-800">Wisefields</span></td><td contenteditable="true">رفع التوصية بـ Wisefields بعد تخفيض السعر</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">05/08/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">86</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال العقد والـ NDA للتوقيع</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">06/08/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">87</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-rose-100 text-rose-800">Wisefields</span></td><td contenteditable="true">توقيع العقد والـ NDA</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">21/08/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">88</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-rose-100 text-rose-800">Wisefields</span></td><td contenteditable="true">عقد اجتماع الانطلاق (Kickoff meeting)</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">24/08/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">89</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-rose-100 text-rose-800">Wisefields</span></td><td contenteditable="true">إرسال Target list of operators للمرئيات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">18/09/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">90</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-rose-100 text-rose-800">Wisefields</span></td><td contenteditable="true">إرسال Scoring matrix criteria للمرئيات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">15/10/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">91</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-rose-100 text-rose-800">Wisefields</span></td><td contenteditable="true">الرد بالملاحظات على Scoring matrix</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">26/10/2025</td></tr>
+                <tr><td class="relative"><span class="row-index">92</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">إرسال تقرير تحليل العروض الأول للمرئيات</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">01/01/2026</td></tr>
+                <tr><td class="relative"><span class="row-index">93</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-rose-100 text-rose-800">Wisefields</span></td><td contenteditable="true">الرد بالملاحظات على تقرير التحليل</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">12/01/2026</td></tr>
+
+                <tr class="stream-header"><td colspan="4" contenteditable="true">رابعاً: استشاري التصميم</td></tr>
+                <tr><td class="relative"><span class="row-index">94</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td><td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag bg-green-100 text-green-800">الفريق الداخلي</span></td><td contenteditable="true">رفع توصية بتعيين استشاري التصميم</td><td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">04/09/2025</td></tr>
+            </tbody>
+        </table>
+        <button class="add-row-btn" onclick="addRow('table-3')">
+            <i class="fa-solid fa-plus"></i> إضافة بند جديد في النهاية
+        </button>
+    </div>
+    
+    <!-- ملخص ختامي -->
+    <div class="card" style="margin-top: auto; margin-bottom: 20mm; background-color: #fafafa;">
+        <div class="section-header">
+            <span class="section-num">✓</span>
+            <span class="section-title">نهاية السجل</span>
+        </div>
+        <div class="txt-content" style="padding: 10px;" contenteditable="true">
+            تم توثيق جميع مراحل المشروع بدءاً من دراسات السوق (يناير 2025) وصولاً إلى المراحل المتقدمة في اختيار المشغل وتعيين المستشارين (يناير 2026).
+        </div>
+    </div>
+
+    <footer>
+        <div>شركة اتحاد الراجحي</div>
+        <div>صفحة 3 من 3</div>
+        <div>مشروع مسار</div>
+    </footer>
+</div>
+
+</body>
+</html>
