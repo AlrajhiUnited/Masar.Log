@@ -56,7 +56,7 @@
         td:nth-child(4) { width: 16%; text-align: center; color: #4a5568; font-family: 'Arial', sans-serif !important; direction: ltr; }
         .tag { font-size: 0.55rem; padding: 1px 5px; border-radius: 4px; font-weight: 700; display: inline-block; white-space: nowrap; }
 
-        /* Save Button (Floating Bottom Left) */
+        /* Floating Save Button */
         .save-floating-btn {
             position: fixed; bottom: 30px; left: 30px;
             background-color: #D4AF37; color: white;
@@ -74,7 +74,7 @@
         .color-swatch { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 1px solid #ddd; transition: transform 0.1s; }
         .color-swatch:hover { transform: scale(1.2); }
         .color-swatch.selected { border: 2px solid #333; transform: scale(1.1); }
-        .custom-datepicker { position: absolute; background: white; border: 1px solid #D4AF37; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 1000; width: 240px; overflow: hidden; font-family: 'Tajawal', sans-serif; animation: fadeIn 0.2s ease-out; }
+        .custom-datepicker { position: absolute; background: white; border: 1px solid #D4AF37; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 1000; width: 240px; overflow: hidden; font-family: 'Tajawal', sans-serif; animation: fadeIn 0.2s ease-out; }
         .calendar-header { background-color: var(--gold-main); color: white; padding: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
         .nav-btn { cursor: pointer; padding: 0 5px; font-weight: bold; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 5px; gap: 2px; }
@@ -90,7 +90,14 @@
         .add-row-btn { width: 100%; padding: 8px; margin-top: 5px; background-color: #f0fdf4; border: 1px dashed #22c55e; color: #15803d; font-size: 0.7rem; font-weight: bold; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .add-row-btn:hover { background-color: #dcfce7; }
         .edit-instructions { position: fixed; top: 20px; left: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 250px; z-index: 1000; border-right: 4px solid #D4AF37; font-size: 0.8rem; }
+        .edit-instructions h3 { font-weight: bold; color: #D4AF37; margin-bottom: 5px; }
+        .edit-instructions ul { list-style: disc; padding-right: 15px; color: #4b5563; }
+        .close-inst { float: left; cursor: pointer; color: #9ca3af; }
         
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        [contenteditable]:hover { background-color: #fffbeb; cursor: text; outline: 1px dashed #d1d5db; }
+        [contenteditable]:focus { background-color: #fff; outline: 2px solid #D4AF37; border-radius: 2px; z-index: 10; }
+
         @media print {
             @page { size: A4; margin: 0; }
             body { background: white; padding: 0; gap: 0; display: block; }
@@ -103,25 +110,37 @@
 </head>
 <body>
 
+<!-- Floating Save Button -->
 <button onclick="saveDataToFirebase()" class="save-floating-btn no-print" id="mainSaveBtn">
     <i class="fa-solid fa-cloud-arrow-up"></i> حفظ التعديلات
 </button>
 
+<!-- Edit Instructions Sidebar -->
 <div class="edit-instructions no-print">
     <span class="close-inst" onclick="this.parentElement.style.display='none'">&times;</span>
-    <h3>حالة الاتصال</h3>
-    <div id="connectionStatus" class="text-xs text-gray-500 mb-2">جاري الاتصال...</div>
-    <ul class="text-xs text-gray-600 list-disc pr-4">
-        <li>بمجرد ظهور البيانات الكاملة، اضغط <strong>حفظ التعديلات</strong> لرفعها لقاعدة البيانات.</li>
-        <li>سيتم تحديث البيانات تلقائياً عند فتح الصفحة مستقبلاً.</li>
+    <h3>تعليمات الاستخدام</h3>
+    <ul class="text-xs text-gray-600 list-disc pr-4 mb-2">
+        <li>اضغط على أي نص لتعديله مباشرة.</li>
+        <li>مرر الماوس فوق الأسطر لإظهار أزرار الإضافة والحذف.</li>
+        <li>استخدم زر "حفظ التعديلات" بالأسفل لتخزين البيانات سحابياً.</li>
     </ul>
+    <div class="border-t pt-2 mt-2">
+        <span class="text-xs font-bold text-gray-500">حالة الاتصال: </span>
+        <span id="connectionStatus" class="text-xs">جاري الاتصال...</span>
+    </div>
 </div>
 
 <!-- ================= PAGE 1 ================= -->
 <div class="page">
     <header>
         <div><h1>سجل متابعة مشروع مسار</h1><h2>ملخص المشروع والدراسات الأولية (HBU)</h2></div>
-        <div class="text-left flex flex-col items-end"><img src="Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/180x50/white/DAA520?text=ALRAJHI+Invest'" class="h-10 object-contain mb-1"><div class="flex gap-1"><span class="text-[0.65rem] bg-[#F2D06B] px-3 py-0.5 rounded-full text-white font-bold" contenteditable="true">2025 - 2026</span></div></div>
+        <div class="text-left flex flex-col items-end">
+            <!-- Logo Path updated to img/ subfolder -->
+            <img src="img/Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/180x50/white/DAA520?text=ALRAJHI+Invest'" class="h-10 object-contain mb-1">
+            <div class="flex gap-1">
+                <span class="text-[0.65rem] bg-[#F2D06B] px-3 py-0.5 rounded-full text-white font-bold" contenteditable="true">2025 - 2026</span>
+            </div>
+        </div>
     </header>
 
     <div class="top-grid">
@@ -147,7 +166,7 @@
 
 <!-- ================= PAGE 2 ================= -->
 <div class="page">
-    <header><h1>تابع: سجل المتابعة</h1><img src="Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/100x30/white/DAA520?text=ALRAJHI'" class="h-6"></header>
+    <header><h1>تابع: سجل المتابعة</h1><img src="img/Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/100x30/white/DAA520?text=ALRAJHI'" class="h-6"></header>
     <div class="matrix-container">
         <table id="table-2">
             <thead><tr><th>م</th><th>الجهة</th><th>الحدث</th><th>التاريخ</th></tr></thead>
@@ -160,7 +179,7 @@
 
 <!-- ================= PAGE 3 ================= -->
 <div class="page">
-    <header><h1>تابع: سجل المتابعة</h1><img src="Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/100x30/white/DAA520?text=ALRAJHI'" class="h-6"></header>
+    <header><h1>تابع: سجل المتابعة</h1><img src="img/Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/100x30/white/DAA520?text=ALRAJHI'" class="h-6"></header>
     <div class="matrix-container">
         <table id="table-3">
             <thead><tr><th>م</th><th>الجهة</th><th>الحدث</th><th>التاريخ</th></tr></thead>
@@ -178,8 +197,8 @@
 <!-- Application Logic -->
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
-    import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
-    import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+    import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
+    import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
     // *** FIREBASE CONFIG ***
     const firebaseConfig = {
@@ -195,10 +214,9 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
     const appId = 'masar-report-data'; 
-    let userId = null; // Defined variable to fix ReferenceError
+    let userId = null; 
 
-    // --- FULL INITIAL DATASET (94 Items) ---
-    // This will be used ONLY if the database is empty (new setup)
+    // Initial Data Set
     const initialData = {
         table1: [
             {type:'header', text:'أولاً: دراسة السوق وأعلى وأفضل استخدام (Colliers)'},
@@ -311,11 +329,11 @@
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            userId = user.uid;
-            document.getElementById('connectionStatus').innerHTML = '<span class="text-green-600 font-bold">✓ متصل (قاعدة بيانات Masarlog0)</span>';
+            userId = user.uid; // Now correctly declared in top scope
+            document.getElementById('connectionStatus').innerHTML = '<span class="text-green-600 font-bold">متصل</span>';
             setupRealtimeListener();
         } else {
-            document.getElementById('connectionStatus').innerText = 'غير متصل';
+            document.getElementById('connectionStatus').innerHTML = '<span class="text-red-600 font-bold">غير متصل</span>';
         }
     });
 
@@ -326,8 +344,7 @@
                 const data = docSnap.data();
                 renderTablesFromJSON(data);
             } else {
-                console.log("No DB data found. Loading default FULL dataset...");
-                // Load the full 94 items if DB is empty
+                console.log("Empty DB. Rendering initial dataset...");
                 renderTablesFromJSON(initialData); 
             }
         }, (error) => {
