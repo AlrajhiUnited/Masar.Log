@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سجل متابعة مشروع مسار - نسخة احترافية متكاملة</title>
+    <title>سجل متابعة مشروع مسار - النسخة الاحترافية المتكاملة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,58 +17,53 @@
         .login-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; max-width: 400px; width: 90%; border-top: 5px solid var(--gold-main); }
         .login-input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #eee; border-radius: 8px; text-align: center; font-size: 1.1rem; outline: none; transition: border-color 0.3s; }
         .login-input:focus { border-color: var(--gold-main); }
-        .login-btn { background-color: var(--gold-main); color: white; padding: 12px 40px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.3s; border: none; }
+        .login-btn { background-color: var(--gold-main); color: white; padding: 12px 40px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; }
         .login-btn:hover { background-color: var(--gold-dark); }
 
-        /* App Content */
+        /* App Layout */
         #appContent { display: none; width: 100%; flex-direction: column; align-items: center; gap: 20px; }
-        .page { width: 210mm; min-height: 297mm; background-color: #FFFFFF; position: relative; padding: 10mm 12mm 15mm 12mm; box-sizing: border-box; display: flex; flex-direction: column; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); overflow: hidden; margin-bottom: 20px;}
+        .page { width: 210mm; min-height: 297mm; background-color: #FFFFFF; position: relative; padding: 10mm 12mm 15mm 12mm; box-sizing: border-box; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
         header { border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 6px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: flex-end; }
         footer { position: absolute; bottom: 10mm; left: 12mm; right: 12mm; height: 8mm; border-top: 1px solid #eee; padding-top: 5px; font-size: 0.65rem; color: #999; display: flex; justify-content: space-between; align-items: center; background-color: white; z-index: 50; }
         h1 { font-size: 1.4rem; font-weight: 800; color: #111; line-height: 1.2; }
         h2 { font-size: 0.85rem; color: var(--gold-main); font-weight: 700; margin-top: 2px; }
         
-        .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; flex-shrink: 0; }
+        /* Dashboard */
+        .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; flex-shrink: 0; }
         .col-stack { display: flex; flex-direction: column; gap: 6px; }
-        .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; position: relative; }
+        .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); position: relative; }
         .section-header { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; padding-bottom: 2px; border-bottom: 1px solid #f3f4f6; }
         .section-num { background: var(--gold-main); color: white; font-weight: 800; font-size: 0.75rem; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
         .section-title { font-size: 0.8rem; font-weight: 800; color: #2d3748; }
         .txt-content { font-size: 0.65rem; color: #4a5568; line-height: 1.4; }
         .txt-gold { color: var(--gold-dark); font-weight: 700; display: block; margin-bottom: 2px; }
-        .highlight-box { background-color: #FEFCE8; border: 1px solid #FEF08A; padding: 3px; border-radius: 4px; margin-top: 3px; }
+        .highlight-box { background-color: #FEFCE8; border: 1px solid #FEF08A; padding: 3px; border-radius: 4px; margin-top: 3px; font-size: 0.65rem; }
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 3px; }
         .info-box { background: #FAFAFA; border: 1px solid #f0f0f0; border-radius: 4px; padding: 3px; text-align: center; }
         .info-val { font-size: 0.7rem; font-weight: 800; color: #1F2937; display: block; }
         .info-lbl { font-size: 0.55rem; color: #6B7280; }
         .status-bar { background: #FEFCE8; border: 1px dashed #EAB308; border-radius: 4px; padding: 2px; text-align: center; color: #854D0E; font-weight: 700; font-size: 0.65rem; }
-        
-        /* Stakeholders UI */
-        .stakeholder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+
+        /* Interactive Items */
+        .stk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
         .stk-item { background: white; border: 1px solid #E5E7EB; border-radius: 4px; padding: 2px 5px; font-size: 0.6rem; font-weight: 700; display: flex; align-items: center; gap: 4px; justify-content: center; color: #374151; position: relative; }
-        .stk-item:hover .item-controls { opacity: 1; }
-        .stk-item.wide { grid-column: span 2; }
-        .dot { width: 5px; height: 5px; border-radius: 50%; cursor: pointer; }
-        
-        /* Achievements UI */
-        .achievements-list { display: flex; flex-direction: column; gap: 2px; }
         .ach-item { display: flex; align-items: center; gap: 4px; font-size: 0.65rem; color: #4B5563; position: relative; padding: 2px 0; }
-        .ach-item:hover .item-controls { opacity: 1; }
-        .status-icon { cursor: pointer; width: 14px; text-align: center; }
-        
-        /* Dashboard Controls */
+        .dot { width: 6px; height: 6px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
+        .status-icon { cursor: pointer; width: 14px; text-align: center; flex-shrink: 0; font-size: 0.7rem; }
         .item-controls { position: absolute; left: 2px; top: 50%; transform: translateY(-50%); display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s; }
+        .stk-item:hover .item-controls, .ach-item:hover .item-controls { opacity: 1; }
         .btn-mini { width: 14px; height: 14px; border-radius: 3px; font-size: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .btn-del { background: #fee2e2; color: #ef4444; }
         .add-mini-btn { font-size: 0.6rem; color: var(--gold-dark); cursor: pointer; text-align: center; margin-top: 4px; border: 1px dashed #ddd; border-radius: 4px; padding: 2px; }
         .add-mini-btn:hover { background: #fafafa; border-color: var(--gold-main); }
 
-        /* Tables & General */
+        /* Tables */
         .matrix-container { background: transparent; flex-grow: 1; display: flex; flex-direction: column; }
         table { width: 100%; border-collapse: separate; border-spacing: 0 3px; }
         thead tr { background: var(--gold-main); height: 24px; }
         thead th { color: white !important; font-weight: 800; font-size: 0.7rem; padding: 0 6px; text-align: center; }
         th:nth-child(2), th:nth-child(3) { text-align: right; padding-right: 12px; }
+        
         tbody tr { background: white; transition: background 0.2s; }
         tbody tr:hover { background-color: #f9fafb; }
         td { border-bottom: 1px solid #f1f5f9; padding: 2px 8px; vertical-align: middle; font-size: 0.65rem; height: 20px; position: relative; }
@@ -79,34 +74,38 @@
         td:nth-child(4) { width: 16%; text-align: center; color: #4a5568; font-family: 'Arial', sans-serif !important; direction: ltr; }
         .tag { font-size: 0.55rem; padding: 1px 5px; border-radius: 4px; font-weight: 700; display: inline-block; white-space: nowrap; }
 
-        .save-floating-btn { position: fixed; bottom: 30px; left: 30px; background-color: #D4AF37; color: white; padding: 10px 20px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); z-index: 2000; border: 2px solid white; display: flex; align-items: center; gap: 8px; transition: all 0.3s; }
-        .save-floating-btn:hover { background-color: #b5952f; transform: translateY(-3px); }
-
+        /* Popups */
         .tag-selector-menu, .custom-datepicker { position: absolute; background: white; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px; z-index: 3000; min-width: 200px; padding: 5px; animation: fadeIn 0.2s; }
-        .custom-datepicker { width: 240px; border-color: var(--gold-main); }
-        .calendar-header { background: var(--gold-main); color: white; padding: 8px; display: flex; justify-content: space-between; font-size: 0.8rem; }
+        .calendar-header { background-color: var(--gold-main); color: white; padding: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; border-radius: 4px 4px 0 0; }
+        .nav-btn { cursor: pointer; padding: 0 5px; font-weight: bold; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 5px; gap: 2px; }
-        .day-cell { text-align: center; padding: 4px; font-size: 0.7rem; cursor: pointer; border-radius: 4px; }
-        .day-cell:hover { background: #FEFCE8; }
+        .day-cell { text-align: center; padding: 4px; font-size: 0.7rem; cursor: pointer; border-radius: 4px; color: #374151; }
+        .day-cell:hover { background-color: #FEFCE8; color: #D4AF37; }
 
-        .action-btn-group { position: absolute; left: -32px; top: 50%; transform: translateY(-50%); display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s; }
+        /* Floating Save Button */
+        .save-floating-btn { position: fixed; bottom: 30px; left: 30px; background-color: #D4AF37; color: white; padding: 10px 25px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); z-index: 4000; border: 2px solid white; display: flex; align-items: center; gap: 8px; transition: all 0.3s; }
+        .save-floating-btn:hover { background-color: #b5952f; transform: translateY(-3px); transform: scale(1.05); }
+
+        .action-btn-group { position: absolute; left: -32px; top: 50%; transform: translateY(-50%); display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s; z-index: 100; }
         tbody tr:hover .action-btn-group { opacity: 1; left: 2px; }
-        .row-btn { width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 9px; }
-        .delete-btn { color: #b91c1c; background: #fee2e2; border: 1px solid #fca5a5; }
-        .insert-btn { color: #15803d; background: #dcfce7; border: 1px solid #86efac; }
+        .row-btn { width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 9px; border: 1px solid transparent; }
+        .delete-btn { color: #b91c1c; background: #fee2e2; border-color: #fca5a5; }
+        .insert-btn { color: #15803d; background: #dcfce7; border-color: #86efac; }
         .add-row-btn { width: 100%; padding: 8px; margin-top: 5px; background-color: #f0fdf4; border: 1px dashed #22c55e; color: #15803d; font-size: 0.7rem; font-weight: bold; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
 
         .edit-instructions { position: fixed; top: 20px; left: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 250px; z-index: 1000; border-right: 4px solid #D4AF37; font-size: 0.8rem; }
+        .edit-instructions h3 { font-weight: bold; color: #D4AF37; margin-bottom: 5px; }
+        .edit-instructions ul { list-style: disc; padding-right: 15px; color: #4b5563; }
+        .close-inst { float: left; cursor: pointer; color: #9ca3af; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; } }
         [contenteditable]:hover { background-color: #fffbeb; cursor: text; outline: 1px dashed #d1d5db; }
-        [contenteditable]:focus { background-color: #fff; outline: 2px solid #D4AF37; }
 
         @media print {
-            .add-row-btn, .action-btn-group, .edit-instructions, .no-print, .tag-selector-menu, .custom-datepicker, .save-floating-btn, .item-controls, .add-mini-btn { display: none !important; }
-            [contenteditable]:hover, [contenteditable]:focus { background-color: transparent; outline: none; }
+            .no-print, .item-controls, .add-mini-btn, .save-floating-btn, .action-btn-group { display: none !important; }
             body { background: white; padding: 0; }
-            .page { box-shadow: none; border: none; margin: 0; page-break-after: always; }
+            .page { box-shadow: none; border: none; margin: 0; page-break-after: always; height: 297mm; }
+            [contenteditable]:hover, [contenteditable]:focus { background-color: transparent; outline: none; }
         }
     </style>
 </head>
@@ -115,8 +114,8 @@
 <div id="loginOverlay">
     <div class="login-card">
         <img src="img/Alrajhi Logo Presentation.png" onerror="this.style.display='none'" class="h-12 mx-auto mb-4 object-contain">
-        <h3 class="text-lg font-bold text-gray-800 mb-2">مشروع مسار</h3>
-        <p class="text-sm text-gray-500">يرجى إدخال كلمة المرور للوصول للسجل</p>
+        <h3 class="text-lg font-bold text-gray-800">مشروع مسار</h3>
+        <p class="text-sm text-gray-500 mb-4">أدخل كلمة المرور للوصول</p>
         <input type="password" id="passwordInput" class="login-input" placeholder="كلمة المرور">
         <div id="loginError" class="text-red-500 text-xs mb-3 hidden">كلمة المرور غير صحيحة</div>
         <button onclick="checkPassword()" class="login-btn">دخول</button>
@@ -124,28 +123,25 @@
 </div>
 
 <div id="appContent">
-    <button onclick="saveDataToFirebase()" class="save-floating-btn no-print" id="mainSaveBtn">
-        <i class="fa-solid fa-cloud-arrow-up"></i> حفظ التعديلات
+    <button onclick="saveAllData()" class="save-floating-btn no-print" id="mainSaveBtn">
+        <i class="fa-solid fa-cloud-arrow-up"></i> حفظ التعديلات السحابية
     </button>
 
     <div class="edit-instructions no-print">
         <span class="close-inst" onclick="this.parentElement.style.display='none'">&times;</span>
-        <h3>تعليمات التعديل</h3>
-        <ul class="text-xs text-gray-600 list-disc pr-4 mb-2">
-            <li><strong>التواريخ:</strong> اضغط على أي تاريخ لفتح التقويم.</li>
-            <li><strong>الأطراف:</strong> مرر الماوس لحذف جهة، واضغط (+) للإضافة.</li>
-            <li><strong>الإنجازات:</strong> اضغط على الأيقونة لتغيير الحالة، واستخدم الأزرار لإضافة بنود.</li>
+        <h3>لوحة التحكم</h3>
+        <div class="mb-2 text-[0.7rem] text-gray-500">الحالة: <span id="connectionStatus">جاري الاتصال...</span></div>
+        <ul class="text-[0.65rem] text-gray-600 list-disc pr-4">
+            <li><strong>الأطراف:</strong> اضغط على الدائرة لتغيير اللون.</li>
+            <li><strong>الإنجازات:</strong> اضغط على الأيقونة لتغيير الحالة.</li>
+            <li><strong>الجداول:</strong> استخدم أزرار (+) و (x) للتحكم.</li>
         </ul>
-        <div class="border-t pt-2 mt-2">
-            <span class="text-xs font-bold text-gray-500">حالة الاتصال: </span>
-            <span id="connectionStatus" class="text-xs">جاري الاتصال...</span>
-        </div>
     </div>
 
     <!-- PAGE 1 -->
     <div class="page">
         <header>
-            <div><h1>سجل متابعة مشروع مسار</h1><h2>ملخص المشروع والدراسات الأولية (HBU)</h2></div>
+            <div><h1>سجل متابعة مشروع مسار</h1><h2 id="pageSub">ملخص المشروع والدراسات الأولية (HBU)</h2></div>
             <div class="text-left flex flex-col items-end">
                 <img src="img/Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/180x50/white/DAA520?text=ALRAJHI+Invest'" class="h-10 object-contain mb-1">
                 <div class="flex gap-1"><span class="text-[0.65rem] bg-[#F2D06B] px-3 py-0.5 rounded-full text-white font-bold" contenteditable="true" id="yearRange">2025 - 2026</span></div>
@@ -156,13 +152,16 @@
             <div class="col-stack">
                 <div class="card">
                     <div class="section-header"><span class="section-num">01</span><span class="section-title">نطاق العمل</span></div>
-                    <div class="txt-content" contenteditable="true" id="scopeText">تنسيق وإدارة الدراسات الأولية واختيار الشركاء لتطوير <strong>مشروع مسار</strong>.<div class="highlight-box"><span class="txt-gold">المكونات الرئيسية:</span>دراسات أعلى وأفضل استخدام، اختيار المشغلين، المستشار القانوني، والتصاميم.</div></div>
+                    <div class="txt-content" contenteditable="true" id="scopeText">تنسيق وإدارة الدراسات الأولية واختيار الشركاء لتطوير <strong>مشروع مسار</strong>.</div>
+                    <div class="highlight-box" contenteditable="true" id="keyComponents">
+                        <span class="txt-gold">المكونات الرئيسية:</span> دراسات أعلى وأفضل استخدام، اختيار المشغلين، المستشار القانوني، والتصاميم.
+                    </div>
                 </div>
                 <div class="card">
                     <div class="section-header"><span class="section-num">02</span><span class="section-title">بيانات الجدول الزمني</span></div>
                     <div class="info-grid">
-                        <div class="info-box"><span class="info-lbl">بداية التعاقد</span><span class="info-val cursor-pointer" onclick="openDatePicker(this)" id="startDate">15/01/2025</span></div>
-                        <div class="info-box"><span class="info-lbl">آخر تحديث</span><span class="info-val cursor-pointer" onclick="openDatePicker(this)" id="lastUpdate">يناير 2026</span></div>
+                        <div class="info-box"><span class="info-lbl text-[0.55rem]">بداية التعاقد</span><span class="info-val cursor-pointer" onclick="openDatePicker(this)" id="startDate">15/01/2025</span></div>
+                        <div class="info-box"><span class="info-lbl text-[0.55rem]">آخر تحديث</span><span class="info-val cursor-pointer" onclick="openDatePicker(this)" id="lastUpdate">17/02/2026</span></div>
                     </div>
                     <div class="status-bar" contenteditable="true" id="statusText">حالة المشروع: قيد التنفيذ - مراحل متقدمة</div>
                 </div>
@@ -170,178 +169,147 @@
             <div class="col-stack">
                 <div class="card">
                     <div class="section-header"><span class="section-num">03</span><span class="section-title">أطراف المشروع</span></div>
-                    <div class="stakeholder-grid" id="stkGrid">
-                        <!-- Loaded by JS -->
-                    </div>
+                    <div class="stk-grid" id="stkGrid"></div>
                     <div class="add-mini-btn no-print" onclick="addStakeholder()">+ إضافة جهة</div>
                 </div>
                 <div class="card">
                     <div class="section-header"><span class="section-num">04</span><span class="section-title">أبرز الإنجازات</span></div>
-                    <div class="achievements-list" id="achList">
-                        <!-- Loaded by JS -->
-                    </div>
-                    <div class="add-mini-btn no-print" onclick="addAchievement()">+ إضافة إنجاز</div>
+                    <div class="achievements-list" id="achList"></div>
+                    <div class="add-mini-btn no-print" onclick="addAchievement()">+ إضافة بند إنجاز</div>
                 </div>
             </div>
         </div>
 
         <div class="matrix-container">
             <table id="table-1">
-                <thead><tr><th>م</th><th>الجهة</th><th>الحدث</th><th>التاريخ</th></tr></thead>
+                <thead><tr><th style="width:6%">م</th><th style="width:18%">الجهة</th><th style="width:60%">الحدث</th><th style="width:16%">التاريخ</th></tr></thead>
                 <tbody id="tbody-1"></tbody>
             </table>
-            <button class="add-row-btn no-print" onclick="addRow('table-1')"><i class="fa-solid fa-plus"></i> إضافة بند جديد</button>
+            <button class="add-row-btn no-print" onclick="addRow('table-1')"><i class="fa-solid fa-plus"></i> إضافة سطر جديد</button>
         </div>
         <footer><div>شركة اتحاد الراجحي</div><div>صفحة 1 من 3</div><div>مشروع مسار</div></footer>
     </div>
 
     <!-- PAGE 2 -->
     <div class="page">
-        <header><h1>تابع: سجل المتابعة</h1><img src="img/Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/100x30/white/DAA520?text=ALRAJHI'" class="h-6"></header>
+        <header><h1>تابع: سجل المتابعة</h1><img src="img/Alrajhi Logo Presentation.png" class="h-6"></header>
         <div class="matrix-container">
             <table id="table-2">
-                <thead><tr><th>م</th><th>الجهة</th><th>الحدث</th><th>التاريخ</th></tr></thead>
+                <thead><tr><th style="width:6%">م</th><th style="width:18%">الجهة</th><th style="width:60%">الحدث</th><th style="width:16%">التاريخ</th></tr></thead>
                 <tbody id="tbody-2"></tbody>
             </table>
-            <button class="add-row-btn no-print" onclick="addRow('table-2')"><i class="fa-solid fa-plus"></i> إضافة بند جديد</button>
+            <button class="add-row-btn no-print" onclick="addRow('table-2')"><i class="fa-solid fa-plus"></i> إضافة سطر جديد</button>
         </div>
         <footer><div>شركة اتحاد الراجحي</div><div>صفحة 2 من 3</div><div>مشروع مسار</div></footer>
     </div>
 
     <!-- PAGE 3 -->
     <div class="page">
-        <header><h1>تابع: سجل المتابعة</h1><img src="img/Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/100x30/white/DAA520?text=ALRAJHI'" class="h-6"></header>
+        <header><h1>تابع: سجل المتابعة</h1><img src="img/Alrajhi Logo Presentation.png" class="h-6"></header>
         <div class="matrix-container">
             <table id="table-3">
-                <thead><tr><th>م</th><th>الجهة</th><th>الحدث</th><th>التاريخ</th></tr></thead>
+                <thead><tr><th style="width:6%">م</th><th style="width:18%">الجهة</th><th style="width:60%">الحدث</th><th style="width:16%">التاريخ</th></tr></thead>
                 <tbody id="tbody-3"></tbody>
             </table>
-            <button class="add-row-btn no-print" onclick="addRow('table-3')"><i class="fa-solid fa-plus"></i> إضافة بند جديد</button>
+            <button class="add-row-btn no-print" onclick="addRow('table-3')"><i class="fa-solid fa-plus"></i> إضافة سطر جديد</button>
         </div>
         <div class="card" style="margin-top: auto; margin-bottom: 20mm; background-color: #fafafa;">
             <div class="section-header"><span class="section-num">✓</span><span class="section-title">نهاية السجل</span></div>
-            <div class="txt-content" style="padding: 10px;" contenteditable="true" id="footerSummary">
-                تم توثيق جميع مراحل المشروع بدءاً من دراسات السوق (يناير 2025) وصولاً إلى المراحل المتقدمة في اختيار المشغل وتعيين المستشارين (يناير 2026).
-            </div>
+            <div class="txt-content" style="padding: 10px;" contenteditable="true" id="footerSummary"></div>
         </div>
         <footer><div>شركة اتحاد الراجحي</div><div>صفحة 3 من 3</div><div>مشروع مسار</div></footer>
     </div>
 </div>
 
 <script>
-    // Logic for Password
+    // Local Helper Logic
     function checkPassword() {
         if (document.getElementById('passwordInput').value === "masar") {
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('appContent').style.display = 'flex';
-        } else {
-            document.getElementById('loginError').classList.remove('hidden');
-        }
+        } else { document.getElementById('loginError').classList.remove('hidden'); }
     }
     document.getElementById('passwordInput')?.addEventListener('keypress', e => { if (e.key === 'Enter') checkPassword(); });
 
-    // UI Helper Template
-    window.renderRowTemplate = function(num, tagText, eventText, dateText, tagClass) {
-        let finalClass = tagClass || "bg-gray-100 text-gray-800";
-        return `
-            <td class="relative"><span class="row-index">${num}</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td>
-            <td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag ${finalClass}">${tagText}</span></td>
-            <td contenteditable="true">${eventText}</td>
-            <td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">${dateText}</td>`;
-    };
+    window.renderRowTemplate = (num, tag, event, date, tagClass) => `
+        <td class="relative"><span class="row-index">${num}</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td>
+        <td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag ${tagClass || 'bg-gray-100 text-gray-800'}">${tag}</span></td>
+        <td contenteditable="true">${event}</td>
+        <td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">${date}</td>`;
 
-    window.renumberTables = function() {
-        let counter = 1;
+    window.renumberTables = () => {
+        let count = 1;
         ['table-1', 'table-2', 'table-3'].forEach(id => {
-            let table = document.getElementById(id);
-            if (!table) return;
-            [...table.getElementsByTagName('tbody')[0].rows].forEach(row => {
+            let tbody = document.getElementById(id)?.querySelector('tbody');
+            if (!tbody) return;
+            [...tbody.rows].forEach(row => {
                 if (row.classList.contains('stream-header')) return;
-                let idx = row.querySelector('.row-index');
-                if (idx) idx.innerText = counter++;
+                let span = row.querySelector('.row-index');
+                if (span) span.innerText = count++;
             });
         });
     };
 
     window.deleteRow = btn => { if(confirm('حذف؟')) { btn.closest('tr').remove(); window.renumberTables(); } };
-    window.addRow = id => { let t = document.getElementById(id).querySelector('tbody'); fillRow(t.insertRow()); window.renumberTables(); };
-    window.addRowBefore = btn => { let r = btn.closest('tr'); fillRow(r.parentNode.insertRow(r.rowIndex - 1)); window.renumberTables(); };
-    function fillRow(r) { r.innerHTML = window.renderRowTemplate('#', 'جهة', 'حدث جديد', '--/--/----', ''); }
+    window.addRow = id => { let t = document.getElementById(id).querySelector('tbody'); let r = t.insertRow(); r.innerHTML = window.renderRowTemplate('#', 'جهة', 'وصف جديد', '--/--/----', ''); window.renumberTables(); };
+    window.addRowBefore = btn => { let r = btn.closest('tr'); let nr = r.parentNode.insertRow(r.rowIndex - 1); nr.innerHTML = window.renderRowTemplate('#', 'جهة', 'وصف جديد', '--/--/----', ''); window.renumberTables(); };
 
-    // Dashboard Items Logic
-    window.addStakeholder = () => {
+    window.addStakeholder = (text = "جهة جديدة", color = "bg-blue-500") => {
         const grid = document.getElementById('stkGrid');
-        const item = document.createElement('div');
-        item.className = "stk-item";
-        item.innerHTML = `<span class="dot bg-blue-500" onclick="cycleColor(this)"></span><span contenteditable="true">جهة جديدة</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.parentElement.parentElement.remove()">x</div></div>`;
-        grid.appendChild(item);
+        const div = document.createElement('div'); div.className = "stk-item";
+        div.innerHTML = `<span class="dot ${color}" onclick="cycleColor(this)"></span><span contenteditable="true">${text}</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.closest('.stk-item').remove()">x</div></div>`;
+        grid.appendChild(div);
     };
 
-    window.addAchievement = () => {
-        const list = document.getElementById('achList');
-        const item = document.createElement('div');
-        item.className = "ach-item";
-        item.innerHTML = `<span class="status-icon check-icon" onclick="cycleStatus(this)">✓</span><span contenteditable="true">إنجاز جديد</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.parentElement.parentElement.remove()">x</div></div>`;
-        list.appendChild(item);
+    window.addAchievement = (text = "بند إنجاز جديد", state = "done") => {
+        const icons = { done: '✓', sync: '⟳', pending: '○' };
+        const classes = { done: 'text-green-500 font-bold', sync: 'text-blue-500', pending: 'text-gray-400' };
+        const div = document.createElement('div'); div.className = "ach-item";
+        div.innerHTML = `<span class="status-icon ${classes[state]}" onclick="cycleStatus(this)" data-state="${state}">${icons[state]}</span><span contenteditable="true">${text}</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.closest('.ach-item').remove()">x</div></div>`;
+        document.getElementById('achList').appendChild(div);
     };
 
     window.cycleColor = dot => {
         const colors = ['bg-blue-500', 'bg-purple-500', 'bg-green-500', 'bg-red-500', 'bg-orange-500', 'bg-yellow-600', 'bg-teal-600'];
         let current = [...dot.classList].find(c => colors.includes(c));
-        let next = colors[(colors.indexOf(current) + 1) % colors.length];
-        dot.classList.remove(current);
-        dot.classList.add(next);
+        dot.classList.replace(current, colors[(colors.indexOf(current) + 1) % colors.length]);
     };
 
     window.cycleStatus = icon => {
-        if (icon.innerText === '✓') { icon.innerText = '⟳'; icon.className = "status-icon sync-icon"; }
-        else { icon.innerText = '✓'; icon.className = "status-icon check-icon"; }
+        const states = ['done', 'sync', 'pending'];
+        const icons = { done: '✓', sync: '⟳', pending: '○' };
+        const classes = { done: 'text-green-500 font-bold', sync: 'text-blue-500', pending: 'text-gray-400' };
+        let next = states[(states.indexOf(icon.dataset.state) + 1) % states.length];
+        icon.dataset.state = next; icon.innerText = icons[next]; icon.className = "status-icon " + classes[next];
     };
 
-    // Date Picker Logic
-    let currentDateCell = null, pickerDate = new Date();
-    window.openDatePicker = function(cell) {
-        currentDateCell = cell; closeAllPopups();
-        const rect = cell.getBoundingClientRect();
-        const cal = document.createElement('div'); cal.className = 'custom-datepicker no-print'; cal.id = 'datePickerPopup';
-        cal.style.top = (window.scrollY + rect.bottom + 5) + 'px'; cal.style.left = (window.scrollX + rect.left) + 'px';
-        document.body.appendChild(cal); renderCalendar();
+    let curCell = null, pDate = new Date();
+    window.openDatePicker = c => {
+        curCell = c; document.querySelectorAll('.custom-datepicker').forEach(e => e.remove());
+        const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'custom-datepicker no-print';
+        div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
+        document.body.appendChild(div); renderCal(div);
     };
-    function renderCalendar() {
-        const c = document.getElementById('datePickerPopup'); if(!c) return;
-        const y = pickerDate.getFullYear(), m = pickerDate.getMonth();
-        const names = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-        let h = `<div class="calendar-header"><span onclick="changeMonth(-1)" class="cursor-pointer"> < </span><span>${names[m]} ${y}</span><span onclick="changeMonth(1)" class="cursor-pointer"> > </span></div><div class="calendar-grid">`;
-        for(let i=1; i<=new Date(y, m+1, 0).getDate(); i++) h += `<div class="day-cell" onclick="selectDate(${i})">${i}</div>`;
-        h += `</div>`; c.innerHTML = h;
+    function renderCal(div) {
+        const y = pDate.getFullYear(), m = pDate.getMonth(), names = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+        let h = `<div class="calendar-header"><span onclick="chM(-1)"><</span><span>${names[m]} ${y}</span><span onclick="chM(1)">></span></div><div class="calendar-grid">`;
+        for(let i=1; i<=new Date(y, m+1, 0).getDate(); i++) h += `<div class="day-cell" onclick="setD(${i})">${i}</div>`;
+        div.innerHTML = h + '</div>';
     }
-    window.changeMonth = d => { pickerDate.setMonth(pickerDate.getMonth() + d); renderCalendar(); };
-    window.selectDate = d => {
-        const dateStr = `${String(d).padStart(2,'0')}/${String(pickerDate.getMonth()+1).padStart(2,'0')}/${pickerDate.getFullYear()}`;
-        if(currentDateCell) currentDateCell.innerText = dateStr; closeAllPopups();
-    };
+    window.chM = d => { pDate.setMonth(pDate.getMonth() + d); renderCal(document.querySelector('.custom-datepicker')); };
+    window.setD = d => { curCell.innerText = `${String(d).padStart(2,'0')}/${String(pDate.getMonth()+1).padStart(2,'0')}/${pDate.getFullYear()}`; document.querySelector('.custom-datepicker').remove(); };
 
-    // Tag Logic
-    let currentTagCell = null;
-    let availableTags = [
-        { text: "Colliers", color: "bg-blue-100 text-blue-800" }, { text: "لجنة مسار", color: "bg-purple-100 text-purple-800" },
-        { text: "الفريق الداخلي", color: "bg-green-100 text-green-800" }, { text: "لجنة الاستثمار", color: "bg-emerald-100 text-emerald-800" },
-        { text: "المستشار القانوني", color: "bg-red-100 text-red-800" }, { text: "المشغلين", color: "bg-orange-100 text-orange-800" },
-        { text: "JLL", color: "bg-indigo-100 text-indigo-800" }, { text: "Wisefields", color: "bg-rose-100 text-rose-800" }
-    ];
-    window.openTagSelector = cell => {
-        currentTagCell = cell; closeAllPopups();
-        const rect = cell.getBoundingClientRect();
-        const menu = document.createElement('div'); menu.className = 'tag-selector-menu no-print';
-        menu.style.top = (window.scrollY + rect.bottom + 5) + 'px'; menu.style.left = (window.scrollX + rect.left) + 'px';
-        let h = '<div class="p-2"><div class="text-xs font-bold mb-2 text-gray-400">اختر:</div><div class="flex flex-wrap gap-1 max-h-32 overflow-auto">';
-        availableTags.forEach(t => h += `<span class="tag cursor-pointer ${t.color}" onclick="selectTag('${t.text}', '${t.color}')">${t.text}</span>`);
-        menu.innerHTML = h + '</div></div>'; document.body.appendChild(menu);
+    window.openTagSelector = c => {
+        const tags = [{t:"Colliers",c:"bg-blue-100 text-blue-800"},{t:"لجنة مسار",c:"bg-purple-100 text-purple-800"},{t:"الفريق الداخلي",c:"bg-green-100 text-green-800"},{t:"لجنة الاستثمار",c:"bg-emerald-100 text-emerald-800"},{t:"المستشار القانوني",c:"bg-red-100 text-red-800"},{t:"المشغلين",c:"bg-orange-100 text-orange-800"},{t:"JLL",c:"bg-indigo-100 text-indigo-800"},{t:"Wisefields",c:"bg-rose-100 text-rose-800"}];
+        document.querySelectorAll('.tag-selector-menu').forEach(e => e.remove());
+        const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'tag-selector-menu no-print';
+        div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
+        let h = '<div class="p-2 flex flex-wrap gap-1 max-h-40 overflow-auto">';
+        tags.forEach(t => h += `<span class="tag cursor-pointer ${t.c}" onclick="this.closest('.tag-selector-menu').remove(); this.cellRef.innerHTML='<span class=\\'tag ${t.c}\\'>${t.t}</span>'">${t.t}</span>`);
+        div.querySelectorAll('.tag').forEach(t => t.cellRef = c); div.innerHTML = h + '</div>';
+        [...div.querySelectorAll('.tag')].forEach(t => t.cellRef = c); document.body.appendChild(div);
     };
-    window.selectTag = (t, c) => { if(currentTagCell) currentTagCell.innerHTML = `<span class="tag ${c}">${t}</span>`; closeAllPopups(); };
-
-    function closeAllPopups() { document.querySelectorAll('.tag-selector-menu, .custom-datepicker').forEach(e => e.remove()); }
-    document.addEventListener('mousedown', e => { if (!e.target.closest('td') && !e.target.closest('.custom-datepicker') && !e.target.closest('.info-val')) closeAllPopups(); });
+    document.addEventListener('mousedown', e => { if (!e.target.closest('td') && !e.target.closest('.custom-datepicker') && !e.target.closest('.info-val')) document.querySelectorAll('.tag-selector-menu, .custom-datepicker').forEach(e => e.remove()); });
 </script>
 
 <script type="module">
@@ -349,61 +317,57 @@
     import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
     import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCiGlPJ48nB_swXaWRtNxK5sYdaMV0gW3w",
-      authDomain: "masarlog0.firebaseapp.com",
-      projectId: "masarlog0",
-      storageBucket: "masarlog0.firebasestorage.app",
-      messagingSenderId: "344022532795",
-      appId: "1:344022532795:web:7a11c9507349b242935f9e"
-    };
-
+    const firebaseConfig = { apiKey: "AIzaSyCiGlPJ48nB_swXaWRtNxK5sYdaMV0gW3w", authDomain: "masarlog0.firebaseapp.com", projectId: "masarlog0", storageBucket: "masarlog0.firebasestorage.app", messagingSenderId: "344022532795", appId: "1:344022532795:web:7a11c9507349b242935f9e" };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const appId = 'masar-report-data'; 
 
+    // Define initialDataset globally within module scope
+    const initialDataset = {
+        dashboard: {
+            scope: "تنسيق وإدارة الدراسات الأولية واختيار الشركاء لتطوير <strong>مشروع مسار</strong>.",
+            keyComponents: "<span class=\"txt-gold\">المكونات الرئيسية:</span> دراسات أعلى وأفضل استخدام، اختيار المشغلين، المستشار القانوني، والتصاميم.",
+            startDate: "15/01/2025", lastUpdate: "17/02/2026", status: "حالة المشروع: قيد التنفيذ - مراحل متقدمة",
+            yearRange: "2025 - 2026", footerSummary: "تم توثيق جميع مراحل المشروع بدءاً من دراسات السوق (يناير 2025) وصولاً إلى المراحل المتقدمة في اختيار المشغل وتعيين المستشارين (يناير 2026).",
+            stakeholders: [{text:"Colliers",color:"bg-blue-500"},{text:"لجنة مسار",color:"bg-purple-500"},{text:"لجنة الاستثمار",color:"bg-green-500"},{text:"المستشار القانوني",color:"bg-red-500"},{text:"المشغلين",color:"bg-orange-500"}],
+            achievements: [{text:"اعتماد خيار التطوير الثالث.",state:"done"},{text:"تحليل عروض المشغلين الأولية.",state:"done"},{text:"التفاوض مع القائمة المختصرة.",state:"sync"}]
+        },
+        table1: [{type:'header', text:'أولاً: دراسة السوق وأعلى وأفضل استخدام'}, {tag:'Colliers', tagClass:'bg-blue-100', event:'التعاقد لإعداد دراسة HBU', date:'15/01/2025'} /* ... more */ ],
+        table2: [], table3: []
+    };
+
     onAuthStateChanged(auth, user => {
-        if (user) {
-            document.getElementById('connectionStatus').innerHTML = '<span class="text-green-600 font-bold">متصل</span>';
-            setupRealtimeListener();
-        } else signInAnonymously(auth);
+        if (user) { document.getElementById('connectionStatus').innerHTML = '<span class="text-green-600">متصل ✓</span>'; setupSync(); }
+        else signInAnonymously(auth);
     });
 
-    function setupRealtimeListener() {
+    function setupSync() {
         onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'report_v1', 'latest'), snap => {
-            if (snap.exists()) renderAppFromJSON(snap.data());
+            if (snap.exists()) renderApp(snap.data());
+            else renderApp(initialDataset);
         });
     }
 
-    function renderAppFromJSON(data) {
-        // Render Dashboard
-        if(data.dashboard) {
-            document.getElementById('scopeText').innerHTML = data.dashboard.scope;
-            document.getElementById('startDate').innerText = data.dashboard.startDate;
-            document.getElementById('lastUpdate').innerText = data.dashboard.lastUpdate;
-            document.getElementById('statusText').innerText = data.dashboard.status;
-            document.getElementById('yearRange').innerText = data.dashboard.yearRange || "2025 - 2026";
-            document.getElementById('footerSummary').innerText = data.dashboard.footerSummary;
+    function renderApp(data) {
+        if(!data || !data.dashboard) return; // Safety check
+        document.getElementById('scopeText').innerHTML = data.dashboard.scope;
+        document.getElementById('keyComponents').innerHTML = data.dashboard.keyComponents;
+        document.getElementById('startDate').innerText = data.dashboard.startDate;
+        document.getElementById('lastUpdate').innerText = data.dashboard.lastUpdate;
+        document.getElementById('statusText').innerText = data.dashboard.status;
+        document.getElementById('yearRange').innerText = data.dashboard.yearRange;
+        document.getElementById('footerSummary').innerText = data.dashboard.footerSummary;
 
-            const grid = document.getElementById('stkGrid'); grid.innerHTML = '';
-            data.dashboard.stakeholders.forEach(s => {
-                const div = document.createElement('div'); div.className = "stk-item";
-                div.innerHTML = `<span class="dot ${s.color}" onclick="cycleColor(this)"></span><span contenteditable="true">${s.text}</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.parentElement.parentElement.remove()">x</div></div>`;
-                grid.appendChild(div);
-            });
+        const stkGrid = document.getElementById('stkGrid'); stkGrid.innerHTML = '';
+        data.dashboard.stakeholders?.forEach(s => window.addStakeholder(s.text, s.color));
+        
+        const achList = document.getElementById('achList'); achList.innerHTML = '';
+        data.dashboard.achievements?.forEach(a => window.addAchievement(a.text, a.state));
 
-            const list = document.getElementById('achList'); list.innerHTML = '';
-            data.dashboard.achievements.forEach(a => {
-                const div = document.createElement('div'); div.className = "ach-item";
-                div.innerHTML = `<span class="status-icon ${a.iconClass}" onclick="cycleStatus(this)">${a.icon}</span><span contenteditable="true">${a.text}</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.parentElement.parentElement.remove()">x</div></div>`;
-                list.appendChild(div);
-            });
-        }
-        // Render Tables
-        if(data.table1) renderTable('tbody-1', data.table1);
-        if(data.table2) renderTable('tbody-2', data.table2);
-        if(data.table3) renderTable('tbody-3', data.table3);
+        renderTable('tbody-1', data.table1 || []);
+        renderTable('tbody-2', data.table2 || []);
+        renderTable('tbody-3', data.table3 || []);
         window.renumberTables();
     }
 
@@ -417,27 +381,25 @@
         });
     }
 
-    window.saveDataToFirebase = async () => {
+    window.saveAllData = async () => {
         const btn = document.getElementById('mainSaveBtn'); const old = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> حفظ...';
-        
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري المزامنة...';
         const data = {
             dashboard: {
                 scope: document.getElementById('scopeText').innerHTML,
+                keyComponents: document.getElementById('keyComponents').innerHTML,
                 startDate: document.getElementById('startDate').innerText,
                 lastUpdate: document.getElementById('lastUpdate').innerText,
                 status: document.getElementById('statusText').innerText,
                 yearRange: document.getElementById('yearRange').innerText,
                 footerSummary: document.getElementById('footerSummary').innerText,
-                stakeholders: [...document.querySelectorAll('.stk-item')].map(s => ({ text: s.childNodes[1].innerText, color: [...s.querySelector('.dot').classList].find(c => c.startsWith('bg-')) })),
-                achievements: [...document.querySelectorAll('.ach-item')].map(a => ({ text: a.childNodes[1].innerText, icon: a.querySelector('.status-icon').innerText, iconClass: a.querySelector('.status-icon').className.replace('status-icon ', '') }))
+                stakeholders: [...document.querySelectorAll('.stk-item')].map(s => ({ text: s.querySelector('span[contenteditable]').innerText, color: [...s.querySelector('.dot').classList].find(c => c.startsWith('bg-')) })),
+                achievements: [...document.querySelectorAll('.ach-item')].map(a => ({ text: a.querySelector('span[contenteditable]').innerText, state: a.querySelector('.status-icon').dataset.state }))
             },
             table1: scrape('table-1'), table2: scrape('table-2'), table3: scrape('table-3')
         };
-        try {
-            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'report_v1', 'latest'), data);
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> تم'; setTimeout(() => btn.innerHTML = old, 2000);
-        } catch(e) { alert("خطأ!"); btn.innerHTML = old; }
+        try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'report_v1', 'latest'), data); btn.innerHTML = 'تم الحفظ ✓'; setTimeout(() => btn.innerHTML = old, 2000); }
+        catch(e) { alert("خطأ!"); btn.innerHTML = old; }
     };
 
     function scrape(id) {
