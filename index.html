@@ -17,7 +17,6 @@
         h1 { font-size: 1.4rem; font-weight: 800; color: #111; line-height: 1.2; }
         h2 { font-size: 0.85rem; color: var(--gold-main); font-weight: 700; margin-top: 2px; }
         
-        /* Dashboard & UI */
         .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; flex-shrink: 0; }
         .col-stack { display: flex; flex-direction: column; gap: 6px; }
         .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
@@ -41,7 +40,6 @@
         .check-icon { color: #10B981; font-weight: bold; }
         .sync-icon { color: #3B82F6; font-weight: bold; }
 
-        /* Table */
         .matrix-container { background: transparent; flex-grow: 1; display: flex; flex-direction: column; }
         table { width: 100%; border-collapse: separate; border-spacing: 0 3px; }
         thead tr { background: var(--gold-main); height: 24px; }
@@ -60,28 +58,18 @@
 
         /* Save Button (Floating Bottom Left) */
         .save-floating-btn {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            background-color: #D4AF37;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            cursor: pointer;
+            position: fixed; bottom: 30px; left: 30px;
+            background-color: #D4AF37; color: white;
+            padding: 10px 20px; border-radius: 50px;
+            font-size: 0.8rem; font-weight: bold; cursor: pointer;
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 2000;
-            border: 2px solid white;
+            transition: all 0.3s; display: flex; align-items: center; gap: 8px;
+            z-index: 2000; border: 2px solid white;
         }
         .save-floating-btn:hover { background-color: #b5952f; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5); }
         .save-floating-btn.loading { opacity: 0.7; cursor: wait; }
 
-        /* Tag Menu & DatePicker Styles */
+        /* UI Elements */
         .tag-selector-menu { position: absolute; background: white; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); border-radius: 6px; z-index: 1000; min-width: 200px; padding: 5px; animation: fadeIn 0.2s ease-out; }
         .color-swatch { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 1px solid #ddd; transition: transform 0.1s; }
         .color-swatch:hover { transform: scale(1.2); }
@@ -102,9 +90,6 @@
         .add-row-btn { width: 100%; padding: 8px; margin-top: 5px; background-color: #f0fdf4; border: 1px dashed #22c55e; color: #15803d; font-size: 0.7rem; font-weight: bold; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .add-row-btn:hover { background-color: #dcfce7; }
         .edit-instructions { position: fixed; top: 20px; left: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 250px; z-index: 1000; border-right: 4px solid #D4AF37; font-size: 0.8rem; }
-        .edit-instructions h3 { font-weight: bold; color: #D4AF37; margin-bottom: 5px; }
-        .edit-instructions ul { list-style: disc; padding-right: 15px; color: #4b5563; }
-        .close-inst { float: left; cursor: pointer; color: #9ca3af; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         [contenteditable]:hover { background-color: #fffbeb; cursor: text; outline: 1px dashed #d1d5db; }
@@ -122,7 +107,6 @@
 </head>
 <body>
 
-<!-- Floating Save Button (Visible Everywhere) -->
 <button onclick="saveDataToFirebase()" class="save-floating-btn no-print" id="mainSaveBtn">
     <i class="fa-solid fa-cloud-arrow-up"></i> حفظ التعديلات
 </button>
@@ -132,62 +116,33 @@
     <h3>حالة الاتصال</h3>
     <div id="connectionStatus" class="text-xs text-gray-500 mb-2">جاري الاتصال...</div>
     <ul class="text-xs text-gray-600 list-disc pr-4">
-        <li>البيانات الآن مخزنة سحابياً (Firebase).</li>
-        <li>اضغط <strong>حفظ التعديلات</strong> في الأسفل لتوثيق عملك.</li>
-        <li>سيتم تحديث البيانات تلقائياً عند فتح الصفحة.</li>
+        <li>بمجرد ظهور البيانات الكاملة، اضغط <strong>حفظ التعديلات</strong> لرفعها لقاعدة البيانات.</li>
+        <li>سيتم تحديث البيانات تلقائياً عند فتح الصفحة مستقبلاً.</li>
     </ul>
 </div>
 
 <!-- ================= PAGE 1 ================= -->
 <div class="page">
     <header>
-        <div>
-            <h1>سجل متابعة مشروع مسار</h1>
-            <h2>ملخص المشروع والدراسات الأولية (HBU)</h2>
-        </div>
-        <div class="text-left flex flex-col items-end">
-            <img src="Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/180x50/white/DAA520?text=ALRAJHI+Invest'" class="h-10 object-contain mb-1">
-            <div class="flex gap-1">
-                <span class="text-[0.65rem] bg-[#F2D06B] px-3 py-0.5 rounded-full text-white font-bold" contenteditable="true">2025 - 2026</span>
-            </div>
-        </div>
+        <div><h1>سجل متابعة مشروع مسار</h1><h2>ملخص المشروع والدراسات الأولية (HBU)</h2></div>
+        <div class="text-left flex flex-col items-end"><img src="Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/180x50/white/DAA520?text=ALRAJHI+Invest'" class="h-10 object-contain mb-1"><div class="flex gap-1"><span class="text-[0.65rem] bg-[#F2D06B] px-3 py-0.5 rounded-full text-white font-bold" contenteditable="true">2025 - 2026</span></div></div>
     </header>
 
-    <!-- Dashboard -->
     <div class="top-grid">
         <div class="col-stack">
-            <div class="card">
-                <div class="section-header"><span class="section-num">01</span><span class="section-title">نطاق العمل</span></div>
-                <div class="txt-content" contenteditable="true">تنسيق وإدارة الدراسات الأولية واختيار الشركاء لتطوير <strong>مشروع مسار</strong>.<div class="highlight-box"><span class="txt-gold">المكونات الرئيسية:</span>دراسات أعلى وأفضل استخدام، اختيار المشغلين، المستشار القانوني، والتصاميم.</div></div>
-            </div>
-            <div class="card">
-                <div class="section-header"><span class="section-num">02</span><span class="section-title">بيانات الجدول الزمني</span></div>
-                <div class="info-grid"><div class="info-box"><span class="info-lbl">بداية التعاقد</span><span class="info-val" contenteditable="true">15 يناير 2025</span></div><div class="info-box"><span class="info-lbl">آخر تحديث</span><span class="info-val" contenteditable="true">يناير 2026</span></div></div>
-                <div class="status-bar" contenteditable="true">حالة المشروع: قيد التنفيذ - مراحل متقدمة</div>
-            </div>
+            <div class="card"><div class="section-header"><span class="section-num">01</span><span class="section-title">نطاق العمل</span></div><div class="txt-content" contenteditable="true">تنسيق وإدارة الدراسات الأولية واختيار الشركاء لتطوير <strong>مشروع مسار</strong>.<div class="highlight-box"><span class="txt-gold">المكونات الرئيسية:</span>دراسات أعلى وأفضل استخدام، اختيار المشغلين، المستشار القانوني، والتصاميم.</div></div></div>
+            <div class="card"><div class="section-header"><span class="section-num">02</span><span class="section-title">بيانات الجدول الزمني</span></div><div class="info-grid"><div class="info-box"><span class="info-lbl">بداية التعاقد</span><span class="info-val" contenteditable="true">15 يناير 2025</span></div><div class="info-box"><span class="info-lbl">آخر تحديث</span><span class="info-val" contenteditable="true">يناير 2026</span></div></div><div class="status-bar" contenteditable="true">حالة المشروع: قيد التنفيذ - مراحل متقدمة</div></div>
         </div>
         <div class="col-stack">
-            <div class="card">
-                <div class="section-header"><span class="section-num">03</span><span class="section-title">أطراف المشروع</span></div>
-                <div class="stakeholder-grid" contenteditable="true">
-                    <div class="stk-item"><span class="dot bg-blue-500"></span>Colliers</div><div class="stk-item"><span class="dot bg-purple-500"></span>لجنة مسار</div><div class="stk-item"><span class="dot bg-green-500"></span>لجنة الاستثمار</div><div class="stk-item"><span class="dot bg-red-500"></span>المستشار القانوني</div><div class="stk-item wide"><span class="dot bg-orange-500"></span>المشغلين</div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="section-header"><span class="section-num">04</span><span class="section-title">أبرز الإنجازات</span></div>
-                <div class="achievements-list" contenteditable="true">
-                    <div class="ach-item"><span class="check-icon">✓</span> اعتماد خيار التطوير الثالث.</div><div class="ach-item"><span class="check-icon">✓</span> تحليل عروض المشغلين الأولية.</div><div class="ach-item"><span class="sync-icon">⟳</span> التفاوض مع القائمة المختصرة.</div>
-                </div>
-            </div>
+            <div class="card"><div class="section-header"><span class="section-num">03</span><span class="section-title">أطراف المشروع</span></div><div class="stakeholder-grid" contenteditable="true"><div class="stk-item"><span class="dot bg-blue-500"></span>Colliers</div><div class="stk-item"><span class="dot bg-purple-500"></span>لجنة مسار</div><div class="stk-item"><span class="dot bg-green-500"></span>لجنة الاستثمار</div><div class="stk-item"><span class="dot bg-red-500"></span>المستشار القانوني</div><div class="stk-item wide"><span class="dot bg-orange-500"></span>المشغلين</div></div></div>
+            <div class="card"><div class="section-header"><span class="section-num">04</span><span class="section-title">أبرز الإنجازات</span></div><div class="achievements-list" contenteditable="true"><div class="ach-item"><span class="check-icon">✓</span> اعتماد خيار التطوير الثالث.</div><div class="ach-item"><span class="check-icon">✓</span> تحليل عروض المشغلين الأولية.</div><div class="ach-item"><span class="sync-icon">⟳</span> التفاوض مع القائمة المختصرة.</div></div></div>
         </div>
     </div>
 
     <div class="matrix-container">
         <table id="table-1">
             <thead><tr><th>م</th><th>الجهة</th><th>الحدث</th><th>التاريخ</th></tr></thead>
-            <tbody id="tbody-1">
-                <tr class="stream-header"><td colspan="4">جاري تحميل البيانات...</td></tr>
-            </tbody>
+            <tbody id="tbody-1"></tbody>
         </table>
         <button class="add-row-btn" onclick="addRow('table-1')"><i class="fa-solid fa-plus"></i> إضافة بند جديد</button>
     </div>
@@ -217,23 +172,20 @@
         </table>
         <button class="add-row-btn" onclick="addRow('table-3')"><i class="fa-solid fa-plus"></i> إضافة بند جديد</button>
     </div>
-    
     <div class="card" style="margin-top: auto; margin-bottom: 20mm; background-color: #fafafa;">
         <div class="section-header"><span class="section-num">✓</span><span class="section-title">نهاية السجل</span></div>
-        <div class="txt-content" style="padding: 10px;" contenteditable="true">
-            تم توثيق جميع مراحل المشروع بدءاً من دراسات السوق (يناير 2025) وصولاً إلى المراحل المتقدمة في اختيار المشغل وتعيين المستشارين (يناير 2026).
-        </div>
+        <div class="txt-content" style="padding: 10px;" contenteditable="true">تم توثيق جميع مراحل المشروع بدءاً من دراسات السوق (يناير 2025) وصولاً إلى المراحل المتقدمة في اختيار المشغل وتعيين المستشارين (يناير 2026).</div>
     </div>
     <footer><div>شركة اتحاد الراجحي</div><div>صفحة 3 من 3</div><div>مشروع مسار</div></footer>
 </div>
 
-<!-- Firebase & App Logic -->
+<!-- Application Logic -->
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
     import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
     import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
-    // --- YOUR FIREBASE CONFIG ---
+    // *** FIREBASE CONFIG ***
     const firebaseConfig = {
       apiKey: "AIzaSyCiGlPJ48nB_swXaWRtNxK5sYdaMV0gW3w",
       authDomain: "masarlog0.firebaseapp.com",
@@ -247,16 +199,116 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
     const appId = 'masar-report-data'; 
-    let userId = null;
 
-    // --- Auth & Init ---
+    // --- FULL INITIAL DATASET (94 Items) ---
+    // This will be used ONLY if the database is empty (new setup)
+    const initialData = {
+        table1: [
+            {type:'header', text:'أولاً: دراسة السوق وأعلى وأفضل استخدام (Colliers)'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'التعاقد لإعداد دراسة HBU', date:'15/01/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'تسليم Interim report (Site/Market assessment)', date:'06/02/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'مراجعة التقرير الأولي وإرسال الملاحظات', date:'11/02/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد اجتماع اللجنة مع كوليرز', date:'20/02/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'تسليم Interim report بعد التعديلات', date:'24/02/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال المستندات إلى اللجنة للمراجعة والاعتماد', date:'25/02/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد اجتماع لمناقشة Initial Recommendations', date:'06/03/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'طلب ملخص تنفيذي لخيارات التطوير المبدئية', date:'13/03/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام الملخص التنفيذي لخيارات التطوير', date:'16/03/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'مراجعة الملخص التنفيذي وإضافة الملاحظات', date:'17/03/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'استلام الملخص بعد الملاحظات', date:'18/03/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد الاجتماع (1) مع لجنة الدعم لمناقشة الخيارات', date:'18/03/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام مستندات خيارات التطوير (10 خيارات)', date:'03/04/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'مراجعة الخيارات والدراسات المالية وإرسال الملاحظات', date:'06/04/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام 10 خيارات بعد التعديل والاضافة', date:'08/04/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد الاجتماع (2) مع لجنة الدعم لمناقشة الافتراضات', date:'09/04/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال بيانات العقارات المجاورة وأسعار البيع لكوليرز', date:'14/04/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد اجتماع لمناقشة وتوضيح التعديلات', date:'15/04/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام خيارات التطوير بعد تغيير الأوزان (6 خيارات)', date:'16/04/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إعداد 3 خيارات تطوير ودراسات مالية داخلياً', date:'19/04/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام البرنامج المساحي والوظيفي المفصل لـ 3 خيارات', date:'22/04/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عمل مواءمة بين الخيارات وإدارة المخاطر', date:'23/04/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال الخيارات لشركة أم القرى مع الاستفسارات', date:'23/04/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال الخيارات لكوليرز', date:'27/04/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد اجتماع ثلاثي (كوليرز + أم القرى + الاتحاد)', date:'29/04/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام الخيار الأول النهائي (بعد استبعاد السكني)', date:'01/05/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال الملاحظات على الخيار الأول', date:'05/05/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد اجتماع لمناقشة وتوضيح التعديلات', date:'07/05/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام 3 خيارات تطوير نهائية (بدون سكني)', date:'16/05/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال الخيارات للجنة مع التوصية بالخيار الثالث', date:'20/05/2025'},
+        ],
+        table2: [
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام الخيارات بعد إضافة ملاحظات اللجنة', date:'25/05/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'طلب خيار مشتق من الثالث (3A)', date:'25/05/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام الخيار المشتق (3A)', date:'25/05/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد الاجتماع (3) مع لجنة الدعم (المضي بـ 3A)', date:'28/05/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'صدور موافقة اللجنة على (3A) مع تحاليل الحساسية', date:'01/06/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام مسودة الدراسة النهائية متضمنة (3A)', date:'04/06/2025'},
+            {tag:'لجنة الاستثمار', tagClass:'bg-emerald-100 text-emerald-800', event:'عقد الاجتماع (4) مع لجنة الاستثمار (مراجعة النموذج)', date:'23/06/2025'},
+            {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام الدراسة النهائية بعد التعديلات', date:'26/06/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال المسودة والإجابات لأعضاء اللجنة', date:'27/06/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'استلام رد الأعضاء بعدم وجود ملاحظات', date:'28/06/2025'},
+            {tag:'مجلس الإدارة', tagClass:'bg-yellow-100 text-yellow-800', event:'اعتماد تطوير الخيار الثالث المحدث', date:'14/08/2025'},
+            {type:'header', text:'ثانياً: استشاري اختيار المشغل (JLL)'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'رفع توصية بتعيين استشاري اختيار المشغل', date:'15/07/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'موافقة اللجنة على التعاقد مع JLL', date:'10/08/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال Compliance checklist', date:'11/08/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام Compliance checklist', date:'14/08/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال العقد والـ NDA للتوقيع', date:'17/08/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'توقيع العقد والـ NDA', date:'02/09/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال مستندات HBU للمراجعة والتحقق', date:'03/09/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام قائمة المشغلين المرشحين والعلامات', date:'10/09/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'مراجعة القائمة وطلب إضافة مشغلين', date:'11/09/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام القائمة المعدلة للمشغلين', date:'16/09/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام الـ Teaser للمشغلين', date:'18/09/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال ملاحظات على الـ Teaser', date:'22/09/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام تقرير التحقق من دراسة السوق (Validation)', date:'22/09/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام البرنامج الوظيفي والمساحي والمالي من JLL', date:'22/09/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام الـ Teaser النهائي', date:'26/09/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد الاجتماع (8) مع لجنة الدعم لمناقشة التقرير', date:'29/09/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'اعتماد برنامج كولييرز للمشغلين (JLL vs Colliers)', date:'01/10/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام قائمة المشغلين (مضافاً خبرات الشقق المعنونة)', date:'01/10/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام Scoring matrix criteria', date:'06/10/2025'},
+            {tag:'المشغلين', tagClass:'bg-orange-100 text-orange-800', event:'إرسال NDA لـ 12 مشغل', date:'08/10/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'مراجعة وإضافة ملاحظات على Scoring matrix', date:'12/10/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام Information Memorandum', date:'17/10/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'مراجعة وإرسال ملاحظات الـ Information Memorandum', date:'21/10/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إنشاء Data Room لبيانات المشروع', date:'22/10/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام النسخة النهائية من Information Memorandum (بعد 3 جولات)', date:'13/11/2025'},
+            {tag:'المشغلين', tagClass:'bg-orange-100 text-orange-800', event:'إرسال الـ RFP للمشغلين', date:'13/11/2025'},
+            {tag:'المشغلين', tagClass:'bg-orange-100 text-orange-800', event:'توقيع الـ NDA (عدد 11 مشغل)', date:'18/11/2025'},
+            {tag:'المشغلين', tagClass:'bg-orange-100 text-orange-800', event:'إرسال البيانات لعمل Area Program & P&L', date:'19/11/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'الإجابة على استفسارات المشغلين', date:'20/11/2025'},
+            {tag:'المشغلين', tagClass:'bg-orange-100 text-orange-800', event:'استلام التقديم الأول (الشروط التجارية الأولية)', date:'04/12/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد ورش عمل مع المشغلين (اليوم 1)', date:'17/12/2025'},
+        ],
+        table3: [
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد ورش عمل مع المشغلين (اليوم 2)', date:'18/12/2025'},
+            {tag:'المشغلين', tagClass:'bg-orange-100 text-orange-800', event:'طلب استيفاء النواقص ومتطلبات إضافية', date:'22/12/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'تحديث Scoring matrix بعد المتطلبات الإضافية', date:'24/12/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'اعتماد Scoring matrix criteria', date:'24/12/2025'},
+            {tag:'المشغلين', tagClass:'bg-orange-100 text-orange-800', event:'استلام التقديم الثاني من المشغلين', date:'25/12/2025'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام تقرير تحليل العروض الأول', date:'01/01/2026'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'مراجعة التقرير ومشاركة التعديلات مع الاستشاري', date:'02/01/2026'},
+            {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام تقرير التحليل بعد التعديل', date:'04/01/2026'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد الاجتماع (11) مع لجنة الدعم (القائمة المختصرة)', date:'05/01/2026'},
+            {type:'header', text:'ثالثاً: المستشار القانوني (Wisefields)'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'رفع توصية بالتعاقد مع المستشار القانوني', date:'15/07/2025'},
+            {tag:'Wisefields', tagClass:'bg-rose-100 text-rose-800', event:'رفع التوصية بـ Wisefields بعد تخفيض السعر', date:'05/08/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال العقد والـ NDA للتوقيع', date:'06/08/2025'},
+            {tag:'Wisefields', tagClass:'bg-rose-100 text-rose-800', event:'توقيع العقد والـ NDA', date:'21/08/2025'},
+            {tag:'Wisefields', tagClass:'bg-rose-100 text-rose-800', event:'عقد اجتماع الانطلاق (Kickoff meeting)', date:'24/08/2025'},
+            {tag:'Wisefields', tagClass:'bg-rose-100 text-rose-800', event:'إرسال Target list of operators للمرئيات', date:'18/09/2025'},
+            {tag:'Wisefields', tagClass:'bg-rose-100 text-rose-800', event:'إرسال Scoring matrix criteria للمرئيات', date:'15/10/2025'},
+            {tag:'Wisefields', tagClass:'bg-rose-100 text-rose-800', event:'الرد بالملاحظات على Scoring matrix', date:'26/10/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال تقرير تحليل العروض الأول للمرئيات', date:'01/01/2026'},
+            {tag:'Wisefields', tagClass:'bg-rose-100 text-rose-800', event:'الرد بالملاحظات على تقرير التحليل', date:'12/01/2026'},
+            {type:'header', text:'رابعاً: استشاري التصميم'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'رفع توصية بتعيين استشاري التصميم', date:'04/09/2025'}
+        ]
+    };
+
     const initAuth = async () => {
-        try {
-            await signInAnonymously(auth);
-        } catch (error) {
-            console.error("Auth error", error);
-            document.getElementById('connectionStatus').innerText = 'خطأ في المصادقة';
-        }
+        try { await signInAnonymously(auth); } catch (error) { document.getElementById('connectionStatus').innerText = 'خطأ في المصادقة'; }
     };
     initAuth();
 
@@ -270,31 +322,28 @@
         }
     });
 
-    // --- Firestore Logic ---
     function setupRealtimeListener() {
         const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'report_v1', 'latest');
-        
         onSnapshot(docRef, (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 renderTablesFromJSON(data);
             } else {
-                console.log("No data found. Initializing...");
-                renderHeadersOnly(); 
+                console.log("No DB data found. Loading default FULL dataset...");
+                // Load the full 94 items if DB is empty
+                renderTablesFromJSON(initialData); 
             }
         }, (error) => {
-            console.error("Error getting document:", error);
-            document.getElementById('connectionStatus').innerHTML = '<span class="text-red-600">خطأ: ' + error.code + '</span> (تحقق من قواعد الأمان)';
+            console.error("Error:", error);
+            document.getElementById('connectionStatus').innerHTML = '<span class="text-red-600">خطأ: ' + error.code + '</span>';
         });
     }
 
     window.saveDataToFirebase = async function() {
         if (!auth.currentUser) { alert("يرجى الانتظار حتى يتم الاتصال."); return; }
-        
         const btn = document.getElementById('mainSaveBtn');
         const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الحفظ...';
-        btn.classList.add('loading');
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الحفظ...'; btn.classList.add('loading');
 
         const dataToSave = {
             table1: scrapeTableData('table-1'),
@@ -306,14 +355,11 @@
         try {
             const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'report_v1', 'latest');
             await setDoc(docRef, dataToSave);
-            
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> تم الحفظ';
-            btn.classList.remove('loading');
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> تم الحفظ'; btn.classList.remove('loading');
             setTimeout(() => { btn.innerHTML = originalText; }, 2000);
         } catch (e) {
             alert("فشل الحفظ: " + e.message);
-            btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> فشل';
-            btn.classList.remove('loading');
+            btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> فشل'; btn.classList.remove('loading');
         }
     }
 
@@ -322,22 +368,13 @@
         const tbody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
         for (let i = 0; i < tbody.rows.length; i++) {
             const row = tbody.rows[i];
-            if (row.classList.contains('stream-header')) {
-                rows.push({ type: 'header', text: row.cells[0].innerText });
-                continue;
-            }
+            if (row.classList.contains('stream-header')) { rows.push({ type: 'header', text: row.cells[0].innerText }); continue; }
             const cells = row.cells;
             if (cells.length < 4) continue;
             const tagSpan = cells[1].querySelector('span.tag');
             const tagText = tagSpan ? tagSpan.innerText : cells[1].innerText;
             const tagClass = tagSpan ? tagSpan.className.replace('tag ', '') : '';
-            rows.push({
-                type: 'data',
-                tag: tagText,
-                tagClass: tagClass,
-                event: cells[2].innerText,
-                date: cells[3].innerText
-            });
+            rows.push({ type: 'data', tag: tagText, tagClass: tagClass, event: cells[2].innerText, date: cells[3].innerText });
         }
         return rows;
     }
@@ -363,18 +400,9 @@
             tbody.appendChild(tr);
         });
     }
-
-    function renderHeadersOnly() {
-        // Initial structure if DB is empty
-        document.getElementById('tbody-1').innerHTML = '<tr class="stream-header"><td colspan="4" contenteditable="true">أولاً: دراسة السوق وأعلى وأفضل استخدام</td></tr>' +
-        window.renderRowTemplate('#', 'Colliers', 'التعاقد لإعداد دراسة HBU', '15/01/2025', 'bg-blue-100 text-blue-800');
-        document.getElementById('tbody-2').innerHTML = '<tr class="stream-header"><td colspan="4" contenteditable="true">تابع: البيانات</td></tr>';
-        document.getElementById('tbody-3').innerHTML = '<tr class="stream-header"><td colspan="4" contenteditable="true">تابع: البيانات</td></tr>';
-        window.renumberTables();
-    }
 </script>
 
-<!-- Utility Scripts -->
+<!-- Shared Utility Scripts -->
 <script>
     window.renumberTables = function() {
         var counter = 1;
@@ -407,161 +435,66 @@
         `;
     };
 
-    window.deleteRow = function(btn) {
-        if(confirm('هل أنت متأكد من حذف هذا البند؟')) {
-            btn.closest('tr').remove();
-            window.renumberTables();
-        }
-    };
+    window.deleteRow = function(btn) { if(confirm('هل أنت متأكد من حذف هذا البند؟')) { btn.closest('tr').remove(); window.renumberTables(); } };
+    window.addRow = function(tableId) { var t = document.getElementById(tableId).getElementsByTagName('tbody')[0]; fillNewRowHTML(t.insertRow(t.rows.length)); window.renumberTables(); };
+    window.addRowBefore = function(btn) { var r = btn.closest('tr'); fillNewRowHTML(r.parentNode.insertRow(r.rowIndex - 1)); window.renumberTables(); };
+    function fillNewRowHTML(row) { row.innerHTML = window.renderRowTemplate('#', 'جهة جديدة', 'وصف البند الجديد...', '--/--/----', 'bg-gray-100 text-gray-800'); }
 
-    window.addRow = function(tableId) {
-        var table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-        var newRow = table.insertRow(table.rows.length);
-        fillNewRowHTML(newRow);
-        window.renumberTables();
-    };
-
-    window.addRowBefore = function(btn) {
-        var currentRow = btn.closest('tr');
-        var newRow = currentRow.parentNode.insertRow(currentRow.rowIndex - 1);
-        fillNewRowHTML(newRow);
-        window.renumberTables();
-    };
-
-    function fillNewRowHTML(row) {
-        row.innerHTML = window.renderRowTemplate('#', 'جهة جديدة', 'وصف البند الجديد...', '--/--/----', 'bg-gray-100 text-gray-800');
-    }
-
-    // Tag & Date Logic
+    // Tag & Date UI Logic (Existing)
     let availableTags = [
-        { text: "Colliers", color: "bg-blue-100 text-blue-800" },
-        { text: "لجنة مسار", color: "bg-purple-100 text-purple-800" },
-        { text: "الفريق الداخلي", color: "bg-green-100 text-green-800" },
-        { text: "لجنة الاستثمار", color: "bg-emerald-100 text-emerald-800" },
-        { text: "المستشار القانوني", color: "bg-red-100 text-red-800" },
-        { text: "المشغلين", color: "bg-orange-100 text-orange-800" },
-        { text: "JLL", color: "bg-indigo-100 text-indigo-800" },
-        { text: "Wisefields", color: "bg-rose-100 text-rose-800" },
-        { text: "مجلس الإدارة", color: "bg-yellow-100 text-yellow-800" },
-        { text: "استشاري التصميم", color: "bg-gray-100 text-gray-800" }
+        { text: "Colliers", color: "bg-blue-100 text-blue-800" }, { text: "لجنة مسار", color: "bg-purple-100 text-purple-800" },
+        { text: "الفريق الداخلي", color: "bg-green-100 text-green-800" }, { text: "لجنة الاستثمار", color: "bg-emerald-100 text-emerald-800" },
+        { text: "المستشار القانوني", color: "bg-red-100 text-red-800" }, { text: "المشغلين", color: "bg-orange-100 text-orange-800" },
+        { text: "JLL", color: "bg-indigo-100 text-indigo-800" }, { text: "Wisefields", color: "bg-rose-100 text-rose-800" },
+        { text: "مجلس الإدارة", color: "bg-yellow-100 text-yellow-800" }, { text: "استشاري التصميم", color: "bg-gray-100 text-gray-800" }
     ];
-    const tagColors = [
-        { name: "Blue", class: "bg-blue-100 text-blue-800", hex: "#dbeafe" },
-        { name: "Purple", class: "bg-purple-100 text-purple-800", hex: "#f3e8ff" },
-        { name: "Green", class: "bg-green-100 text-green-800", hex: "#dcfce7" },
-        { name: "Red", class: "bg-red-100 text-red-800", hex: "#fee2e2" },
-        { name: "Orange", class: "bg-orange-100 text-orange-800", hex: "#ffedd5" },
-        { name: "Yellow", class: "bg-yellow-100 text-yellow-800", hex: "#fef9c3" },
-        { name: "Gray", class: "bg-gray-100 text-gray-800", hex: "#f3f4f6" },
-        { name: "Gold", class: "bg-[#FEFCE8] text-[#854D0E]", hex: "#FEFCE8" }
-    ];
+    const tagColors = [ {class:"bg-blue-100 text-blue-800",hex:"#dbeafe"}, {class:"bg-purple-100 text-purple-800",hex:"#f3e8ff"}, {class:"bg-green-100 text-green-800",hex:"#dcfce7"}, {class:"bg-red-100 text-red-800",hex:"#fee2e2"}, {class:"bg-orange-100 text-orange-800",hex:"#ffedd5"}, {class:"bg-yellow-100 text-yellow-800",hex:"#fef9c3"}, {class:"bg-gray-100 text-gray-800",hex:"#f3f4f6"}, {class:"bg-[#FEFCE8] text-[#854D0E]",hex:"#FEFCE8"} ];
 
     let currentTagCell = null;
     window.openTagSelector = function(cell) {
-        currentTagCell = cell;
-        closeAllPopups();
+        currentTagCell = cell; closeAllPopups();
         const rect = cell.getBoundingClientRect();
-        const menu = document.createElement('div');
-        menu.className = 'tag-selector-menu no-print';
-        menu.style.top = (window.scrollY + rect.bottom + 5) + 'px';
-        menu.style.left = (window.scrollX + rect.left) + 'px';
-        menu.style.minWidth = rect.width + 'px';
-
-        let html = '<div class="p-2"><div class="text-xs font-bold text-gray-500 mb-2">اختر وسماً أو أضف جديداً:</div>';
-        html += '<div class="flex flex-wrap gap-1 mb-3 max-h-32 overflow-y-auto">';
-        availableTags.forEach(tag => {
-            html += `<span class="tag cursor-pointer hover:opacity-80 ${tag.color}" onclick="selectTag('${tag.text}', '${tag.color}')">${tag.text}</span>`;
-        });
-        html += '</div><div class="border-t pt-2">';
-        html += '<input type="text" id="newTagInput" placeholder="اسم الجهة..." class="w-full text-xs p-1 border rounded mb-2">';
-        html += '<div class="flex gap-1 mb-2">';
-        tagColors.forEach((c, idx) => {
-            html += `<div onclick="selectColor(this, '${c.class}')" class="color-swatch ${idx===0?'selected':''}" style="background-color:${c.hex}" data-class="${c.class}"></div>`;
-        });
-        html += '</div><button onclick="addNewTag()" class="w-full bg-[#D4AF37] text-white text-xs py-1 rounded hover:bg-[#b5952f]">إضافة واعتماد</button></div></div>';
-        menu.innerHTML = html;
-        document.body.appendChild(menu);
-        setTimeout(() => { document.addEventListener('click', closeTagSelectorOnOutside); }, 0);
+        const menu = document.createElement('div'); menu.className = 'tag-selector-menu no-print';
+        menu.style.top = (window.scrollY + rect.bottom + 5) + 'px'; menu.style.left = (window.scrollX + rect.left) + 'px'; menu.style.minWidth = rect.width + 'px';
+        let html = '<div class="p-2"><div class="text-xs font-bold text-gray-500 mb-2">اختر وسماً أو أضف جديداً:</div><div class="flex flex-wrap gap-1 mb-3 max-h-32 overflow-y-auto">';
+        availableTags.forEach(tag => { html += `<span class="tag cursor-pointer hover:opacity-80 ${tag.color}" onclick="selectTag('${tag.text}', '${tag.color}')">${tag.text}</span>`; });
+        html += '</div><div class="border-t pt-2"><input type="text" id="newTagInput" placeholder="اسم..." class="w-full text-xs p-1 border rounded mb-2"><div class="flex gap-1 mb-2">';
+        tagColors.forEach((c, i) => { html += `<div onclick="selectColor(this, '${c.class}')" class="color-swatch ${i===0?'selected':''}" style="background-color:${c.hex}" data-class="${c.class}"></div>`; });
+        html += '</div><button onclick="addNewTag()" class="w-full bg-[#D4AF37] text-white text-xs py-1 rounded hover:bg-[#b5952f]">إضافة</button></div></div>';
+        menu.innerHTML = html; document.body.appendChild(menu); setTimeout(() => { document.addEventListener('click', closeTagSelectorOnOutside); }, 0);
     }
-
     let selectedColorClass = tagColors[0].class;
-    window.selectColor = function(el, colorClass) {
-        document.querySelectorAll('.color-swatch').forEach(d => d.classList.remove('selected'));
-        el.classList.add('selected');
-        selectedColorClass = colorClass;
-    }
-    window.addNewTag = function() {
-        const input = document.getElementById('newTagInput');
-        const text = input.value.trim();
-        if(text) {
-            availableTags.push({ text: text, color: selectedColorClass });
-            selectTag(text, selectedColorClass);
-        }
-    }
-    window.selectTag = function(text, colorClass) {
-        if(currentTagCell) currentTagCell.innerHTML = `<span class="tag ${colorClass}">${text}</span>`;
-        closeAllPopups();
-    }
+    window.selectColor = function(el, colorClass) { document.querySelectorAll('.color-swatch').forEach(d => d.classList.remove('selected')); el.classList.add('selected'); selectedColorClass = colorClass; }
+    window.addNewTag = function() { const t = document.getElementById('newTagInput').value.trim(); if(t) { availableTags.push({ text: t, color: selectedColorClass }); selectTag(t, selectedColorClass); } }
+    window.selectTag = function(t, c) { if(currentTagCell) currentTagCell.innerHTML = `<span class="tag ${c}">${t}</span>`; closeAllPopups(); }
     function closeTagSelectorOnOutside(e) { if (!e.target.closest('.tag-selector-menu')) closeAllPopups(); }
 
-    let currentDateCell = null;
-    let pickerDate = new Date();
+    let currentDateCell = null, pickerDate = new Date();
     window.openDatePicker = function(cell) {
-        currentDateCell = cell;
-        closeAllPopups();
-        const currentText = cell.innerText.trim();
-        if (currentText && currentText.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) {
-            const parts = currentText.split('/');
-            pickerDate = new Date(parts[2], parts[1] - 1, parts[0]);
-        } else { pickerDate = new Date(); }
-
-        const rect = cell.getBoundingClientRect();
-        const calendar = document.createElement('div');
-        calendar.className = 'custom-datepicker no-print';
-        calendar.id = 'datePickerPopup';
-        calendar.style.top = (window.scrollY + rect.bottom + 5) + 'px';
-        calendar.style.left = (window.scrollX + rect.left) + 'px';
-        document.body.appendChild(calendar);
-        renderCalendar();
-        setTimeout(() => { document.addEventListener('click', closeDatePickerOnOutside); }, 0);
+        currentDateCell = cell; closeAllPopups();
+        const t = cell.innerText.trim(); if (t && t.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) { const p = t.split('/'); pickerDate = new Date(p[2], p[1]-1, p[0]); } else { pickerDate = new Date(); }
+        const rect = cell.getBoundingClientRect(); const cal = document.createElement('div'); cal.className = 'custom-datepicker no-print'; cal.id = 'datePickerPopup';
+        cal.style.top = (window.scrollY + rect.bottom + 5) + 'px'; cal.style.left = (window.scrollX + rect.left) + 'px';
+        document.body.appendChild(cal); renderCalendar(); setTimeout(() => { document.addEventListener('click', closeDatePickerOnOutside); }, 0);
     }
-
     function renderCalendar() {
-        const container = document.getElementById('datePickerPopup');
-        if(!container) return;
-        const year = pickerDate.getFullYear();
-        const month = pickerDate.getMonth();
-        const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-        let html = `<div class="calendar-header"><span class="nav-btn" onclick="changeMonth(-1)">&#10094;</span><span class="font-bold">${monthNames[month]} ${year}</span><span class="nav-btn" onclick="changeMonth(1)">&#10095;</span></div><div class="calendar-grid"><div class="day-name">أحد</div><div class="day-name">إثنين</div><div class="day-name">ثلاثاء</div><div class="day-name">أربعاء</div><div class="day-name">خميس</div><div class="day-name">جمعة</div><div class="day-name">سبت</div>`;
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        for(let i=0; i<firstDay; i++) html += `<div></div>`;
-        for(let d=1; d<=daysInMonth; d++) {
-            const isSelected = (d === pickerDate.getDate());
-            let classes = "day-cell";
-            if(isSelected) classes += " selected";
-            html += `<div class="${classes}" onclick="selectDate(${d})">${d}</div>`;
-        }
-        html += `</div>`;
-        container.innerHTML = html;
+        const c = document.getElementById('datePickerPopup'); if(!c) return;
+        const y = pickerDate.getFullYear(), m = pickerDate.getMonth();
+        const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+        let h = `<div class="calendar-header"><span class="nav-btn" onclick="changeMonth(-1)">&#10094;</span><span class="font-bold">${months[m]} ${y}</span><span class="nav-btn" onclick="changeMonth(1)">&#10095;</span></div><div class="calendar-grid"><div class="day-name">أحد</div><div class="day-name">إثنين</div><div class="day-name">ثلاثاء</div><div class="day-name">أربعاء</div><div class="day-name">خميس</div><div class="day-name">جمعة</div><div class="day-name">سبت</div>`;
+        const fd = new Date(y, m, 1).getDay(), dim = new Date(y, m + 1, 0).getDate();
+        for(let i=0; i<fd; i++) h += `<div></div>`;
+        for(let d=1; d<=dim; d++) { const s = (d === pickerDate.getDate()); h += `<div class="day-cell ${s?'selected':''}" onclick="selectDate(${d})">${d}</div>`; }
+        h += `</div>`; c.innerHTML = h;
     }
-    window.changeMonth = function(delta) { pickerDate.setMonth(pickerDate.getMonth() + delta); renderCalendar(); }
-    window.selectDate = function(day) {
-        pickerDate.setDate(day);
-        const d = String(pickerDate.getDate()).padStart(2, '0');
-        const m = String(pickerDate.getMonth() + 1).padStart(2, '0');
-        const y = pickerDate.getFullYear();
-        if(currentDateCell) currentDateCell.innerText = `${d}/${m}/${y}`;
-        closeAllPopups();
+    window.changeMonth = function(d) { pickerDate.setMonth(pickerDate.getMonth() + d); renderCalendar(); }
+    window.selectDate = function(d) {
+        pickerDate.setDate(d);
+        const day = String(pickerDate.getDate()).padStart(2, '0'), mon = String(pickerDate.getMonth() + 1).padStart(2, '0'), year = pickerDate.getFullYear();
+        if(currentDateCell) currentDateCell.innerText = `${day}/${mon}/${year}`; closeAllPopups();
     }
     function closeDatePickerOnOutside(e) { if (!e.target.closest('.custom-datepicker') && !e.target.closest('.calendar-header')) closeAllPopups(); }
-    
-    function closeAllPopups() {
-        document.querySelectorAll('.tag-selector-menu').forEach(e => e.remove());
-        document.querySelectorAll('.custom-datepicker').forEach(e => e.remove());
-        document.removeEventListener('click', closeTagSelectorOnOutside);
-        document.removeEventListener('click', closeDatePickerOnOutside);
-    }
+    function closeAllPopups() { document.querySelectorAll('.tag-selector-menu, .custom-datepicker').forEach(e => e.remove()); document.removeEventListener('click', closeTagSelectorOnOutside); document.removeEventListener('click', closeDatePickerOnOutside); }
 </script>
 
 </body>
