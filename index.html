@@ -91,10 +91,6 @@
         .add-row-btn:hover { background-color: #dcfce7; }
         .edit-instructions { position: fixed; top: 20px; left: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 250px; z-index: 1000; border-right: 4px solid #D4AF37; font-size: 0.8rem; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-        [contenteditable]:hover { background-color: #fffbeb; cursor: text; outline: 1px dashed #d1d5db; }
-        [contenteditable]:focus { background-color: #fff; outline: 2px solid #D4AF37; border-radius: 2px; z-index: 10; }
-
         @media print {
             @page { size: A4; margin: 0; }
             body { background: white; padding: 0; gap: 0; display: block; }
@@ -199,6 +195,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
     const appId = 'masar-report-data'; 
+    let userId = null; // Defined variable to fix ReferenceError
 
     // --- FULL INITIAL DATASET (94 Items) ---
     // This will be used ONLY if the database is empty (new setup)
