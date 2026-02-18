@@ -12,7 +12,6 @@
         :root { --gold-light: #F9E79F; --gold-main: #D4AF37; --gold-dark: #8D6E23; --bg-dark: #333; --text-main: #1F2937; }
         body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-dark); display: flex; flex-direction: column; align-items: center; padding: 20px; gap: 20px; margin: 0; color: var(--text-main); min-height: 100vh; }
         
-        /* Login Overlay */
         #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .login-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; max-width: 400px; width: 90%; border-top: 5px solid var(--gold-main); }
         .login-input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #eee; border-radius: 8px; text-align: center; font-size: 1.1rem; outline: none; transition: border-color 0.3s; }
@@ -26,7 +25,6 @@
         h1 { font-size: 1.4rem; font-weight: 800; color: #111; line-height: 1.2; }
         h2 { font-size: 0.85rem; color: var(--gold-main); font-weight: 700; margin-top: 2px; }
         
-        /* Dashboard & UI */
         .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; flex-shrink: 0; }
         .col-stack { display: flex; flex-direction: column; gap: 6px; }
         .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); position: relative; }
@@ -53,12 +51,11 @@
         .add-mini-btn { font-size: 0.6rem; color: var(--gold-dark); cursor: pointer; text-align: center; margin-top: 4px; border: 1px dashed #ddd; border-radius: 4px; padding: 2px; }
         .add-mini-btn:hover { background: #fafafa; border-color: var(--gold-main); }
 
-        /* Matrix Tables */
         .matrix-container { background: transparent; flex-grow: 1; display: flex; flex-direction: column; position: relative; }
         table { width: 100%; border-collapse: separate; border-spacing: 0 3px; }
         thead tr { background: var(--gold-main); height: 24px; }
         thead th { color: white !important; font-weight: 800; font-size: 0.7rem; padding: 0 6px; text-align: center; }
-        tbody tr { background: white; transition: background 0.2s; }
+        tbody tr { background: white; transition: background 0.2s; position: relative; }
         
         /* Row Selection Style */
         tbody tr.selected { background-color: #ecfdf5 !important; border-left: 2px solid #10b981; }
@@ -69,7 +66,8 @@
         tr.stream-header td { background-color: #fcfbf7; border-bottom: 1px solid #D4AF37; color: var(--gold-dark); font-weight: 800; padding-top: 4px; padding-bottom: 4px; }
         
         /* Custom Checkbox */
-        .row-select-box { width: 12px; height: 12px; border: 1px solid #cbd5e1; border-radius: 3px; cursor: pointer; display: inline-block; vertical-align: middle; margin-left: 4px; }
+        .row-select-box { width: 12px; height: 12px; border: 1px solid #cbd5e1; border-radius: 3px; cursor: pointer; display: inline-block; vertical-align: middle; margin-left: 4px; transition: 0.2s; }
+        .row-select-box:hover { border-color: #10b981; }
         tr.selected .row-select-box { background-color: #10b981; border-color: #10b981; position: relative; }
         tr.selected .row-select-box::after { content: '✓'; color: white; font-size: 8px; position: absolute; top: -2px; left: 2px; }
 
@@ -78,42 +76,44 @@
         td:nth-child(4) { width: 17%; text-align: center; color: #4a5568; font-family: 'Arial', sans-serif !important; direction: ltr; }
         .tag { font-size: 0.6rem; padding: 2px 10px; border-radius: 9999px; font-weight: 700; display: inline-block; white-space: nowrap; border: 1px solid transparent; }
 
-        .add-row-btn { width: 100%; padding: 6px; margin-top: 5px; background-color: #f0fdf4; border: 1px dashed #22c55e; color: #15803d; font-size: 0.7rem; font-weight: bold; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; opacity: 0.6; transition: 0.2s; }
-        .add-row-btn:hover { opacity: 1; }
+        /* Actions on Hover */
+        .action-btn-group { 
+            position: absolute; right: 100%; top: 50%; transform: translateY(-50%); 
+            display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s; 
+            padding-right: 5px; z-index: 50;
+        }
+        tbody tr:hover .action-btn-group { opacity: 1; }
+        
+        .row-btn { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 10px; border: 1px solid transparent; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .delete-btn { color: #b91c1c; background: #fee2e2; border-color: #fca5a5; }
+        .insert-btn { color: #15803d; background: #dcfce7; border-color: #86efac; }
+        .delete-btn:hover { background: #ef4444; color: white; }
+        .insert-btn:hover { background: #22c55e; color: white; }
 
-        /* Floating Controls */
         .save-floating-btn { position: fixed; bottom: 30px; left: 30px; background-color: #D4AF37; color: white; padding: 10px 25px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); z-index: 4000; border: 2px solid white; display: flex; align-items: center; gap: 8px; transition: all 0.3s; }
         .edit-instructions { position: fixed; top: 20px; left: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 250px; z-index: 1000; border-right: 4px solid #D4AF37; font-size: 0.8rem; }
         
-        /* Multi-Select Toolbar */
-        .selection-toolbar {
-            position: fixed; bottom: 90px; left: 30px; background: white; border: 1px solid #e5e7eb; 
-            padding: 8px 12px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); 
-            display: none; align-items: center; gap: 10px; z-index: 3900; animation: slideUp 0.2s;
-        }
+        .selection-toolbar { position: fixed; bottom: 90px; left: 30px; background: white; border: 1px solid #e5e7eb; padding: 8px 12px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); display: none; align-items: center; gap: 10px; z-index: 3900; animation: slideUp 0.2s; }
         .toolbar-btn { background: #f3f4f6; color: #374151; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; font-weight: bold; transition: 0.2s; }
         .toolbar-btn:hover { background: #e5e7eb; }
         .toolbar-btn.delete { color: #ef4444; background: #fee2e2; }
         .toolbar-count { font-weight: bold; color: var(--gold-dark); margin-left: 5px; font-size: 0.75rem; }
 
-        /* Elegant DatePicker */
         .tag-selector-menu, .custom-datepicker { position: absolute; background: white; border: 1px solid #e2e8f0; box-shadow: 0 8px 20px -4px rgba(0,0,0,0.15); border-radius: 8px; z-index: 3000; min-width: 180px; padding: 0; animation: fadeIn 0.15s; overflow: hidden; }
-        .custom-datepicker { width: 200px; } /* Smaller elegant width */
+        .custom-datepicker { width: 200px; }
         .calendar-header { background: #fff; color: #333; padding: 8px 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-bottom: 1px solid #f1f5f9; font-weight: 700; color: var(--gold-dark); }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 8px; gap: 1px; }
         .day-name { text-align: center; font-size: 0.5rem; font-weight: 600; color: #9ca3af; padding-bottom: 2px; }
         .day-cell { text-align: center; padding: 4px 0; font-size: 0.65rem; cursor: pointer; border-radius: 4px; color: #4b5563; transition: 0.1s; }
         .day-cell:hover { background-color: #FEFCE8; color: var(--gold-main); font-weight: bold; }
-        .day-cell.today { color: var(--gold-dark); font-weight: bold; border: 1px solid #f0f0f0; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
         [contenteditable]:hover { background-color: #fffbeb; cursor: text; outline: 1px dashed #d1d5db; }
         [contenteditable]:focus { background-color: #fff; outline: 2px solid #D4AF37; }
 
         @media print {
-            .no-print, .item-controls, .add-mini-btn, .save-floating-btn, .action-btn-group, .add-row-btn, .selection-toolbar, .row-select-box { display: none !important; }
+            .no-print, .item-controls, .add-mini-btn, .save-floating-btn, .action-btn-group, .selection-toolbar, .row-select-box { display: none !important; }
             body { background: white; padding: 0; }
             .page { box-shadow: none; border: none; margin: 0; page-break-after: always; height: 297mm; }
             [contenteditable]:hover, [contenteditable]:focus { background-color: transparent; outline: none; }
@@ -138,7 +138,6 @@
         <i class="fa-solid fa-cloud-arrow-up"></i> حفظ التعديلات السحابية
     </button>
     
-    <!-- Multi-Select Toolbar -->
     <div id="selectionToolbar" class="selection-toolbar no-print">
         <span class="toolbar-count">تم تحديد <span id="selCount">0</span></span>
         <div class="h-4 w-px bg-gray-300 mx-2"></div>
@@ -153,10 +152,9 @@
         <h3>لوحة التحكم</h3>
         <div class="mb-2 text-[0.7rem] text-gray-500">الحالة: <span id="connectionStatus">جاري الاتصال...</span></div>
         <ul class="text-[0.65rem] text-gray-600 list-disc pr-4">
-            <li><strong>تحديد متعدد:</strong> اضغط على المربع الملون لتديد السطر، ثم استخدم الشريط العائم للنقل أو الحذف.</li>
-            <li><strong>التوزيع التلقائي:</strong> البنود تنتقل تلقائياً للصفحات التالية عند الامتلاء.</li>
-            <li><strong>الصفحة 1:</strong> حد أقصى 29 بند.</li>
-            <li><strong>الصفحة 2:</strong> حد أقصى 70 بند.</li>
+            <li><strong>إضافة سطر:</strong> مرر الماوس فوق أي سطر واضغط (+) للإضافة قبله.</li>
+            <li><strong>تحديد فقرة:</strong> اضغط مربع التحديد بجانب العنوان لتحديد كل بنوده.</li>
+            <li><strong>نقل وحذف:</strong> حدد الأسطر واستخدم الشريط العائم.</li>
         </ul>
     </div>
 
@@ -207,8 +205,6 @@
                 <thead><tr><th style="width:6%">م</th><th style="width:18%">الجهة</th><th style="width:60%">الحدث</th><th style="width:16%">التاريخ</th></tr></thead>
                 <tbody id="tbody-1"></tbody>
             </table>
-            <!-- Added Add button here too, it inserts at global index of page end -->
-            <button class="add-row-btn no-print" onclick="addGlobalRow(28)">+ إضافة سطر في هذه الصفحة</button>
         </div>
         <footer><div>شركة اتحاد الراجحي</div><div id="p1_count">صفحة 1 من 3</div><div>مشروع مسار</div></footer>
     </div>
@@ -221,7 +217,6 @@
                 <thead><tr><th style="width:6%">م</th><th style="width:18%">الجهة</th><th style="width:60%">الحدث</th><th style="width:16%">التاريخ</th></tr></thead>
                 <tbody id="tbody-2"></tbody>
             </table>
-            <button class="add-row-btn no-print" onclick="addGlobalRow(69)">+ إضافة سطر في هذه الصفحة</button>
         </div>
         <footer><div>شركة اتحاد الراجحي</div><div>صفحة 2 من 3</div><div>مشروع مسار</div></footer>
     </div>
@@ -234,7 +229,6 @@
                 <thead><tr><th style="width:6%">م</th><th style="width:18%">الجهة</th><th style="width:60%">الحدث</th><th style="width:16%">التاريخ</th></tr></thead>
                 <tbody id="tbody-3"></tbody>
             </table>
-            <button class="add-row-btn no-print" onclick="addGlobalRow(-1)">+ إضافة سطر في النهاية</button>
         </div>
         <div class="card" style="margin-top: auto; margin-bottom: 20mm; background-color: #fafafa;">
             <div class="section-header"><span class="section-num">✓</span><span class="section-title">نهاية السجل</span></div>
@@ -245,13 +239,12 @@
 </div>
 
 <script>
-    // --- GLOBAL DATA & STATE ---
-    // All rows are stored here. Rendering splits them into pages.
+    // --- GLOBAL DATA ---
     window.globalRows = []; 
     window.selectedIndices = new Set();
     window.userId = null;
 
-    // --- RENDER LOGIC (THE CORE) ---
+    // --- RENDER LOGIC ---
     window.renderPages = function() {
         const tbody1 = document.getElementById('tbody-1');
         const tbody2 = document.getElementById('tbody-2');
@@ -260,11 +253,6 @@
         tbody1.innerHTML = '';
         tbody2.innerHTML = '';
         tbody3.innerHTML = '';
-
-        // Pagination Logic:
-        // Page 1: 0 to 28 (29 items)
-        // Page 2: 29 to 69 (41 items) -> Total 70
-        // Page 3: 70 to end
         
         globalRows.forEach((row, index) => {
             let targetBody;
@@ -278,10 +266,8 @@
 
             if (row.type === 'header') {
                 tr.className = 'stream-header';
-                // Add click listener for selection
-                tr.onclick = (e) => toggleSelection(e, index);
                 tr.innerHTML = `<td colspan="4" contenteditable="true" onblur="updateRowData(${index}, 'text', this.innerText)">${row.text}
-                    <div class="no-print row-select-box"></div>
+                    <div class="no-print row-select-box" onclick="toggleHeaderSelection(event, ${index})"></div>
                 </td>`;
             } else {
                 tr.innerHTML = window.renderRowTemplate(index, row);
@@ -294,47 +280,71 @@
     };
 
     window.renderRowTemplate = (index, row) => `
-        <td class="relative" onclick="toggleSelection(event, ${index})">
-            <span class="row-index"></span>
-            <div class="no-print row-select-box"></div>
+        <td class="relative">
+            <div class="flex items-center justify-center gap-1">
+                <div class="action-btn-group no-print" style="left:-40px;">
+                    <div class="row-btn insert-btn" onclick="insertRowAt(${index})" title="إضافة قبل"><i class="fa-solid fa-plus"></i></div>
+                    <div class="row-btn delete-btn" onclick="deleteGlobalRow(${index})" title="حذف"><i class="fa-solid fa-xmark"></i></div>
+                </div>
+                <span class="row-index"></span>
+                <div class="no-print row-select-box" onclick="toggleSelection(event, ${index})"></div>
+            </div>
         </td>
         <td onclick="openTagSelector(this, ${index})" class="cursor-pointer text-center"><span class="tag ${row.tagClass || 'bg-gray-100 text-gray-800'}">${row.tag}</span></td>
         <td contenteditable="true" onblur="updateRowData(${index}, 'event', this.innerText)">${row.event}</td>
         <td onclick="openDatePicker(this, ${index})" class="cursor-pointer text-center" dir="ltr">${row.date}</td>`;
 
-    // --- DATA MANIPULATION ---
-    window.updateRowData = (index, field, value) => {
-        if(globalRows[index]) globalRows[index][field] = value;
-    };
+    // --- DATA ACTIONS ---
+    window.updateRowData = (index, field, value) => { if(globalRows[index]) globalRows[index][field] = value; };
+    window.updateRowTag = (index, tag, cls) => { if(globalRows[index]) { globalRows[index].tag = tag; globalRows[index].tagClass = cls; renderPages(); } };
+    window.updateRowDate = (index, date) => { if(globalRows[index]) { globalRows[index].date = date; renderPages(); } };
 
-    window.updateRowTag = (index, tag, cls) => {
-        if(globalRows[index]) { globalRows[index].tag = tag; globalRows[index].tagClass = cls; renderPages(); }
-    };
-
-    window.updateRowDate = (index, date) => {
-        if(globalRows[index]) { globalRows[index].date = date; renderPages(); }
-    };
-
-    window.addGlobalRow = (atIndex) => {
+    window.insertRowAt = (index) => {
         const newRow = { type: 'data', tag: 'جديد', tagClass: 'bg-gray-100 text-gray-800', event: 'وصف البند الجديد...', date: '--/--/----' };
-        if (atIndex === -1) globalRows.push(newRow); // Add to end
-        else globalRows.splice(atIndex + 1, 0, newRow); // Insert after
+        globalRows.splice(index, 0, newRow);
         renderPages();
     };
+    
+    window.deleteGlobalRow = (index) => {
+        if(confirm('هل أنت متأكد من حذف هذا السطر؟')) {
+            globalRows.splice(index, 1);
+            // Fix selection indices after delete
+            const newSet = new Set();
+            window.selectedIndices.forEach(i => {
+                if (i < index) newSet.add(i);
+                else if (i > index) newSet.add(i - 1);
+            });
+            window.selectedIndices = newSet;
+            renderPages();
+        }
+    };
 
-    // --- SELECTION & MOVE LOGIC ---
+    // --- SELECTION LOGIC ---
     window.toggleSelection = (e, index) => {
-        if(e.target.isContentEditable) return; // Don't select if editing text
         if (window.selectedIndices.has(index)) window.selectedIndices.delete(index);
         else window.selectedIndices.add(index);
         renderPages();
     };
 
-    window.clearSelection = () => {
-        window.selectedIndices.clear();
+    // FIX: Select All in Section
+    window.toggleHeaderSelection = (e, headerIndex) => {
+        e.stopPropagation();
+        const isSelected = window.selectedIndices.has(headerIndex);
+        const targetState = !isSelected;
+        
+        if (targetState) window.selectedIndices.add(headerIndex);
+        else window.selectedIndices.delete(headerIndex);
+
+        // Loop until next header or end
+        for (let i = headerIndex + 1; i < window.globalRows.length; i++) {
+            if (window.globalRows[i].type === 'header') break;
+            if (targetState) window.selectedIndices.add(i);
+            else window.selectedIndices.delete(i);
+        }
         renderPages();
     };
 
+    window.clearSelection = () => { window.selectedIndices.clear(); renderPages(); };
     window.updateToolbar = () => {
         const toolbar = document.getElementById('selectionToolbar');
         const count = window.selectedIndices.size;
@@ -344,33 +354,26 @@
 
     window.deleteSelectedRows = () => {
         if(!confirm('هل أنت متأكد من حذف البنود المحددة؟')) return;
-        // Sort indices descending to delete safely
         const indices = Array.from(window.selectedIndices).sort((a,b) => b-a);
         indices.forEach(idx => globalRows.splice(idx, 1));
         clearSelection();
     };
 
     window.moveSelectedRows = (direction) => {
-        // Direction: -1 for Up, 1 for Down
         const indices = Array.from(window.selectedIndices).sort((a,b) => direction === -1 ? a-b : b-a);
-        
-        let movedAny = false;
+        let moved = false;
         indices.forEach(idx => {
-            const targetIdx = idx + direction;
-            if (targetIdx >= 0 && targetIdx < globalRows.length && !window.selectedIndices.has(targetIdx)) {
-                // Swap
-                [globalRows[idx], globalRows[targetIdx]] = [globalRows[targetIdx], globalRows[idx]];
-                // Update selection to follow
+            const target = idx + direction;
+            if (target >= 0 && target < globalRows.length && !window.selectedIndices.has(target)) {
+                [globalRows[idx], globalRows[target]] = [globalRows[target], globalRows[idx]];
                 window.selectedIndices.delete(idx);
-                window.selectedIndices.add(targetIdx);
-                movedAny = true;
+                window.selectedIndices.add(target);
+                moved = true;
             }
         });
-        
-        if(movedAny) renderPages();
+        if(moved) renderPages();
     };
 
-    // --- UI Helpers ---
     window.renumberTables = () => {
         let count = 1;
         document.querySelectorAll('tbody tr').forEach(row => {
@@ -380,7 +383,7 @@
         });
     };
 
-    // --- OTHER HELPERS (Calendar, Tags, Auth) Same as before ---
+    // --- AUTH & OTHER LOGIC ---
     function checkPassword() {
         if (document.getElementById('passwordInput').value === "masar") {
             document.getElementById('loginOverlay').style.display = 'none';
@@ -389,58 +392,7 @@
     }
     document.getElementById('passwordInput')?.addEventListener('keypress', e => { if (e.key === 'Enter') checkPassword(); });
 
-    // Dynamic Calendar
-    let curIdxForDate = null; let pDate = new Date();
-    window.openDatePicker = (c, idx) => {
-        curIdxForDate = idx !== undefined ? idx : 'dashboard'; // 'dashboard' if top info
-        const txt = c.innerText.trim();
-        if (txt.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) { const p = txt.split('/'); pDate = new Date(p[2], p[1]-1, p[0]); } 
-        else { pDate = new Date(); }
-        
-        document.querySelectorAll('.custom-datepicker').forEach(e => e.remove());
-        const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'custom-datepicker no-print';
-        div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
-        document.body.appendChild(div); renderCal(div, c);
-    };
-
-    function renderCal(div, targetElement) {
-        const y = pDate.getFullYear(), m = pDate.getMonth();
-        const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-        const days = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
-        let h = `<div class="calendar-header"><span onclick="window.chM(-1)"><i class="fa-solid fa-chevron-right"></i></span><span>${months[m]} ${y}</span><span onclick="window.chM(1)"><i class="fa-solid fa-chevron-left"></i></span></div><div class="calendar-grid">`;
-        days.forEach(d => h += `<div class="day-name">${d}</div>`);
-        const firstDay = new Date(y, m, 1).getDay(), totalDays = new Date(y, m + 1, 0).getDate();
-        for(let i=0; i<firstDay; i++) h += `<div></div>`;
-        for(let d=1; d<=totalDays; d++) h += `<div class="day-cell" onclick="window.setD(${d})">${d}</div>`;
-        div.innerHTML = h + '</div>';
-    }
-    window.chM = d => { pDate.setMonth(pDate.getMonth() + d); renderCal(document.querySelector('.custom-datepicker')); };
-    window.setD = d => { 
-        const dateStr = `${String(d).padStart(2,'0')}/${String(pDate.getMonth()+1).padStart(2,'0')}/${pDate.getFullYear()}`;
-        if (typeof curIdxForDate === 'number') window.updateRowDate(curIdxForDate, dateStr);
-        else document.querySelectorAll('.custom-datepicker').forEach(e => {
-             // For dashboard dates
-             const target = document.elementFromPoint(parseInt(e.style.left), parseInt(e.style.top) - 10);
-             if(target) target.innerText = dateStr; 
-        }); 
-        
-        document.querySelector('.custom-datepicker').remove(); 
-    };
-
-    // Tags
-    let curIdxForTag = null;
-    window.openTagSelector = (c, idx) => {
-        curIdxForTag = idx;
-        const tags = [{t:"Colliers",c:"bg-blue-100 text-blue-800"},{t:"لجنة مسار",c:"bg-purple-100 text-purple-800"},{t:"الفريق الداخلي",c:"bg-green-100 text-green-800"},{t:"لجنة الاستثمار",c:"bg-emerald-100 text-emerald-800"},{t:"المستشار القانوني",c:"bg-red-100 text-red-800"},{t:"المشغلين",c:"bg-orange-100 text-orange-800"},{t:"JLL",c:"bg-indigo-100 text-indigo-800"},{t:"Wisefields",c:"bg-rose-100 text-rose-800"}];
-        document.querySelectorAll('.tag-selector-menu').forEach(e => e.remove());
-        const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'tag-selector-menu no-print';
-        div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
-        let h = '<div class="p-2 flex flex-wrap gap-1 max-h-40 overflow-auto">';
-        tags.forEach(t => h += `<span class="tag cursor-pointer ${t.c}" onclick="window.updateRowTag(${idx}, '${t.t}', '${t.c}'); document.querySelector('.tag-selector-menu').remove();">${t.t}</span>`);
-        div.innerHTML = h + '</div>'; document.body.appendChild(div);
-    };
-    
-    // Dashboard Helpers (Stakeholders/Achievements)
+    // Dashboard Helpers
     window.addStakeholder = (text = "جهة جديدة", color = "bg-blue-500") => {
         const div = document.createElement('div'); div.className = "stk-item";
         div.innerHTML = `<span class="dot ${color}" onclick="cycleColor(this)"></span><span contenteditable="true">${text}</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.closest('.stk-item').remove()">x</div></div>`;
@@ -462,6 +414,49 @@
         let next = states[(states.indexOf(icon.dataset.state) + 1) % states.length];
         icon.dataset.state = next; icon.innerText = icons[next]; icon.className = "status-icon " + classes[next];
     };
+
+    // DatePicker
+    let curIdxForDate = null, pDate = new Date();
+    window.openDatePicker = (c, idx) => {
+        curIdxForDate = idx !== undefined ? idx : 'dashboard'; 
+        const txt = c.innerText.trim();
+        if (txt.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) { const p = txt.split('/'); pDate = new Date(p[2], p[1]-1, p[0]); } else { pDate = new Date(); }
+        document.querySelectorAll('.custom-datepicker').forEach(e => e.remove());
+        const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'custom-datepicker no-print';
+        div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
+        document.body.appendChild(div); renderCal(div);
+    };
+    function renderCal(div) {
+        const y = pDate.getFullYear(), m = pDate.getMonth();
+        const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+        const days = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
+        let h = `<div class="calendar-header"><span onclick="window.chM(-1)"><i class="fa-solid fa-chevron-right"></i></span><span>${months[m]} ${y}</span><span onclick="window.chM(1)"><i class="fa-solid fa-chevron-left"></i></span></div><div class="calendar-grid">`;
+        days.forEach(d => h += `<div class="day-name">${d}</div>`);
+        const dim = new Date(y, m + 1, 0).getDate();
+        for(let i=0; i<new Date(y, m, 1).getDay(); i++) h += `<div></div>`;
+        for(let d=1; d<=dim; d++) h += `<div class="day-cell" onclick="window.setD(${d})">${d}</div>`;
+        div.innerHTML = h + '</div>';
+    }
+    window.chM = d => { pDate.setMonth(pDate.getMonth() + d); renderCal(document.querySelector('.custom-datepicker')); };
+    window.setD = d => { 
+        const ds = `${String(d).padStart(2,'0')}/${String(pDate.getMonth()+1).padStart(2,'0')}/${pDate.getFullYear()}`;
+        if (typeof curIdxForDate === 'number') window.updateRowDate(curIdxForDate, ds);
+        else document.querySelectorAll('.custom-datepicker').forEach(e => { const t = document.elementFromPoint(parseInt(e.style.left), parseInt(e.style.top) - 10); if(t) t.innerText = ds; }); 
+        document.querySelector('.custom-datepicker').remove(); 
+    };
+
+    // Tags
+    let curIdxForTag = null;
+    window.openTagSelector = (c, idx) => {
+        curIdxForTag = idx;
+        const tags = [{t:"Colliers",c:"bg-blue-100 text-blue-800"},{t:"لجنة مسار",c:"bg-purple-100 text-purple-800"},{t:"الفريق الداخلي",c:"bg-green-100 text-green-800"},{t:"لجنة الاستثمار",c:"bg-emerald-100 text-emerald-800"},{t:"المستشار القانوني",c:"bg-red-100 text-red-800"},{t:"المشغلين",c:"bg-orange-100 text-orange-800"},{t:"JLL",c:"bg-indigo-100 text-indigo-800"},{t:"Wisefields",c:"bg-rose-100 text-rose-800"}];
+        document.querySelectorAll('.tag-selector-menu').forEach(e => e.remove());
+        const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'tag-selector-menu no-print';
+        div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
+        let h = '<div class="p-2 flex flex-wrap gap-1 max-h-40 overflow-auto">';
+        tags.forEach(t => h += `<span class="tag cursor-pointer ${t.c}" onclick="window.updateRowTag(${idx}, '${t.t}', '${t.c}'); document.querySelector('.tag-selector-menu').remove();">${t.t}</span>`);
+        div.innerHTML = h + '</div>'; document.body.appendChild(div);
+    };
     document.addEventListener('mousedown', e => { if (!e.target.closest('td') && !e.target.closest('.custom-datepicker') && !e.target.closest('.info-val')) document.querySelectorAll('.tag-selector-menu, .custom-datepicker').forEach(e => e.remove()); });
 </script>
 
@@ -473,7 +468,6 @@
     const firebaseConfig = { apiKey: "AIzaSyCiGlPJ48nB_swXaWRtNxK5sYdaMV0gW3w", authDomain: "masarlog0.firebaseapp.com", projectId: "masarlog0", storageBucket: "masarlog0.firebasestorage.app", messagingSenderId: "344022532795", appId: "1:344022532795:web:7a11c9507349b242935f9e" };
     const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app), appId = 'masar-report-data';
 
-    // *** COMPLETE DATASET ***
     const initialDataset = {
         dashboard: {
             scope: "تنسيق وإدارة الدراسات الأولية واختيار الشركاء لتطوير <strong>مشروع مسار</strong>.",
@@ -483,7 +477,6 @@
             stakeholders: [{text:"Colliers",color:"bg-blue-500"},{text:"لجنة مسار",color:"bg-purple-500"},{text:"لجنة الاستثمار",color:"bg-green-500"},{text:"المستشار القانوني",color:"bg-red-500"},{text:"المشغلين",color:"bg-orange-500"}],
             achievements: [{text:"اعتماد خيار التطوير الثالث.",state:"done"},{text:"تحليل عروض المشغلين الأولية.",state:"done"},{text:"التفاوض مع القائمة المختصرة.",state:"sync"}]
         },
-        // We initialize as ONE list now, but keep structure for fallback
         rows: [
             {type:'header', text:'أولاً: دراسة السوق وأعلى وأفضل استخدام (Colliers)'},
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'التعاقد لإعداد دراسة HBU', date:'15/01/2025'},
@@ -593,7 +586,6 @@
         onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'report_v1', 'latest'), snap => {
             if (snap.exists()) {
                 const d = snap.data();
-                // Fix old DB format if needed: concat old tables
                 if (d.table1 && !d.rows) {
                     window.globalRows = [...(d.table1||[]), ...(d.table2||[]), ...(d.table3||[])];
                 } else {
@@ -605,7 +597,6 @@
                 renderApp(initialDataset);
             }
         }, err => {
-            console.error("Sync Error:", err);
             window.globalRows = initialDataset.rows;
             renderApp(initialDataset);
         });
@@ -645,7 +636,7 @@
                     stakeholders: [...document.querySelectorAll('.stk-item')].map(s => ({ text: s.querySelector('span[contenteditable]').innerText, color: [...s.querySelector('.dot').classList].find(c => c.startsWith('bg-')) })),
                     achievements: [...document.querySelectorAll('.ach-item')].map(a => ({ text: a.querySelector('span[contenteditable]').innerText, state: a.querySelector('.status-icon').dataset.state }))
                 },
-                rows: window.globalRows // Saving single consolidated list
+                rows: window.globalRows
             };
             await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'report_v1', 'latest'), data);
             btn.innerHTML = 'تم الحفظ ✓'; setTimeout(() => btn.innerHTML = old, 2000);
