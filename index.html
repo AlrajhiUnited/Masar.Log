@@ -25,11 +25,12 @@
         h1 { font-size: 1.4rem; font-weight: 800; color: #111; line-height: 1.2; }
         h2 { font-size: 0.85rem; color: var(--gold-main); font-weight: 700; margin-top: 2px; }
         
+        /* Dashboard */
         .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; flex-shrink: 0; }
         .col-stack { display: flex; flex-direction: column; gap: 6px; }
-        .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); position: relative; }
+        .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px 10px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); position: relative; }
         .section-header { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; padding-bottom: 2px; border-bottom: 1px solid #f3f4f6; }
-        .section-num { background: var(--gold-main); color: white; font-weight: 800; font-size: 0.75rem; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+        .section-num { background: var(--gold-main); color: white; font-weight: 800; font-size: 0.75rem; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
         .section-title { font-size: 0.8rem; font-weight: 800; color: #2d3748; }
         .txt-content { font-size: 0.65rem; color: #4a5568; line-height: 1.4; }
         .highlight-box { background-color: #FEFCE8; border: 1px solid #FEF08A; padding: 3px; border-radius: 4px; margin-top: 3px; font-size: 0.65rem; }
@@ -39,8 +40,9 @@
         .info-lbl { font-size: 0.55rem; color: #6B7280; }
         .status-bar { background: #FEFCE8; border: 1px dashed #EAB308; border-radius: 4px; padding: 2px; text-align: center; color: #854D0E; font-weight: 700; font-size: 0.65rem; }
 
+        /* Interactive Items */
         .stk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-        .stk-item { background: white; border: 1px solid #E5E7EB; border-radius: 4px; padding: 2px 5px; font-size: 0.6rem; font-weight: 700; display: flex; align-items: center; gap: 4px; justify-content: center; color: #374151; position: relative; }
+        .stk-item { background: white; border: 1px solid #E5E7EB; border-radius: 4px; padding: 3px 6px; font-size: 0.6rem; font-weight: 700; display: flex; align-items: center; gap: 4px; justify-content: center; color: #374151; position: relative; }
         .ach-item { display: flex; align-items: center; gap: 4px; font-size: 0.65rem; color: #4B5563; position: relative; padding: 2px 0; }
         .dot { width: 6px; height: 6px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
         .status-icon { cursor: pointer; width: 14px; text-align: center; flex-shrink: 0; font-size: 0.7rem; }
@@ -50,20 +52,39 @@
         .btn-del { background: #fee2e2; color: #ef4444; }
         .add-mini-btn { font-size: 0.6rem; color: var(--gold-dark); cursor: pointer; text-align: center; margin-top: 4px; border: 1px dashed #ddd; border-radius: 4px; padding: 2px; }
 
+        /* Tables */
         .matrix-container { background: transparent; flex-grow: 1; display: flex; flex-direction: column; }
         table { width: 100%; border-collapse: separate; border-spacing: 0 3px; }
         thead tr { background: var(--gold-main); height: 24px; }
         thead th { color: white !important; font-weight: 800; font-size: 0.7rem; padding: 0 6px; text-align: center; }
+        th:nth-child(2), th:nth-child(3) { text-align: right; padding-right: 12px; }
+        
         tbody tr { background: white; transition: background 0.2s; }
-        td { border-bottom: 1px solid #f1f5f9; padding: 2px 8px; vertical-align: middle; font-size: 0.65rem; height: 20px; position: relative; }
+        tbody tr:hover { background-color: #f9fafb; }
+        td { border-bottom: 1px solid #f1f5f9; padding: 3px 8px; vertical-align: middle; font-size: 0.65rem; height: 20px; position: relative; }
         td:nth-child(1) { width: 6%; font-weight: 800; color: var(--gold-dark); background: #fafafa; border-left: 1px solid #f1f5f9; text-align: center; overflow: visible; }
         tr.stream-header td { background-color: #fcfbf7; border-bottom: 1px solid #D4AF37; color: var(--gold-dark); font-weight: 800; padding-top: 4px; padding-bottom: 4px; }
+        td:nth-child(2) { width: 18%; text-align: right; }
+        td:nth-child(3) { width: 60%; text-align: right; color: #2d3748; line-height: 1.3; }
+        td:nth-child(4) { width: 16%; text-align: center; color: #4a5568; font-family: 'Arial', sans-serif !important; direction: ltr; }
+        
+        /* UPDATED TAG STYLING */
+        .tag { 
+            font-size: 0.6rem; 
+            padding: 2px 10px; 
+            border-radius: 9999px; /* Rounded pill shape */
+            font-weight: 700; 
+            display: inline-block; 
+            white-space: nowrap;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
         .action-btn-group { position: absolute; left: -32px; top: 50%; transform: translateY(-50%); display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s; z-index: 100; }
         tbody tr:hover .action-btn-group { opacity: 1; left: 2px; }
-        .row-btn { width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 9px; }
-        .delete-btn { color: #b91c1c; background: #fee2e2; border: 1px solid #fca5a5; }
-        .insert-btn { color: #15803d; background: #dcfce7; border: 1px solid #86efac; }
-        .add-row-btn { width: 100%; padding: 8px; margin-top: 5px; background-color: #f0fdf4; border: 1px dashed #22c55e; color: #15803d; font-size: 0.7rem; font-weight: bold; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .row-btn { width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 9px; border: 1px solid transparent; }
+        .delete-btn { color: #b91c1c; background: #fee2e2; border-color: #fca5a5; }
+        .insert-btn { color: #15803d; background: #dcfce7; border-color: #86efac; }
 
         .save-floating-btn { position: fixed; bottom: 30px; left: 30px; background-color: #D4AF37; color: white; padding: 10px 25px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); z-index: 4000; border: 2px solid white; display: flex; align-items: center; gap: 8px; transition: all 0.3s; }
         .edit-instructions { position: fixed; top: 20px; left: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 250px; z-index: 1000; border-right: 4px solid #D4AF37; font-size: 0.8rem; }
@@ -71,11 +92,18 @@
         .tag-selector-menu, .custom-datepicker { position: absolute; background: white; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px; z-index: 3000; min-width: 200px; padding: 5px; animation: fadeIn 0.2s; }
         .calendar-header { background: var(--gold-main); color: white; padding: 8px; display: flex; justify-content: space-between; font-size: 0.8rem; border-radius: 4px 4px 0 0; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 5px; gap: 2px; }
-        .day-cell { text-align: center; padding: 4px; font-size: 0.7rem; cursor: pointer; border-radius: 4px; }
-        .day-cell:hover { background: #FEFCE8; }
+        .day-cell { text-align: center; padding: 4px; font-size: 0.7rem; cursor: pointer; border-radius: 4px; color: #374151; }
+        .day-cell:hover { background-color: #FEFCE8; color: #D4AF37; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; } }
-        @media print { .no-print, .item-controls, .add-mini-btn, .save-floating-btn, .action-btn-group { display: none !important; } body { background: white; padding: 0; } .page { box-shadow: none; border: none; margin: 0; page-break-after: always; height: 297mm; } }
+        [contenteditable]:hover { background-color: #fffbeb; cursor: text; outline: 1px dashed #d1d5db; }
+
+        @media print {
+            .no-print, .item-controls, .add-mini-btn, .save-floating-btn, .action-btn-group { display: none !important; }
+            body { background: white; padding: 0; }
+            .page { box-shadow: none; border: none; margin: 0; page-break-after: always; height: 297mm; }
+            [contenteditable]:hover, [contenteditable]:focus { background-color: transparent; outline: none; }
+        }
     </style>
 </head>
 <body>
@@ -204,7 +232,7 @@
 
     window.renderRowTemplate = (num, tag, event, date, tagClass) => `
         <td class="relative"><span class="row-index">${num}</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td>
-        <td onclick="openTagSelector(this)" class="cursor-pointer"><span class="tag ${tagClass || 'bg-gray-100 text-gray-800'}">${tag}</span></td>
+        <td onclick="openTagSelector(this)" class="cursor-pointer text-center"><span class="tag ${tagClass || 'bg-gray-100 text-gray-800'}">${tag}</span></td>
         <td contenteditable="true">${event}</td>
         <td onclick="openDatePicker(this)" class="cursor-pointer text-center" dir="ltr">${date}</td>`;
 
@@ -261,14 +289,22 @@
         document.body.appendChild(div); renderCal(div, c);
     };
     function renderCal(div, target) {
-        const y = 2026, m = 1, names = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-        let h = `<div class="calendar-header"><span>فبراير 2026</span></div><div class="calendar-grid">`;
-        for(let i=1; i<=28; i++) h += `<div class="day-cell" onclick="this.closest('.custom-datepicker').remove(); document.getElementById('${target.id}').innerText='${String(i).padStart(2,'0')}/02/2026'">${i}</div>`;
+        let h = `<div class="calendar-header"><span>التقويم</span></div><div class="calendar-grid">`;
+        for(let i=1; i<=31; i++) h += `<div class="day-cell" onclick="this.closest('.custom-datepicker').remove(); document.getElementById('${target.id}').innerText='${String(i).padStart(2,'0')}/02/2026'">${i}</div>`;
         div.innerHTML = h + '</div>';
     }
 
     window.openTagSelector = c => {
-        const tags = [{t:"Colliers",c:"bg-blue-100 text-blue-800"},{t:"لجنة مسار",c:"bg-purple-100 text-purple-800"},{t:"الفريق الداخلي",c:"bg-green-100 text-green-800"},{t:"لجنة الاستثمار",c:"bg-emerald-100 text-emerald-800"},{t:"المستشار القانوني",c:"bg-red-100 text-red-800"},{t:"المشغلين",c:"bg-orange-100 text-orange-800"},{t:"JLL",c:"bg-indigo-100 text-indigo-800"},{t:"Wisefields",c:"bg-rose-100 text-rose-800"}];
+        const tags = [
+            {t:"Colliers",c:"bg-blue-100 text-blue-800"},
+            {t:"لجنة مسار",c:"bg-purple-100 text-purple-800"},
+            {t:"الفريق الداخلي",c:"bg-green-100 text-green-800"},
+            {t:"لجنة الاستثمار",c:"bg-emerald-100 text-emerald-800"},
+            {t:"المستشار القانوني",c:"bg-red-100 text-red-800"},
+            {t:"المشغلين",c:"bg-orange-100 text-orange-800"},
+            {t:"JLL",c:"bg-indigo-100 text-indigo-800"},
+            {t:"Wisefields",c:"bg-rose-100 text-rose-800"}
+        ];
         document.querySelectorAll('.tag-selector-menu').forEach(e => e.remove());
         const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'tag-selector-menu no-print';
         div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
@@ -291,7 +327,6 @@
     const db = getFirestore(app);
     const appId = 'masar-report-data';
 
-    // *** COMPLETE DATASET (94 ITEMS) ***
     const initialDataset = {
         dashboard: {
             scope: "تنسيق وإدارة الدراسات الأولية واختيار الشركاء لتطوير <strong>مشروع مسار</strong>.",
@@ -332,7 +367,7 @@
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال الملاحظات على الخيار الأول', date:'05/05/2025'},
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد اجتماع لمناقشة وتوضيح التعديلات', date:'07/05/2025'},
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام 3 خيارات تطوير نهائية (بدون سكني)', date:'16/05/2025'},
-            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال الخيارات للجنة مع التوصية بالخيار الثالث', date:'20/05/2025'}
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال الخيارات للجنة مع التوصية بالخيار الثالث', date:'20/05/2025'},
         ],
         table2: [
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام الخيارات بعد إضافة ملاحظات اللجنة', date:'25/05/2025'},
@@ -377,7 +412,7 @@
             {tag:'المشغلين', tagClass:'bg-orange-100 text-orange-800', event:'إرسال البيانات لعمل Area Program & P&L', date:'19/11/2025'},
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'الإجابة على استفسارات المشغلين', date:'20/11/2025'},
             {tag:'المشغلين', tagClass:'bg-orange-100 text-orange-800', event:'استلام التقديم الأول (الشروط التجارية الأولية)', date:'04/12/2025'},
-            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد ورش عمل مع المشغلين (اليوم 1)', date:'17/12/2025'}
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد ورش عمل مع المشغلين (اليوم 1)', date:'17/12/2025'},
         ],
         table3: [
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد ورش عمل مع المشغلين (اليوم 2)', date:'18/12/2025'},
@@ -389,7 +424,7 @@
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'مراجعة التقرير ومشاركة التعديلات مع الاستشاري', date:'02/01/2026'},
             {tag:'JLL', tagClass:'bg-indigo-100 text-indigo-800', event:'استلام تقرير التحليل بعد التعديل', date:'04/01/2026'},
             {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد الاجتماع (11) مع لجنة الدعم (القائمة المختصرة)', date:'05/01/2026'},
-            {type:'header', text:'ثالثاً: المستشار القانوني (Wisefields)'},
+            {type:'header', text:'ثانياً: المستشار القانوني (Wisefields)'},
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'رفع توصية بالتعاقد مع المستشار القانوني', date:'15/07/2025'},
             {tag:'Wisefields', tagClass:'bg-rose-100 text-rose-800', event:'رفع التوصية بـ Wisefields بعد تخفيض السعر', date:'05/08/2025'},
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال العقد والـ NDA للتوقيع', date:'06/08/2025'},
@@ -419,7 +454,7 @@
             else renderApp(initialDataset);
         }, err => {
             console.error("Sync Error:", err);
-            renderApp(initialDataset); // Fallback to local data on permission error
+            renderApp(initialDataset); 
         });
     }
 
@@ -427,22 +462,28 @@
         if(!data) return;
         const d = data.dashboard || initialDataset.dashboard;
         
-        // Fill Dashboard Fields
-        document.getElementById('scopeText').innerHTML = d.scope;
-        document.getElementById('keyComponents').innerHTML = d.keyComponents;
-        document.getElementById('startDate').innerText = d.startDate;
-        document.getElementById('lastUpdate').innerText = d.lastUpdate;
-        document.getElementById('statusText').innerText = d.status;
-        document.getElementById('yearRange').innerText = d.yearRange;
-        document.getElementById('footerSummary').innerText = d.footerSummary;
+        // Safety check for UI elements
+        if (document.getElementById('scopeText')) document.getElementById('scopeText').innerHTML = d.scope || "";
+        if (document.getElementById('keyComponents')) document.getElementById('keyComponents').innerHTML = d.keyComponents || "";
+        if (document.getElementById('startDate')) document.getElementById('startDate').innerText = d.startDate || "";
+        if (document.getElementById('lastUpdate')) document.getElementById('lastUpdate').innerText = d.lastUpdate || "";
+        if (document.getElementById('statusText')) document.getElementById('statusText').innerText = d.status || "";
+        if (document.getElementById('yearRange')) document.getElementById('yearRange').innerText = d.yearRange || "";
+        if (document.getElementById('footerSummary')) document.getElementById('footerSummary').innerText = d.footerSummary || "";
 
         // Fill Stakeholders
-        const stkGrid = document.getElementById('stkGrid'); stkGrid.innerHTML = '';
-        (d.stakeholders || []).forEach(s => window.addStakeholder(s.text, s.color));
+        const stkGrid = document.getElementById('stkGrid'); 
+        if (stkGrid) {
+            stkGrid.innerHTML = '';
+            (d.stakeholders || []).forEach(s => window.addStakeholder(s.text, s.color));
+        }
         
         // Fill Achievements
-        const achList = document.getElementById('achList'); achList.innerHTML = '';
-        (d.achievements || []).forEach(a => window.addAchievement(a.text, a.state));
+        const achList = document.getElementById('achList'); 
+        if (achList) {
+            achList.innerHTML = '';
+            (d.achievements || []).forEach(a => window.addAchievement(a.text, a.state));
+        }
 
         // Fill Tables
         renderTable('tbody-1', data.table1 || initialDataset.table1);
@@ -457,8 +498,13 @@
         body.innerHTML = '';
         rows.forEach(r => {
             const tr = document.createElement('tr');
-            if(r.type === 'header') { tr.className = 'stream-header'; tr.innerHTML = `<td colspan="4" contenteditable="true">${r.text}</td>`; }
-            else tr.innerHTML = window.renderRowTemplate('#', r.tag, r.event, r.date, r.tagClass);
+            if(r.type === 'header') { 
+                tr.className = 'stream-header'; 
+                tr.innerHTML = `<td colspan="4" contenteditable="true">${r.text}</td>`; 
+            }
+            else {
+                tr.innerHTML = window.renderRowTemplate('#', r.tag, r.event, r.date, r.tagClass);
+            }
             body.appendChild(tr);
         });
     }
