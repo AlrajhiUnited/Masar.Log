@@ -21,10 +21,10 @@
 
         #appContent { display: none; width: 100%; flex-direction: column; align-items: center; gap: 20px; }
         
-        /* Page Layout - Strict Height & Visible Overflow for margins */
+        /* Page Layout */
         .page { 
             width: 210mm; 
-            height: 297mm; /* Fixed A4 Height */
+            height: 297mm; /* Fixed Height to Ensure Standard A4 */
             background-color: #FFFFFF; 
             position: relative; 
             padding: 10mm 12mm 15mm 12mm; 
@@ -32,8 +32,7 @@
             display: flex; 
             flex-direction: column; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-            /* Changed to visible to allow buttons to sit in the margin */
-            overflow: visible; 
+            overflow: visible; /* Allows buttons to show in margin */
             margin-bottom: 20px; 
         }
         
@@ -43,67 +42,63 @@
         h2 { font-size: 0.85rem; color: var(--gold-main); font-weight: 700; margin-top: 2px; }
         
         /* Dashboard */
-        .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; flex-shrink: 0; }
+        .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; flex-shrink: 0; }
         .col-stack { display: flex; flex-direction: column; gap: 6px; }
         .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px 10px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); position: relative; }
-        .section-header { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; padding-bottom: 2px; border-bottom: 1px solid #f3f4f6; }
+        .section-header { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px solid #f3f4f6; }
         .section-num { background: var(--gold-main); color: white; font-weight: 800; font-size: 0.75rem; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
         .section-title { font-size: 0.8rem; font-weight: 800; color: #2d3748; }
-        .txt-content { font-size: 0.65rem; color: #4a5568; line-height: 1.4; }
-        .highlight-box { background-color: #FEFCE8; border: 1px solid #FEF08A; padding: 3px; border-radius: 4px; margin-top: 3px; font-size: 0.65rem; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 3px; }
-        .info-box { background: #FAFAFA; border: 1px solid #f0f0f0; border-radius: 4px; padding: 3px; text-align: center; }
+        .txt-content { font-size: 0.65rem; color: #4a5568; line-height: 1.5; }
+        .highlight-box { background-color: #FEFCE8; border: 1px solid #FEF08A; padding: 4px; border-radius: 4px; margin-top: 4px; font-size: 0.65rem; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 5px; }
+        .info-box { background: #FAFAFA; border: 1px solid #f0f0f0; border-radius: 4px; padding: 4px; text-align: center; }
         .info-val { font-size: 0.7rem; font-weight: 800; color: #1F2937; display: block; }
         .info-lbl { font-size: 0.55rem; color: #6B7280; }
-        .status-bar { background: #FEFCE8; border: 1px dashed #EAB308; border-radius: 4px; padding: 2px; text-align: center; color: #854D0E; font-weight: 700; font-size: 0.65rem; }
+        .status-bar { background: #FEFCE8; border: 1px dashed #EAB308; border-radius: 4px; padding: 3px; text-align: center; color: #854D0E; font-weight: 700; font-size: 0.65rem; }
 
         /* Interactive Items */
         .stk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-        .stk-item { background: white; border: 1px solid #E5E7EB; border-radius: 4px; padding: 2px 5px; font-size: 0.6rem; font-weight: 700; display: flex; align-items: center; gap: 4px; justify-content: center; color: #374151; position: relative; }
-        .ach-item { display: flex; align-items: center; gap: 4px; font-size: 0.65rem; color: #4B5563; position: relative; padding: 2px 0; }
-        .dot { width: 6px; height: 6px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
-        .status-icon { cursor: pointer; width: 14px; text-align: center; flex-shrink: 0; font-size: 0.7rem; }
+        .stk-item { background: white; border: 1px solid #E5E7EB; border-radius: 4px; padding: 4px 6px; font-size: 0.65rem; font-weight: 700; display: flex; align-items: center; gap: 5px; position: relative; }
+        .ach-item { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; color: #4B5563; position: relative; padding: 3px 0; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
+        .status-icon { cursor: pointer; width: 16px; text-align: center; flex-shrink: 0; font-size: 0.75rem; }
         .item-controls { position: absolute; left: 2px; top: 50%; transform: translateY(-50%); display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s; }
         .stk-item:hover .item-controls, .ach-item:hover .item-controls { opacity: 1; }
         .btn-mini { width: 14px; height: 14px; border-radius: 3px; font-size: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .btn-del { background: #fee2e2; color: #ef4444; }
-        .add-mini-btn { font-size: 0.6rem; color: var(--gold-dark); cursor: pointer; text-align: center; margin-top: 4px; border: 1px dashed #ddd; border-radius: 4px; padding: 2px; }
+        .add-mini-btn { font-size: 0.6rem; color: var(--gold-dark); cursor: pointer; text-align: center; margin-top: 6px; border: 1px dashed #ddd; border-radius: 4px; padding: 3px; transition: 0.2s; }
         .add-mini-btn:hover { background: #fafafa; border-color: var(--gold-main); }
 
         /* Tables */
         .matrix-container { background: transparent; flex-grow: 1; display: flex; flex-direction: column; position: relative; }
-        table { width: 100%; border-collapse: separate; border-spacing: 0 3px; }
-        thead tr { background: var(--gold-main); height: 24px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 4px; } /* Increased spacing */
+        thead tr { background: var(--gold-main); height: 28px; }
         thead th { color: white !important; font-weight: 800; font-size: 0.7rem; padding: 0 6px; text-align: center; }
-        tbody tr { background: white; transition: background 0.2s; position: relative; }
         
-        /* Row Selection */
+        tbody tr { background: white; transition: background 0.2s; position: relative; }
         tbody tr.selected { background-color: #ecfdf5 !important; border-left: 2px solid #10b981; }
         tbody tr:hover { background-color: #f9fafb; }
         
-        td { border-bottom: 1px solid #f1f5f9; padding: 3px 8px; vertical-align: middle; font-size: 0.65rem; height: 20px; position: relative; }
-        
-        /* First Column (Index, Actions, Checkbox) */
-        td:nth-child(1) { 
-            width: 5%; 
-            font-weight: 800; 
-            color: var(--gold-dark); 
-            background: #fafafa; 
-            border-left: 1px solid #f1f5f9; 
-            text-align: center; 
-            overflow: visible; /* CRITICAL: Allow buttons to be seen outside */
+        td { 
+            border-bottom: 1px solid #f1f5f9; 
+            padding: 5px 8px; /* Increased padding for better spacing (not compressed) */
+            vertical-align: middle; 
+            font-size: 0.65rem; 
+            /* Let height define itself but enforce minimum */
+            min-height: 28px; 
+            position: relative; 
         }
         
-        tr.stream-header td { background-color: #fcfbf7; border-bottom: 1px solid #D4AF37; color: var(--gold-dark); font-weight: 800; padding-top: 4px; padding-bottom: 4px; }
+        td:nth-child(1) { width: 5%; font-weight: 800; color: var(--gold-dark); background: #fafafa; border-left: 1px solid #f1f5f9; text-align: center; overflow: visible; }
+        tr.stream-header td { background-color: #fcfbf7; border-bottom: 1px solid #D4AF37; color: var(--gold-dark); font-weight: 800; padding: 6px 4px; }
         
-        /* Custom Checkbox */
         .row-select-box { width: 12px; height: 12px; border: 1px solid #cbd5e1; border-radius: 3px; cursor: pointer; display: inline-block; vertical-align: middle; margin-left: 4px; transition: 0.2s; }
         .row-select-box:hover { border-color: #10b981; }
         tr.selected .row-select-box { background-color: #10b981; border-color: #10b981; position: relative; }
         tr.selected .row-select-box::after { content: '✓'; color: white; font-size: 8px; position: absolute; top: -2px; left: 2px; }
 
         td:nth-child(2) { width: 18%; text-align: right; }
-        td:nth-child(3) { width: 60%; text-align: right; color: #2d3748; line-height: 1.3; }
+        td:nth-child(3) { width: 60%; text-align: right; color: #2d3748; line-height: 1.4; }
         td:nth-child(4) { width: 17%; text-align: center; color: #4a5568; font-family: 'Arial', sans-serif !important; direction: ltr; }
         
         .tag { font-size: 0.6rem; padding: 2px 10px; border-radius: 9999px; font-weight: 700; display: inline-block; white-space: nowrap; border: 1px solid transparent; }
@@ -111,18 +106,21 @@
         /* Action Buttons - POSITIONED FAR RIGHT IN MARGIN */
         .action-btn-group { 
             position: absolute; 
-            right: -40px; /* Moved to the right, into the margin */
+            right: -45px; /* Fully in the margin */
             top: 50%; 
             transform: translateY(-50%); 
             display: flex; 
-            gap: 2px; 
+            gap: 3px; 
             opacity: 0; 
             transition: opacity 0.2s; 
             z-index: 100;
+            background: white; /* Avoid transparency issues */
+            padding: 2px;
+            border-radius: 4px;
         }
         tbody tr:hover .action-btn-group { opacity: 1; }
         
-        .row-btn { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 10px; border: 1px solid transparent; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .row-btn { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; font-size: 10px; border: 1px solid transparent; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .delete-btn { color: #b91c1c; background: #fee2e2; border-color: #fca5a5; }
         .insert-btn { color: #15803d; background: #dcfce7; border-color: #86efac; }
         .delete-btn:hover { background: #ef4444; color: white; }
@@ -130,6 +128,7 @@
 
         /* Floating Controls */
         .save-floating-btn { position: fixed; bottom: 30px; left: 30px; background-color: #D4AF37; color: white; padding: 10px 25px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); z-index: 4000; border: 2px solid white; display: flex; align-items: center; gap: 8px; transition: all 0.3s; }
+        .save-floating-btn:hover { background-color: #b5952f; transform: scale(1.05); }
         .edit-instructions { position: fixed; top: 20px; left: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 250px; z-index: 1000; border-right: 4px solid #D4AF37; font-size: 0.8rem; }
         
         .selection-toolbar { position: fixed; bottom: 90px; left: 30px; background: white; border: 1px solid #e5e7eb; padding: 8px 12px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); display: none; align-items: center; gap: 10px; z-index: 3900; animation: slideUp 0.2s; }
@@ -140,10 +139,10 @@
         /* Elegant DatePicker */
         .tag-selector-menu, .custom-datepicker { position: absolute; background: white; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border-radius: 8px; z-index: 3000; min-width: 160px; padding: 0; animation: fadeIn 0.15s; overflow: hidden; }
         .custom-datepicker { width: 180px; }
-        .calendar-header { background: #fff; padding: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; border-bottom: 1px solid #f0f0f0; font-weight: 700; color: var(--gold-dark); }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 5px; gap: 1px; }
-        .day-name { text-align: center; font-size: 0.45rem; font-weight: 600; color: #9ca3af; padding-bottom: 2px; }
-        .day-cell { text-align: center; padding: 3px 0; font-size: 0.6rem; cursor: pointer; border-radius: 3px; color: #4b5563; transition: 0.1s; }
+        .calendar-header { background: #fff; padding: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; border-bottom: 1px solid #f0f0f0; font-weight: 700; color: var(--gold-dark); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 8px; gap: 2px; }
+        .day-name { text-align: center; font-size: 0.5rem; font-weight: 600; color: #9ca3af; padding-bottom: 4px; }
+        .day-cell { text-align: center; padding: 4px 0; font-size: 0.65rem; cursor: pointer; border-radius: 4px; color: #4b5563; transition: 0.1s; }
         .day-cell:hover { background-color: #FEFCE8; color: var(--gold-main); font-weight: bold; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: translateY(0); } }
@@ -191,14 +190,14 @@
         <h3>لوحة التحكم</h3>
         <div class="mb-2 text-[0.7rem] text-gray-500">الحالة: <span id="connectionStatus">جاري الاتصال...</span></div>
         <ul class="text-[0.65rem] text-gray-600 list-disc pr-4">
-            <li><strong>توزيع آمن:</strong> البنود لا تتجاوز الهوامش أبداً (17 بنداً للصفحة الأولى، 30 للثانية).</li>
+            <li><strong>توزيع آمن:</strong> البنود تنتقل تلقائياً لضمان عدم الخروج عن الهوامش.</li>
             <li><strong>إضافة سطر:</strong> اضغط (+) الأخضر الموجود يمين الجدول.</li>
             <li><strong>نقل وحذف:</strong> حدد الأسطر واستخدم الشريط العائم.</li>
         </ul>
     </div>
 
-    <!-- PAGE 1 -->
-    <div class="page">
+    <!-- PAGE 1 (Fixed Static Structure, Content Filled Dynamically) -->
+    <div class="page" id="page-1">
         <header>
             <div><h1>سجل متابعة مشروع مسار</h1><h2 id="pageSub">ملخص المشروع والدراسات الأولية (HBU)</h2></div>
             <div class="text-left flex flex-col items-end">
@@ -245,84 +244,113 @@
                 <tbody id="tbody-1"></tbody>
             </table>
         </div>
-        <footer><div>شركة اتحاد الراجحي</div><div id="p1_count">صفحة 1 من 3</div><div>مشروع مسار</div></footer>
+        <footer><div>شركة اتحاد الراجحي</div><div id="footer-p1">صفحة 1 من 3</div><div>مشروع مسار</div></footer>
     </div>
 
-    <!-- PAGE 2 -->
-    <div class="page">
-        <header><h1>تابع: سجل المتابعة</h1><img src="img/Alrajhi Logo Presentation.png" class="h-6"></header>
-        <div class="matrix-container">
-            <table id="table-2">
-                <thead><tr><th style="width:6%">م</th><th style="width:18%">الجهة</th><th style="width:60%">الحدث</th><th style="width:16%">التاريخ</th></tr></thead>
-                <tbody id="tbody-2"></tbody>
-            </table>
-        </div>
-        <footer><div>شركة اتحاد الراجحي</div><div>صفحة 2 من 3</div><div>مشروع مسار</div></footer>
-    </div>
+    <!-- Container for dynamic pages (2, 3, etc) -->
+    <div id="extra-pages-container"></div>
 
-    <!-- PAGE 3 -->
-    <div class="page">
-        <header><h1>تابع: سجل المتابعة</h1><img src="img/Alrajhi Logo Presentation.png" class="h-6"></header>
-        <div class="matrix-container">
-            <table id="table-3">
-                <thead><tr><th style="width:6%">م</th><th style="width:18%">الجهة</th><th style="width:60%">الحدث</th><th style="width:16%">التاريخ</th></tr></thead>
-                <tbody id="tbody-3"></tbody>
-            </table>
-        </div>
-        <div class="card" style="margin-top: auto; margin-bottom: 20mm; background-color: #fafafa;">
-            <div class="section-header"><span class="section-num">✓</span><span class="section-title">نهاية السجل</span></div>
-            <div class="txt-content" style="padding: 10px;" contenteditable="true" id="footerSummary"></div>
-        </div>
-        <footer><div>شركة اتحاد الراجحي</div><div>صفحة 3 من 3</div><div>مشروع مسار</div></footer>
-    </div>
 </div>
 
 <script>
-    // --- GLOBAL DATA ---
+    // --- GLOBAL DATA & STATE ---
     window.globalRows = []; 
     window.selectedIndices = new Set();
     window.userId = null;
 
-    // --- RENDER LOGIC WITH SAFE PAGINATION ---
+    // --- RENDER LOGIC WITH AUTO-PAGINATION ---
     window.renderPages = function() {
+        // Page 1 is static in HTML, just fill table
         const tbody1 = document.getElementById('tbody-1');
-        const tbody2 = document.getElementById('tbody-2');
-        const tbody3 = document.getElementById('tbody-3');
-        
         tbody1.innerHTML = '';
-        tbody2.innerHTML = '';
-        tbody3.innerHTML = '';
         
-        // STRICT SAFE LIMITS to guarantee no footer overlap
-        const LIMIT_P1 = 17; // Safe for dashboard + margins
-        const LIMIT_P2 = 47; // 17 + 30 (30 is safe full page)
+        // Define Capacity
+        const LIMIT_P1 = 15; // Conservative for Dashboard page
+        const LIMIT_PN = 25; // Very safe for subsequent pages (guarantees spacing and no overflow)
+
+        // Split data into chunks
+        const p1Rows = globalRows.slice(0, LIMIT_P1);
+        renderRowsIntoBody(p1Rows, tbody1, 0);
+
+        // Handle Extra Pages
+        const container = document.getElementById('extra-pages-container');
+        container.innerHTML = ''; // Clear old pages
         
-        globalRows.forEach((row, index) => {
-            let targetBody;
-            if (index < LIMIT_P1) targetBody = tbody1;
-            else if (index < LIMIT_P2) targetBody = tbody2;
-            else targetBody = tbody3;
+        let remainingRows = globalRows.slice(LIMIT_P1);
+        let pageCount = 1;
 
-            const tr = document.createElement('tr');
-            tr.dataset.index = index;
-            if (window.selectedIndices.has(index)) tr.classList.add('selected');
+        while (remainingRows.length > 0 || pageCount < 3) { // Ensure at least 3 pages total as requested
+            pageCount++;
+            const chunk = remainingRows.slice(0, LIMIT_PN);
+            remainingRows = remainingRows.slice(LIMIT_PN);
+            
+            // Create Page HTML
+            const pageDiv = document.createElement('div');
+            pageDiv.className = 'page';
+            pageDiv.innerHTML = `
+                <header><h1>تابع: سجل المتابعة</h1><img src="img/Alrajhi Logo Presentation.png" class="h-6"></header>
+                <div class="matrix-container">
+                    <table>
+                        <thead><tr><th style="width:6%">م</th><th style="width:18%">الجهة</th><th style="width:60%">الحدث</th><th style="width:16%">التاريخ</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                ${(remainingRows.length === 0) ? `
+                <div class="card" style="margin-top: auto; margin-bottom: 20mm; background-color: #fafafa;">
+                    <div class="section-header"><span class="section-num">✓</span><span class="section-title">نهاية السجل</span></div>
+                    <div class="txt-content" style="padding: 10px;" contenteditable="true" id="footerSummary"></div>
+                </div>` : ''}
+                <footer><div>شركة اتحاد الراجحي</div><div>صفحة ${pageCount} من <span class="total-pages"></span></div><div>مشروع مسار</div></footer>
+            `;
+            
+            const tbody = pageDiv.querySelector('tbody');
+            // Calculate start index for this chunk
+            const startIndex = LIMIT_P1 + ((pageCount - 2) * LIMIT_PN);
+            renderRowsIntoBody(chunk, tbody, startIndex);
+            
+            container.appendChild(pageDiv);
 
-            if (row.type === 'header') {
-                tr.className = 'stream-header';
-                tr.innerHTML = `<td colspan="4" contenteditable="true" onblur="updateRowData(${index}, 'text', this.innerText)">${row.text}
-                    <div class="no-print row-select-box" onclick="toggleHeaderSelection(event, ${index})"></div>
-                </td>`;
-            } else {
-                tr.innerHTML = window.renderRowTemplate(index, row);
+            if (remainingRows.length === 0 && pageCount < 3) {
+                 // Loop to create empty page if needed to maintain 3 pages minimum layout
+                 // No op, just continues to create empty page in next iter if array empty but count < 3
+            } else if (remainingRows.length === 0) {
+                break;
             }
-            targetBody.appendChild(tr);
-        });
+        }
+
+        // Update Page Numbers
+        document.getElementById('footer-p1').innerText = `صفحة 1 من ${pageCount}`;
+        document.querySelectorAll('.total-pages').forEach(span => span.innerText = pageCount);
+        
+        // Restore Footer Summary Text if it was rendered
+        const fSum = document.getElementById('footerSummary');
+        if(fSum && window.savedFooterSummary) fSum.innerText = window.savedFooterSummary;
+        if(fSum) fSum.onblur = function() { window.savedFooterSummary = this.innerText; };
 
         window.renumberTables();
         updateToolbar();
     };
 
-    // Updated Template: Buttons on RIGHT (outside margin)
+    function renderRowsIntoBody(rows, tbody, startIndex) {
+        rows.forEach((row, localIndex) => {
+            const globalIndex = startIndex + localIndex;
+            const tr = document.createElement('tr');
+            tr.dataset.index = globalIndex;
+            if (window.selectedIndices.has(globalIndex)) tr.classList.add('selected');
+
+            if (row.type === 'header') {
+                tr.className = 'stream-header';
+                tr.innerHTML = `<td colspan="4" contenteditable="true" onblur="updateRowData(${globalIndex}, 'text', this.innerText)">${row.text}
+                    <div class="no-print row-select-box" onclick="toggleHeaderSelection(event, ${globalIndex})"></div>
+                </td>`;
+            } else {
+                tr.innerHTML = window.renderRowTemplate(globalIndex, row);
+            }
+            tbody.appendChild(tr);
+        });
+    }
+
+    // --- TEMPLATE ---
     window.renderRowTemplate = (index, row) => `
         <td class="relative">
             <span class="row-index"></span>
@@ -368,10 +396,8 @@
         e.stopPropagation();
         const isSelected = window.selectedIndices.has(headerIndex);
         const targetState = !isSelected;
-        
         if (targetState) window.selectedIndices.add(headerIndex);
         else window.selectedIndices.delete(headerIndex);
-
         for (let i = headerIndex + 1; i < window.globalRows.length; i++) {
             if (window.globalRows[i].type === 'header') break;
             if (targetState) window.selectedIndices.add(i);
@@ -428,7 +454,7 @@
     }
     document.getElementById('passwordInput')?.addEventListener('keypress', e => { if (e.key === 'Enter') checkPassword(); });
 
-    // Dashboard
+    // Dashboard Helpers
     window.addStakeholder = (text = "جهة جديدة", color = "bg-blue-500") => {
         const div = document.createElement('div'); div.className = "stk-item";
         div.innerHTML = `<span class="dot ${color}" onclick="cycleColor(this)"></span><span contenteditable="true">${text}</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.closest('.stk-item').remove()">x</div></div>`;
@@ -451,7 +477,7 @@
         icon.dataset.state = next; icon.innerText = icons[next]; icon.className = "status-icon " + classes[next];
     };
 
-    // Refined DatePicker
+    // DatePicker
     let curIdxForDate = null, pDate = new Date();
     window.openDatePicker = (c, idx) => {
         curIdxForDate = idx !== undefined ? idx : 'dashboard'; 
@@ -513,6 +539,7 @@
             stakeholders: [{text:"Colliers",color:"bg-blue-500"},{text:"لجنة مسار",color:"bg-purple-500"},{text:"لجنة الاستثمار",color:"bg-green-500"},{text:"المستشار القانوني",color:"bg-red-500"},{text:"المشغلين",color:"bg-orange-500"}],
             achievements: [{text:"اعتماد خيار التطوير الثالث.",state:"done"},{text:"تحليل عروض المشغلين الأولية.",state:"done"},{text:"التفاوض مع القائمة المختصرة.",state:"sync"}]
         },
+        // We initialize as ONE list now, but keep structure for fallback
         rows: [
             {type:'header', text:'أولاً: دراسة السوق وأعلى وأفضل استخدام (Colliers)'},
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'التعاقد لإعداد دراسة HBU', date:'15/01/2025'},
@@ -649,6 +676,7 @@
         safeSet('statusText', d.status);
         safeSet('yearRange', d.yearRange);
         safeSet('footerSummary', d.footerSummary);
+        window.savedFooterSummary = d.footerSummary; // Save initially to fix blur issue
 
         const stkGrid = document.getElementById('stkGrid'); if(stkGrid){ stkGrid.innerHTML=''; (d.stakeholders||[]).forEach(s=>window.addStakeholder(s.text, s.color)); }
         const achList = document.getElementById('achList'); if(achList){ achList.innerHTML=''; (d.achievements||[]).forEach(a=>window.addAchievement(a.text, a.state)); }
