@@ -12,12 +12,15 @@
         :root { --gold-light: #F9E79F; --gold-main: #D4AF37; --gold-dark: #8D6E23; --bg-dark: #333; --text-main: #1F2937; }
         body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-dark); display: flex; flex-direction: column; align-items: center; padding: 20px; gap: 20px; margin: 0; color: var(--text-main); min-height: 100vh; }
         
+        /* Login Overlay */
         #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease; }
         .login-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; max-width: 400px; width: 90%; border-top: 5px solid var(--gold-main); }
         .login-input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #eee; border-radius: 8px; text-align: center; font-size: 1.1rem; outline: none; transition: border-color 0.3s; }
         .login-input:focus { border-color: var(--gold-main); }
         .login-btn { background-color: var(--gold-main); color: white; padding: 12px 40px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; }
+        .login-btn:hover { background-color: var(--gold-dark); }
 
+        /* App Layout */
         #appContent { display: none; width: 100%; flex-direction: column; align-items: center; gap: 20px; }
         .page { width: 210mm; min-height: 297mm; background-color: #FFFFFF; position: relative; padding: 10mm 12mm 15mm 12mm; box-sizing: border-box; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
         header { border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 8px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: flex-end; }
@@ -28,11 +31,12 @@
         /* Dashboard */
         .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; flex-shrink: 0; }
         .col-stack { display: flex; flex-direction: column; gap: 6px; }
-        .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px 10px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); position: relative; }
+        .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); position: relative; }
         .section-header { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; padding-bottom: 2px; border-bottom: 1px solid #f3f4f6; }
-        .section-num { background: var(--gold-main); color: white; font-weight: 800; font-size: 0.75rem; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+        .section-num { background: var(--gold-main); color: white; font-weight: 800; font-size: 0.75rem; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
         .section-title { font-size: 0.8rem; font-weight: 800; color: #2d3748; }
         .txt-content { font-size: 0.65rem; color: #4a5568; line-height: 1.4; }
+        .txt-gold { color: var(--gold-dark); font-weight: 700; display: block; margin-bottom: 2px; }
         .highlight-box { background-color: #FEFCE8; border: 1px solid #FEF08A; padding: 3px; border-radius: 4px; margin-top: 3px; font-size: 0.65rem; }
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 3px; }
         .info-box { background: #FAFAFA; border: 1px solid #f0f0f0; border-radius: 4px; padding: 3px; text-align: center; }
@@ -42,7 +46,7 @@
 
         /* Interactive Items */
         .stk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-        .stk-item { background: white; border: 1px solid #E5E7EB; border-radius: 4px; padding: 3px 6px; font-size: 0.6rem; font-weight: 700; display: flex; align-items: center; gap: 4px; justify-content: center; color: #374151; position: relative; }
+        .stk-item { background: white; border: 1px solid #E5E7EB; border-radius: 4px; padding: 2px 5px; font-size: 0.6rem; font-weight: 700; display: flex; align-items: center; gap: 4px; justify-content: center; color: #374151; position: relative; }
         .ach-item { display: flex; align-items: center; gap: 4px; font-size: 0.65rem; color: #4B5563; position: relative; padding: 2px 0; }
         .dot { width: 6px; height: 6px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
         .status-icon { cursor: pointer; width: 14px; text-align: center; flex-shrink: 0; font-size: 0.7rem; }
@@ -51,6 +55,7 @@
         .btn-mini { width: 14px; height: 14px; border-radius: 3px; font-size: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .btn-del { background: #fee2e2; color: #ef4444; }
         .add-mini-btn { font-size: 0.6rem; color: var(--gold-dark); cursor: pointer; text-align: center; margin-top: 4px; border: 1px dashed #ddd; border-radius: 4px; padding: 2px; }
+        .add-mini-btn:hover { background: #fafafa; border-color: var(--gold-main); }
 
         /* Tables */
         .matrix-container { background: transparent; flex-grow: 1; display: flex; flex-direction: column; }
@@ -68,15 +73,14 @@
         td:nth-child(3) { width: 60%; text-align: right; color: #2d3748; line-height: 1.3; }
         td:nth-child(4) { width: 16%; text-align: center; color: #4a5568; font-family: 'Arial', sans-serif !important; direction: ltr; }
         
-        /* UPDATED TAG STYLING */
+        /* Pill Tags */
         .tag { 
             font-size: 0.6rem; 
             padding: 2px 10px; 
-            border-radius: 9999px; /* Rounded pill shape */
+            border-radius: 9999px; 
             font-weight: 700; 
             display: inline-block; 
             white-space: nowrap;
-            transition: all 0.2s;
             border: 1px solid transparent;
         }
 
@@ -89,11 +93,15 @@
         .save-floating-btn { position: fixed; bottom: 30px; left: 30px; background-color: #D4AF37; color: white; padding: 10px 25px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); z-index: 4000; border: 2px solid white; display: flex; align-items: center; gap: 8px; transition: all 0.3s; }
         .edit-instructions { position: fixed; top: 20px; left: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 250px; z-index: 1000; border-right: 4px solid #D4AF37; font-size: 0.8rem; }
         
-        .tag-selector-menu, .custom-datepicker { position: absolute; background: white; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px; z-index: 3000; min-width: 200px; padding: 5px; animation: fadeIn 0.2s; }
-        .calendar-header { background: var(--gold-main); color: white; padding: 8px; display: flex; justify-content: space-between; font-size: 0.8rem; border-radius: 4px 4px 0 0; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 5px; gap: 2px; }
-        .day-cell { text-align: center; padding: 4px; font-size: 0.7rem; cursor: pointer; border-radius: 4px; color: #374151; }
-        .day-cell:hover { background-color: #FEFCE8; color: #D4AF37; }
+        /* Custom DatePicker UI */
+        .tag-selector-menu, .custom-datepicker { position: absolute; background: white; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px; z-index: 3000; min-width: 200px; padding: 0; animation: fadeIn 0.2s; overflow: hidden; }
+        .calendar-header { background-color: var(--gold-main); color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: bold; }
+        .calendar-header span { cursor: pointer; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 8px; gap: 2px; }
+        .day-name { text-align: center; font-size: 0.55rem; font-weight: 800; color: var(--gold-dark); padding-bottom: 5px; }
+        .day-cell { text-align: center; padding: 5px; font-size: 0.75rem; cursor: pointer; border-radius: 4px; color: #374151; transition: 0.1s; }
+        .day-cell:hover { background-color: #FEFCE8; color: var(--gold-main); }
+        .day-cell.today { border: 1px solid var(--gold-main); font-weight: bold; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; } }
         [contenteditable]:hover { background-color: #fffbeb; cursor: text; outline: 1px dashed #d1d5db; }
@@ -129,9 +137,9 @@
         <h3>لوحة التحكم</h3>
         <div class="mb-2 text-[0.7rem] text-gray-500">الحالة: <span id="connectionStatus">جاري الاتصال...</span></div>
         <ul class="text-[0.65rem] text-gray-600 list-disc pr-4">
+            <li><strong>التواريخ:</strong> اضغط لتعديل اليوم/الشهر.</li>
             <li><strong>الأطراف:</strong> اضغط على الدائرة لتغيير اللون.</li>
             <li><strong>الإنجازات:</strong> اضغط على الأيقونة لتغيير الحالة.</li>
-            <li><strong>الجداول:</strong> استخدم أزرار (+) و (x) للتحكم.</li>
         </ul>
     </div>
 
@@ -230,6 +238,51 @@
     }
     document.getElementById('passwordInput')?.addEventListener('keypress', e => { if (e.key === 'Enter') checkPassword(); });
 
+    // --- Dynamic Calendar Logic ---
+    let curCell = null, pDate = new Date();
+    window.openDatePicker = c => {
+        curCell = c; 
+        const txt = c.innerText.trim();
+        if (txt.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) {
+            const p = txt.split('/'); pDate = new Date(p[2], p[1]-1, p[0]);
+        } else { pDate = new Date(); }
+        
+        document.querySelectorAll('.custom-datepicker').forEach(e => e.remove());
+        const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'custom-datepicker no-print';
+        div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
+        document.body.appendChild(div); 
+        renderCal(div);
+    };
+
+    function renderCal(div) {
+        const y = pDate.getFullYear(), m = pDate.getMonth();
+        const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+        const days = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
+        
+        let h = `<div class="calendar-header">
+                    <span onclick="window.chM(-1)"><i class="fa-solid fa-chevron-right"></i></span>
+                    <span>${months[m]} ${y}</span>
+                    <span onclick="window.chM(1)"><i class="fa-solid fa-chevron-left"></i></span>
+                 </div>
+                 <div class="calendar-grid">`;
+        
+        days.forEach(d => h += `<div class="day-name">${d}</div>`);
+        const firstDay = new Date(y, m, 1).getDay();
+        const totalDays = new Date(y, m + 1, 0).getDate();
+        for(let i=0; i<firstDay; i++) h += `<div></div>`;
+        for(let d=1; d<=totalDays; d++) {
+            const isToday = (d === new Date().getDate() && m === new Date().getMonth() && y === new Date().getFullYear());
+            h += `<div class="day-cell ${isToday?'today':''}" onclick="window.setD(${d})">${d}</div>`;
+        }
+        div.innerHTML = h + '</div>';
+    }
+    window.chM = d => { pDate.setMonth(pDate.getMonth() + d); renderCal(document.querySelector('.custom-datepicker')); };
+    window.setD = d => { 
+        curCell.innerText = `${String(d).padStart(2,'0')}/${String(pDate.getMonth()+1).padStart(2,'0')}/${pDate.getFullYear()}`; 
+        document.querySelector('.custom-datepicker').remove(); 
+    };
+
+    // --- Table Row Rendering ---
     window.renderRowTemplate = (num, tag, event, date, tagClass) => `
         <td class="relative"><span class="row-index">${num}</span><div class="action-btn-group"><div class="row-btn insert-btn" onclick="addRowBefore(this)"><i class="fa-solid fa-plus"></i></div><div class="row-btn delete-btn" onclick="deleteRow(this)"><i class="fa-solid fa-xmark"></i></div></div></td>
         <td onclick="openTagSelector(this)" class="cursor-pointer text-center"><span class="tag ${tagClass || 'bg-gray-100 text-gray-800'}">${tag}</span></td>
@@ -253,6 +306,7 @@
     window.addRow = id => { let t = document.getElementById(id).querySelector('tbody'); let r = t.insertRow(); r.innerHTML = window.renderRowTemplate('#', 'جهة', 'وصف جديد', '--/--/----', ''); window.renumberTables(); };
     window.addRowBefore = btn => { let r = btn.closest('tr'); let nr = r.parentNode.insertRow(r.rowIndex - 1); nr.innerHTML = window.renderRowTemplate('#', 'جهة', 'وصف جديد', '--/--/----', ''); window.renumberTables(); };
 
+    // --- Dashboard Items Logic ---
     window.addStakeholder = (text = "جهة جديدة", color = "bg-blue-500") => {
         const grid = document.getElementById('stkGrid');
         const div = document.createElement('div'); div.className = "stk-item";
@@ -260,7 +314,7 @@
         grid.appendChild(div);
     };
 
-    window.addAchievement = (text = "بند إنجاز جديد", state = "done") => {
+    window.addAchievement = (text = "إنجاز جديد", state = "done") => {
         const icons = { done: '✓', sync: '⟳', pending: '○' };
         const classes = { done: 'text-green-500 font-bold', sync: 'text-blue-500', pending: 'text-gray-400' };
         const div = document.createElement('div'); div.className = "ach-item";
@@ -282,29 +336,8 @@
         icon.dataset.state = next; icon.innerText = icons[next]; icon.className = "status-icon " + classes[next];
     };
 
-    window.openDatePicker = c => {
-        document.querySelectorAll('.custom-datepicker').forEach(e => e.remove());
-        const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'custom-datepicker no-print';
-        div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
-        document.body.appendChild(div); renderCal(div, c);
-    };
-    function renderCal(div, target) {
-        let h = `<div class="calendar-header"><span>التقويم</span></div><div class="calendar-grid">`;
-        for(let i=1; i<=31; i++) h += `<div class="day-cell" onclick="this.closest('.custom-datepicker').remove(); document.getElementById('${target.id}').innerText='${String(i).padStart(2,'0')}/02/2026'">${i}</div>`;
-        div.innerHTML = h + '</div>';
-    }
-
     window.openTagSelector = c => {
-        const tags = [
-            {t:"Colliers",c:"bg-blue-100 text-blue-800"},
-            {t:"لجنة مسار",c:"bg-purple-100 text-purple-800"},
-            {t:"الفريق الداخلي",c:"bg-green-100 text-green-800"},
-            {t:"لجنة الاستثمار",c:"bg-emerald-100 text-emerald-800"},
-            {t:"المستشار القانوني",c:"bg-red-100 text-red-800"},
-            {t:"المشغلين",c:"bg-orange-100 text-orange-800"},
-            {t:"JLL",c:"bg-indigo-100 text-indigo-800"},
-            {t:"Wisefields",c:"bg-rose-100 text-rose-800"}
-        ];
+        const tags = [{t:"Colliers",c:"bg-blue-100 text-blue-800"},{t:"لجنة مسار",c:"bg-purple-100 text-purple-800"},{t:"الفريق الداخلي",c:"bg-green-100 text-green-800"},{t:"لجنة الاستثمار",c:"bg-emerald-100 text-emerald-800"},{t:"المستشار القانوني",c:"bg-red-100 text-red-800"},{t:"المشغلين",c:"bg-orange-100 text-orange-800"},{t:"JLL",c:"bg-indigo-100 text-indigo-800"},{t:"Wisefields",c:"bg-rose-100 text-rose-800"}];
         document.querySelectorAll('.tag-selector-menu').forEach(e => e.remove());
         const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'tag-selector-menu no-print';
         div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
@@ -367,7 +400,7 @@
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال الملاحظات على الخيار الأول', date:'05/05/2025'},
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد اجتماع لمناقشة وتوضيح التعديلات', date:'07/05/2025'},
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام 3 خيارات تطوير نهائية (بدون سكني)', date:'16/05/2025'},
-            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال الخيارات للجنة مع التوصية بالخيار الثالث', date:'20/05/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال الخيارات للجنة مع التوصية بالخيار الثالث', date:'20/05/2025'}
         ],
         table2: [
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام الخيارات بعد إضافة ملاحظات اللجنة', date:'25/05/2025'},
@@ -412,7 +445,7 @@
             {tag:'المشغلين', tagClass:'bg-orange-100 text-orange-800', event:'إرسال البيانات لعمل Area Program & P&L', date:'19/11/2025'},
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'الإجابة على استفسارات المشغلين', date:'20/11/2025'},
             {tag:'المشغلين', tagClass:'bg-orange-100 text-orange-800', event:'استلام التقديم الأول (الشروط التجارية الأولية)', date:'04/12/2025'},
-            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد ورش عمل مع المشغلين (اليوم 1)', date:'17/12/2025'},
+            {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد ورش عمل مع المشغلين (اليوم 1)', date:'17/12/2025'}
         ],
         table3: [
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد ورش عمل مع المشغلين (اليوم 2)', date:'18/12/2025'},
@@ -462,30 +495,24 @@
         if(!data) return;
         const d = data.dashboard || initialDataset.dashboard;
         
-        // Safety check for UI elements
-        if (document.getElementById('scopeText')) document.getElementById('scopeText').innerHTML = d.scope || "";
-        if (document.getElementById('keyComponents')) document.getElementById('keyComponents').innerHTML = d.keyComponents || "";
-        if (document.getElementById('startDate')) document.getElementById('startDate').innerText = d.startDate || "";
-        if (document.getElementById('lastUpdate')) document.getElementById('lastUpdate').innerText = d.lastUpdate || "";
-        if (document.getElementById('statusText')) document.getElementById('statusText').innerText = d.status || "";
-        if (document.getElementById('yearRange')) document.getElementById('yearRange').innerText = d.yearRange || "";
-        if (document.getElementById('footerSummary')) document.getElementById('footerSummary').innerText = d.footerSummary || "";
+        // Safety check and fill Dashboard
+        const safeFill = (id, val) => { let e = document.getElementById(id); if(e) e.innerHTML = val || ""; };
+        const safeFillText = (id, val) => { let e = document.getElementById(id); if(e) e.innerText = val || ""; };
 
-        // Fill Stakeholders
+        safeFill('scopeText', d.scope);
+        safeFill('keyComponents', d.keyComponents);
+        safeFillText('startDate', d.startDate);
+        safeFillText('lastUpdate', d.lastUpdate);
+        safeFillText('statusText', d.status);
+        safeFillText('yearRange', d.yearRange);
+        safeFillText('footerSummary', d.footerSummary);
+
         const stkGrid = document.getElementById('stkGrid'); 
-        if (stkGrid) {
-            stkGrid.innerHTML = '';
-            (d.stakeholders || []).forEach(s => window.addStakeholder(s.text, s.color));
-        }
+        if (stkGrid) { stkGrid.innerHTML = ''; (d.stakeholders || []).forEach(s => window.addStakeholder(s.text, s.color)); }
         
-        // Fill Achievements
         const achList = document.getElementById('achList'); 
-        if (achList) {
-            achList.innerHTML = '';
-            (d.achievements || []).forEach(a => window.addAchievement(a.text, a.state));
-        }
+        if (achList) { achList.innerHTML = ''; (d.achievements || []).forEach(a => window.addAchievement(a.text, a.state)); }
 
-        // Fill Tables
         renderTable('tbody-1', data.table1 || initialDataset.table1);
         renderTable('tbody-2', data.table2 || initialDataset.table2);
         renderTable('tbody-3', data.table3 || initialDataset.table3);
@@ -493,18 +520,12 @@
     }
 
     function renderTable(tbodyId, rows) {
-        const body = document.getElementById(tbodyId); 
-        if(!body) return;
+        const body = document.getElementById(tbodyId); if(!body) return;
         body.innerHTML = '';
         rows.forEach(r => {
             const tr = document.createElement('tr');
-            if(r.type === 'header') { 
-                tr.className = 'stream-header'; 
-                tr.innerHTML = `<td colspan="4" contenteditable="true">${r.text}</td>`; 
-            }
-            else {
-                tr.innerHTML = window.renderRowTemplate('#', r.tag, r.event, r.date, r.tagClass);
-            }
+            if(r.type === 'header') { tr.className = 'stream-header'; tr.innerHTML = `<td colspan="4" contenteditable="true">${r.text}</td>`; }
+            else tr.innerHTML = window.renderRowTemplate('#', r.tag, r.event, r.date, r.tagClass);
             body.appendChild(tr);
         });
     }
@@ -536,11 +557,7 @@
             };
             await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'report_v1', 'latest'), data);
             btn.innerHTML = 'تم الحفظ ✓'; setTimeout(() => btn.innerHTML = old, 2000);
-        } catch(e) { 
-            console.error("Save Error:", e);
-            alert("فشل الحفظ: " + e.message); 
-            btn.innerHTML = old; 
-        }
+        } catch(e) { alert("فشل الحفظ: " + e.message); btn.innerHTML = old; }
     };
 
     function scrape(id) {
