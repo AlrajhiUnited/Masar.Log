@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سجل متابعة مشروع مسار - النسخة الاحترافية (محرك آمن)</title>
+    <title>سجل متابعة مشروع مسار - النسخة الاحترافية (محرك آمن V3)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -260,14 +260,15 @@
     window.isSearching = false;
     window.selectedIndices = new Set();
     window.userId = null;
-    
-    // --- STRICT PAGINATION LOGIC ---
+    const MAX_SAFE_PAGES = 100; // Emergency brake limit
+
+    // --- STRICT PAGINATION LOGIC (NO RECURSIVE LOOP RISK) ---
     window.renderPages = async function() {
-        const container = document.getElementById('pages-container');
-        container.innerHTML = ''; // Clear DOM
+        // Wait for next frame to ensure login overlay is gone and layout is computable
+        await new Promise(r => requestAnimationFrame(r));
         
-        // Wait for DOM clear
-        await new Promise(r => setTimeout(r, 0));
+        const container = document.getElementById('pages-container');
+        container.innerHTML = ''; 
 
         const rowsToRender = window.isSearching ? window.filteredRows : window.globalRows;
         
@@ -275,18 +276,23 @@
         let currentPageObj = createNewPage(currentPageIndex);
         container.appendChild(currentPageObj.el);
         
-        // Setup Page 1
         if (currentPageIndex === 1) {
             injectDashboard(currentPageObj.el);
-            // Wait for dashboard render to get height
+            // Allow dashboard to render before measuring
             await new Promise(r => setTimeout(r, 0));
         }
 
         let currentTbody = currentPageObj.tbody;
-        let currentFooterTop = getFooterTopLimit(currentPageObj.el);
-
-        // Process Rows
+        // Pre-calculate safe limit based on page geometry (approx)
+        // We use dynamic measurement inside loop for accuracy
+        
         for (let i = 0; i < rowsToRender.length; i++) {
+            // Safety break
+            if (currentPageIndex > MAX_SAFE_PAGES) {
+                console.error("Safety limit reached. Stopping pagination to prevent crash.");
+                break;
+            }
+
             const row = rowsToRender[i];
             const actualIndex = window.isSearching ? row.originalIndex : i;
             
@@ -306,29 +312,32 @@
             // Append tentatively
             currentTbody.appendChild(tr);
 
-            // Measure Overflow
+            // Measure
             const trRect = tr.getBoundingClientRect();
+            const footerTop = getFooterTopLimit(currentPageObj.el);
             
-            // If the bottom of this row exceeds the footer safety limit
-            if (trRect.bottom > currentFooterTop) {
-                // CRITICAL FIX: Only move to next page if current page has OTHER rows.
-                // If this is the FIRST/ONLY row on this page, DO NOT move it, 
-                // otherwise we create an infinite loop of empty pages.
+            // Check Overflow
+            if (trRect.bottom > footerTop) {
+                // If this is the FIRST item on the page, we CANNOT move it.
+                // Moving it to a new page would result in the same overflow on the new page, causing infinite loop.
                 if (currentTbody.rows.length > 1) {
-                    // Remove row from this page
+                    // It's not the first item. Move it to a new page.
                     currentTbody.removeChild(tr);
-                    i--; // Retry this row on next page
-
-                    // Create Next Page
+                    
                     currentPageIndex++;
                     currentPageObj = createNewPage(currentPageIndex);
                     container.appendChild(currentPageObj.el);
                     currentTbody = currentPageObj.tbody;
                     
-                    // Recalculate limit for new page
-                    currentFooterTop = getFooterTopLimit(currentPageObj.el);
+                    // Add to new page
+                    currentTbody.appendChild(tr);
+                    
+                    // NOTE: We do NOT check overflow again here. 
+                    // If it overflows the new page (and it's the first item), we let it be.
+                } else {
+                    // It is the first/only item and it is huge. Let it overflow.
+                    console.warn(`Row ${i} is too tall for a single page.`);
                 }
-                // Else: It's the only row, leave it here even if it overflows (prevents freeze)
             }
         }
 
@@ -342,7 +351,6 @@
         }
 
         // --- FOOTER SUMMARY LOGIC ---
-        // Try adding summary to the last page. If it overflows, create a new page.
         const lastPage = container.lastElementChild;
         const lastWrapper = lastPage.querySelector('.page-content-wrapper');
         const summaryHtml = `
@@ -355,13 +363,10 @@
         summaryDiv.innerHTML = summaryHtml;
         lastWrapper.appendChild(summaryDiv);
         
-        // Check overflow for summary
         if (summaryDiv.getBoundingClientRect().bottom > getFooterTopLimit(lastPage)) {
-            // Only move summary if it's not the only thing (though it's usually at bottom)
-            // But summary is inside wrapper, not tbody. Wrapper might have table.
-            // If table exists, we can move summary.
+            // Move summary only if we can (wrapper has other things)
+            // But summary is usually last. Just check if we need new page.
             lastWrapper.removeChild(summaryDiv);
-            // Create new page for summary
             currentPageIndex++;
             const summaryPage = createNewPage(currentPageIndex);
             container.appendChild(summaryPage.el);
@@ -380,16 +385,15 @@
     };
 
     function getFooterTopLimit(pageEl) {
-        // Returns the Y coordinate where the safe content area ends
-        // Page Top + Page Height (in px) - Footer Margin - Footer Height - Buffer
-        const pageRect = pageEl.getBoundingClientRect();
         const footerEl = pageEl.querySelector('footer');
         const footerRect = footerEl.getBoundingClientRect();
-        
-        // Safety buffer of 5px above footer. 
-        // If footerRect is 0 (hidden), assume standard A4 calculation
+        // Return top of footer minus 5px padding
+        // If footer is not visible (0), calculate based on A4 height in pixels (approx 1122px)
         if (footerRect.top === 0) {
-            return pageRect.top + (297 * 3.7795) - 60; // Fallback
+            const pageRect = pageEl.getBoundingClientRect();
+            // 297mm * 3.78 px/mm = ~1122px. Footer is at bottom.
+            // Safety: use page bottom - 60px
+            return pageRect.top + 1060; 
         }
         return footerRect.top - 5; 
     }
@@ -484,7 +488,7 @@
     window.renumberTables = () => { let count = 1; document.querySelectorAll('tbody tr').forEach(row => { if (row.classList.contains('stream-header')) return; const idx = row.querySelector('.row-index'); if(idx) idx.innerText = count++; }); };
 
     // --- HELPERS ---
-    function checkPassword() { if (document.getElementById('passwordInput').value === "masar") { document.getElementById('loginOverlay').style.display = 'none'; document.getElementById('appContent').style.display = 'flex'; setTimeout(renderPages, 100); } else { document.getElementById('loginError').classList.remove('hidden'); } }
+    function checkPassword() { if (document.getElementById('passwordInput').value === "masar") { document.getElementById('loginOverlay').style.display = 'none'; document.getElementById('appContent').style.display = 'flex'; setTimeout(() => window.renderPages(), 50); } else { document.getElementById('loginError').classList.remove('hidden'); } }
     document.getElementById('passwordInput')?.addEventListener('keypress', e => { if (e.key === 'Enter') checkPassword(); });
 
     function restoreDomData() {
@@ -545,11 +549,11 @@
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام الملخص التنفيذي لخيارات التطوير', date:'16/03/2025'},
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'مراجعة الملخص التنفيذي وإضافة الملاحظات', date:'17/03/2025'},
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'استلام الملخص بعد الملاحظات', date:'18/03/2025'},
-            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد الاجتماع (1) مع لجنة الدعم لمناقشة الخيارات', date:'18/03/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد اجتماع (1) مع لجنة الدعم لمناقشة الخيارات', date:'18/03/2025'},
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام مستندات خيارات التطوير (10 خيارات)', date:'03/04/2025'},
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'مراجعة الخيارات والدراسات المالية وإرسال الملاحظات', date:'06/04/2025'},
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام 10 خيارات بعد التعديل والاضافة', date:'08/04/2025'},
-            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد الاجتماع (2) مع لجنة الدعم لمناقشة الافتراضات', date:'09/04/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد اجتماع (2) مع لجنة الدعم لمناقشة الافتراضات', date:'09/04/2025'},
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'إرسال بيانات العقارات المجاورة وأسعار البيع لكوليرز', date:'14/04/2025'},
             {tag:'الفريق الداخلي', tagClass:'bg-green-100 text-green-800', event:'عقد اجتماع لمناقشة وتوضيح التعديلات', date:'15/04/2025'},
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام خيارات التطوير بعد تغيير الأوزان (6 خيارات)', date:'16/04/2025'},
