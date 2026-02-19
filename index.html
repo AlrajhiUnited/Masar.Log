@@ -40,11 +40,10 @@
             display: flex; 
             flex-direction: column; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-            overflow: hidden; /* Hide overflow to force pagination logic */
+            overflow: hidden; 
             margin-bottom: 20px; 
         }
         
-        /* Safety Zone Logic */
         .page-content-wrapper { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
         
         header { border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 8px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: flex-end; }
@@ -270,13 +269,6 @@
     window.selectedIndices = new Set();
     window.userId = null;
     
-    // Page Rendering Configuration
-    const PAGE_HEIGHT_MM = 297;
-    const FOOTER_HEIGHT_MM = 15; // Footer area + margin
-    const PAGE_PADDING_BOTTOM_MM = 15;
-    const MM_TO_PX = 3.7795275591; // Approx px per mm
-    const SAFE_HEIGHT_PX = (PAGE_HEIGHT_MM - FOOTER_HEIGHT_MM - PAGE_PADDING_BOTTOM_MM) * MM_TO_PX;
-
     // --- SMART PAGINATION LOGIC ---
     window.renderPages = function() {
         const container = document.getElementById('pages-container');
@@ -295,7 +287,6 @@
         }
 
         let currentTbody = currentPageObj.tbody;
-        let currentRowCount = 0;
 
         // Loop through rows and distribute
         rowsToRender.forEach((row, index) => {
@@ -315,19 +306,17 @@
                 tr.innerHTML = window.renderRowTemplate(actualIndex, row);
             }
 
-            // Append tentatively to check height
+            // Append tentatively
             currentTbody.appendChild(tr);
             
-            // Check overflow
-            const contentWrapper = currentPageObj.el.querySelector('.page-content-wrapper');
-            // We measure if content wrapper height exceeds the safe zone relative to page top
-            // Simpler: Check if content bottom > Page Height - Footer Space
-            // Fixed Height approach:
-            const contentBottom = contentWrapper.getBoundingClientRect().bottom;
-            const pageBottom = currentPageObj.el.getBoundingClientRect().top + (297 * MM_TO_PX);
-            const footerClearance = 60; // Px space for footer
-
-            if (contentBottom > (pageBottom - footerClearance)) {
+            // CHECK OVERFLOW
+            // We verify if the bottom of the just added ROW is below the top of the FOOTER
+            // We use getBoundingClientRect which is accurate for rendering
+            const rowRect = tr.getBoundingClientRect();
+            const footerRect = currentPageObj.el.querySelector('footer').getBoundingClientRect();
+            
+            // If Row Bottom > Footer Top - Padding (e.g. 5px safety)
+            if (rowRect.bottom > (footerRect.top - 5)) {
                 // Overflow detected!
                 currentTbody.removeChild(tr); // Take it back
                 
@@ -341,15 +330,6 @@
                 currentTbody.appendChild(tr);
             }
         });
-
-        // Ensure minimum 3 pages if not searching
-        if (!window.isSearching) {
-            while (currentPageIndex < 3) {
-                currentPageIndex++;
-                currentPageObj = createNewPage(currentPageIndex);
-                container.appendChild(currentPageObj.el);
-            }
-        }
 
         // Add Footer Summary to LAST page if exists
         const summaryHtml = `
@@ -368,7 +348,10 @@
         lastWrapper.appendChild(summaryDiv);
         
         // Check overflow for summary
-        if (lastWrapper.getBoundingClientRect().bottom > (lastPage.getBoundingClientRect().top + (297 * MM_TO_PX) - 60)) {
+        const summaryRect = summaryDiv.getBoundingClientRect();
+        const footerRect = lastPage.querySelector('footer').getBoundingClientRect();
+        
+        if (summaryRect.bottom > (footerRect.top - 5)) {
             lastWrapper.removeChild(summaryDiv);
             // Create spillover page just for summary
             currentPageIndex++;
