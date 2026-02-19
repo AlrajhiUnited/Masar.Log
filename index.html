@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سجل متابعة مشروع مسار - النسخة الاحترافية (محرك الصفحات المطور)</title>
+    <title>سجل متابعة مشروع مسار - النسخة الاحترافية (محرك آمن)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -262,13 +262,6 @@
     window.userId = null;
     
     // --- STRICT PAGINATION LOGIC ---
-    // A4 height = 297mm.
-    // Bottom Margin = 12mm.
-    // Footer Height = 10mm. 
-    // Footer Position = bottom: 10mm.
-    // Safe Limit = Content MUST NOT cross ~ 25mm from bottom (Footer Top + Buffer)
-    // 297mm - 25mm = 272mm usable height from top.
-    
     window.renderPages = async function() {
         const container = document.getElementById('pages-container');
         container.innerHTML = ''; // Clear DOM
@@ -315,21 +308,27 @@
 
             // Measure Overflow
             const trRect = tr.getBoundingClientRect();
+            
             // If the bottom of this row exceeds the footer safety limit
             if (trRect.bottom > currentFooterTop) {
-                // Remove row from this page
-                currentTbody.removeChild(tr);
-                i--; // Retry this row on next page
+                // CRITICAL FIX: Only move to next page if current page has OTHER rows.
+                // If this is the FIRST/ONLY row on this page, DO NOT move it, 
+                // otherwise we create an infinite loop of empty pages.
+                if (currentTbody.rows.length > 1) {
+                    // Remove row from this page
+                    currentTbody.removeChild(tr);
+                    i--; // Retry this row on next page
 
-                // Create Next Page
-                currentPageIndex++;
-                currentPageObj = createNewPage(currentPageIndex);
-                container.appendChild(currentPageObj.el);
-                currentTbody = currentPageObj.tbody;
-                
-                // Recalculate limit for new page
-                // We need to wait a tick for layout sometimes, but since it's same structure, we can estimate or measure
-                currentFooterTop = getFooterTopLimit(currentPageObj.el);
+                    // Create Next Page
+                    currentPageIndex++;
+                    currentPageObj = createNewPage(currentPageIndex);
+                    container.appendChild(currentPageObj.el);
+                    currentTbody = currentPageObj.tbody;
+                    
+                    // Recalculate limit for new page
+                    currentFooterTop = getFooterTopLimit(currentPageObj.el);
+                }
+                // Else: It's the only row, leave it here even if it overflows (prevents freeze)
             }
         }
 
@@ -358,6 +357,9 @@
         
         // Check overflow for summary
         if (summaryDiv.getBoundingClientRect().bottom > getFooterTopLimit(lastPage)) {
+            // Only move summary if it's not the only thing (though it's usually at bottom)
+            // But summary is inside wrapper, not tbody. Wrapper might have table.
+            // If table exists, we can move summary.
             lastWrapper.removeChild(summaryDiv);
             // Create new page for summary
             currentPageIndex++;
@@ -384,7 +386,11 @@
         const footerEl = pageEl.querySelector('footer');
         const footerRect = footerEl.getBoundingClientRect();
         
-        // Safety buffer of 5px above footer
+        // Safety buffer of 5px above footer. 
+        // If footerRect is 0 (hidden), assume standard A4 calculation
+        if (footerRect.top === 0) {
+            return pageRect.top + (297 * 3.7795) - 60; // Fallback
+        }
         return footerRect.top - 5; 
     }
 
