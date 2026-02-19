@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سجل متابعة مشروع مسار - النسخة المنضبطة</title>
+    <title>سجل متابعة مشروع مسار</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -281,12 +281,11 @@
 
         let currentTbody = currentPageObj.tbody;
         
-        // --- STRICT SAFE LIMIT ---
-        // A4 Height = 297mm.
-        // We set a hard safe limit at 270mm (approx 1020px)
+        // --- STRICT SAFE LIMIT (UPDATED TO 257mm) ---
+        // We set a hard safe limit at 257mm (approx 971px) to enforce cut-off at Item 27 location.
         // This effectively creates a safe zone before the footer.
         // All pages will respect this EXACT pixel distance from the top.
-        const SAFE_LIMIT_MM = 270;
+        const SAFE_LIMIT_MM = 257;
         const MM_TO_PX = 3.7795;
         const SAFE_LIMIT_PX = SAFE_LIMIT_MM * MM_TO_PX;
 
