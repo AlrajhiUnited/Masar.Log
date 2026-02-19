@@ -35,7 +35,7 @@
             height: 297mm; /* A4 Standard */
             background-color: #FFFFFF; 
             position: relative; 
-            padding: 10mm 12mm 20mm 12mm; /* Increased bottom padding to protect footer */
+            padding: 10mm 12mm 25mm 12mm; /* Increased bottom padding significantly */
             box-sizing: border-box; 
             display: flex; 
             flex-direction: column; 
@@ -259,11 +259,10 @@
     window.isSearching = false;
     window.selectedIndices = new Set();
     window.userId = null;
-    const MAX_SAFE_PAGES = 100; // Emergency brake limit
+    const MAX_SAFE_PAGES = 100;
 
-    // --- STRICT PAGINATION LOGIC (NO RECURSIVE LOOP RISK) ---
+    // --- STRICT PAGINATION LOGIC ---
     window.renderPages = async function() {
-        // Wait for layout
         await new Promise(r => requestAnimationFrame(r));
         
         const container = document.getElementById('pages-container');
@@ -282,14 +281,14 @@
 
         let currentTbody = currentPageObj.tbody;
         
-        // Strict Pixel Limit Calculation
-        // A4 Height (px at 96dpi) = 1122px
-        // Footer (10mm + padding) approx 80px from bottom
-        // We set a SAFE BOTTOM LIMIT. Any row crossing this goes to next page.
-        // This prevents the row from even touching the footer area.
-        const PAGE_HEIGHT_PX = 1122;
-        const FOOTER_ZONE_PX = 100; // 25mm approx
-        const SAFE_BOTTOM_LIMIT = PAGE_HEIGHT_PX - FOOTER_ZONE_PX;
+        // --- STRICT SAFE LIMIT ---
+        // A4 Height = 297mm.
+        // We set a hard safe limit at 270mm (approx 1020px)
+        // This effectively creates a safe zone before the footer.
+        // All pages will respect this EXACT pixel distance from the top.
+        const SAFE_LIMIT_MM = 270;
+        const MM_TO_PX = 3.7795;
+        const SAFE_LIMIT_PX = SAFE_LIMIT_MM * MM_TO_PX;
 
         for (let i = 0; i < rowsToRender.length; i++) {
             if (currentPageIndex > MAX_SAFE_PAGES) break;
@@ -313,15 +312,15 @@
             // Append to measure
             currentTbody.appendChild(tr);
 
-            // Measure position relative to the page top
-            // We use offsetTop + offsetHeight relative to the page content wrapper
-            const rowBottom = tr.getBoundingClientRect().bottom;
+            // MEASURE POSITION
+            // Calculate distance from Page Top to Row Bottom
+            const rowRect = tr.getBoundingClientRect();
             const pageRect = currentPageObj.el.getBoundingClientRect();
-            const relativeBottom = rowBottom - pageRect.top;
+            const relativeBottom = rowRect.bottom - pageRect.top;
             
-            // Check Overflow
-            if (relativeBottom > SAFE_BOTTOM_LIMIT) {
-                // Remove from current
+            // CHECK OVERFLOW
+            if (relativeBottom > SAFE_LIMIT_PX) {
+                // Remove from current page
                 currentTbody.removeChild(tr);
                 
                 // Create New Page
@@ -357,10 +356,10 @@
         summaryDiv.innerHTML = summaryHtml;
         lastWrapper.appendChild(summaryDiv);
         
-        const summaryBottom = summaryDiv.getBoundingClientRect().bottom;
-        const pageRect = lastPage.getBoundingClientRect();
+        const summaryRect = summaryDiv.getBoundingClientRect();
+        const lastPageRect = lastPage.getBoundingClientRect();
         
-        if ((summaryBottom - pageRect.top) > SAFE_BOTTOM_LIMIT) {
+        if ((summaryRect.bottom - lastPageRect.top) > SAFE_LIMIT_PX) {
             lastWrapper.removeChild(summaryDiv);
             currentPageIndex++;
             const summaryPage = createNewPage(currentPageIndex);
