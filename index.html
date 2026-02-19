@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سجل متابعة مشروع مسار</title>
+    <title>سجل متابعة مشروع مسار - النسخة المنضبطة النهائية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -35,18 +35,31 @@
             height: 297mm; /* A4 Standard */
             background-color: #FFFFFF; 
             position: relative; 
-            padding: 10mm 12mm 25mm 12mm; /* Increased bottom padding significantly */
+            padding: 10mm 12mm 25mm 12mm; /* الهوامش */
             box-sizing: border-box; 
             display: flex; 
             flex-direction: column; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-            overflow: hidden; 
+            overflow: visible; /* Changed from hidden to visible to fix logo clipping if any */
             margin-bottom: 20px; 
         }
         
         .page-content-wrapper { flex-grow: 1; display: flex; flex-direction: column; width: 100%; }
         
-        header { border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 8px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: flex-end; height: 65px; overflow: hidden; }
+        /* Header Fix for Logo */
+        header { 
+            border-bottom: 2px solid #f0f0f0; 
+            padding-bottom: 5px; 
+            margin-bottom: 8px; 
+            flex-shrink: 0; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-end; 
+            height: auto; 
+            min-height: 75px; /* Increased height */
+            overflow: visible; /* No clipping */
+        }
+        
         footer { position: absolute; bottom: 10mm; left: 12mm; right: 12mm; height: 10mm; border-top: 1px solid #eee; padding-top: 5px; font-size: 0.65rem; color: #999; display: flex; justify-content: space-between; align-items: center; background-color: white; z-index: 50; }
         
         h1 { font-size: 1.4rem; font-weight: 800; color: #111; line-height: 1.2; }
@@ -201,8 +214,8 @@
     <div class="page">
         <header>
             <div class="page-header-content"><h1>سجل متابعة مشروع مسار</h1><h2 class="page-sub-header"></h2></div>
-            <div class="text-left flex flex-col items-end header-logo-area">
-                <img src="img/Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/180x50/white/DAA520?text=ALRAJHI+Invest'" class="h-10 object-contain mb-1">
+            <div class="text-left flex flex-col items-end header-logo-area pt-2">
+                <img src="img/Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/180x50/white/DAA520?text=ALRAJHI+Invest'" class="h-12 object-contain mb-1">
                 <div class="flex gap-1 year-badge hidden"><span class="text-[0.65rem] bg-[#F2D06B] px-3 py-0.5 rounded-full text-white font-bold" contenteditable="true" id="yearRange">2025 - 2026</span></div>
             </div>
         </header>
@@ -281,11 +294,9 @@
 
         let currentTbody = currentPageObj.tbody;
         
-        // --- STRICT SAFE LIMIT (UPDATED TO 257mm) ---
-        // We set a hard safe limit at 257mm (approx 971px) to enforce cut-off at Item 27 location.
-        // This effectively creates a safe zone before the footer.
-        // All pages will respect this EXACT pixel distance from the top.
-        const SAFE_LIMIT_MM = 257;
+        // --- SAFE LIMIT SET TO 250mm ---
+        // This is a conservative limit to ensure item 28+ always move to next page.
+        const SAFE_LIMIT_MM = 250;
         const MM_TO_PX = 3.7795;
         const SAFE_LIMIT_PX = SAFE_LIMIT_MM * MM_TO_PX;
 
@@ -312,7 +323,6 @@
             currentTbody.appendChild(tr);
 
             // MEASURE POSITION
-            // Calculate distance from Page Top to Row Bottom
             const rowRect = tr.getBoundingClientRect();
             const pageRect = currentPageObj.el.getBoundingClientRect();
             const relativeBottom = rowRect.bottom - pageRect.top;
