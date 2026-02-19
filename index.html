@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سجل متابعة مشروع مسار - النسخة الاحترافية الديناميكية</title>
+    <title>سجل متابعة مشروع مسار - النسخة الاحترافية (محرك الصفحات المطور)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -35,7 +35,7 @@
             height: 297mm; /* A4 Standard */
             background-color: #FFFFFF; 
             position: relative; 
-            padding: 10mm 12mm 15mm 12mm; /* Bottom padding creates the safety zone */
+            padding: 10mm 12mm 15mm 12mm; /* الهوامش الأساسية */
             box-sizing: border-box; 
             display: flex; 
             flex-direction: column; 
@@ -44,15 +44,17 @@
             margin-bottom: 20px; 
         }
         
-        .page-content-wrapper { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
+        /* منطقة المحتوى القابلة للتمدد */
+        .page-content-wrapper { flex-grow: 1; display: flex; flex-direction: column; width: 100%; }
         
-        header { border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 8px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: flex-end; }
-        footer { position: absolute; bottom: 10mm; left: 12mm; right: 12mm; height: 8mm; border-top: 1px solid #eee; padding-top: 5px; font-size: 0.65rem; color: #999; display: flex; justify-content: space-between; align-items: center; background-color: white; z-index: 50; }
+        header { border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 8px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: flex-end; height: 65px; overflow: hidden; }
+        footer { position: absolute; bottom: 10mm; left: 12mm; right: 12mm; height: 10mm; border-top: 1px solid #eee; padding-top: 5px; font-size: 0.65rem; color: #999; display: flex; justify-content: space-between; align-items: center; background-color: white; z-index: 50; }
+        
         h1 { font-size: 1.4rem; font-weight: 800; color: #111; line-height: 1.2; }
         h2 { font-size: 0.85rem; color: var(--gold-main); font-weight: 700; margin-top: 2px; }
         
         /* Dashboard */
-        .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; flex-shrink: 0; }
+        .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; flex-shrink: 0; }
         .col-stack { display: flex; flex-direction: column; gap: 6px; }
         .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px 10px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); position: relative; }
         .section-header { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px solid #f3f4f6; }
@@ -191,9 +193,7 @@
     </div>
 
     <!-- Container for ALL pages -->
-    <div id="pages-container">
-        <!-- Page 1 will be generated via JS to ensure logic consistency -->
-    </div>
+    <div id="pages-container"></div>
 
 </div>
 
@@ -204,27 +204,19 @@
             <div class="page-header-content"><h1>سجل متابعة مشروع مسار</h1><h2 class="page-sub-header"></h2></div>
             <div class="text-left flex flex-col items-end header-logo-area">
                 <img src="img/Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/180x50/white/DAA520?text=ALRAJHI+Invest'" class="h-10 object-contain mb-1">
-                <!-- Year range only on page 1 usually, but template allows flexibility -->
                 <div class="flex gap-1 year-badge hidden"><span class="text-[0.65rem] bg-[#F2D06B] px-3 py-0.5 rounded-full text-white font-bold" contenteditable="true" id="yearRange">2025 - 2026</span></div>
             </div>
         </header>
-
         <div class="page-content-wrapper">
-            <!-- Dashboard (Only P1) -->
             <div class="dashboard-area"></div>
-            
-            <!-- Table -->
             <div class="matrix-container">
                 <table>
                     <thead><tr><th style="width:6%">م</th><th style="width:18%">الجهة</th><th style="width:60%">الحدث</th><th style="width:16%">التاريخ</th></tr></thead>
                     <tbody class="page-tbody"></tbody>
                 </table>
             </div>
-
-            <!-- Footer Summary (Last Page) -->
             <div class="footer-summary-area"></div>
         </div>
-
         <footer><div>شركة اتحاد الراجحي</div><div class="page-number">صفحة 1 من 3</div><div>مشروع مسار</div></footer>
     </div>
 </template>
@@ -264,35 +256,47 @@
 <script>
     // --- GLOBAL DATA & STATE ---
     window.globalRows = []; 
-    window.filteredRows = []; // For search
+    window.filteredRows = []; 
     window.isSearching = false;
     window.selectedIndices = new Set();
     window.userId = null;
     
-    // --- SMART PAGINATION LOGIC ---
-    window.renderPages = function() {
+    // --- STRICT PAGINATION LOGIC ---
+    // A4 height = 297mm.
+    // Bottom Margin = 12mm.
+    // Footer Height = 10mm. 
+    // Footer Position = bottom: 10mm.
+    // Safe Limit = Content MUST NOT cross ~ 25mm from bottom (Footer Top + Buffer)
+    // 297mm - 25mm = 272mm usable height from top.
+    
+    window.renderPages = async function() {
         const container = document.getElementById('pages-container');
-        container.innerHTML = '';
+        container.innerHTML = ''; // Clear DOM
         
-        // Determine which rows to render (All or Filtered)
+        // Wait for DOM clear
+        await new Promise(r => setTimeout(r, 0));
+
         const rowsToRender = window.isSearching ? window.filteredRows : window.globalRows;
         
         let currentPageIndex = 1;
         let currentPageObj = createNewPage(currentPageIndex);
         container.appendChild(currentPageObj.el);
         
-        // If Page 1, Inject Dashboard
+        // Setup Page 1
         if (currentPageIndex === 1) {
             injectDashboard(currentPageObj.el);
+            // Wait for dashboard render to get height
+            await new Promise(r => setTimeout(r, 0));
         }
 
         let currentTbody = currentPageObj.tbody;
+        let currentFooterTop = getFooterTopLimit(currentPageObj.el);
 
-        // Loop through rows and distribute
-        rowsToRender.forEach((row, index) => {
-            const actualIndex = window.isSearching ? row.originalIndex : index; // Track original index for editing
+        // Process Rows
+        for (let i = 0; i < rowsToRender.length; i++) {
+            const row = rowsToRender[i];
+            const actualIndex = window.isSearching ? row.originalIndex : i;
             
-            // Create TR element
             const tr = document.createElement('tr');
             tr.dataset.index = actualIndex;
             if (window.selectedIndices.has(actualIndex)) tr.classList.add('selected');
@@ -308,56 +312,58 @@
 
             // Append tentatively
             currentTbody.appendChild(tr);
-            
-            // CHECK OVERFLOW
-            // We verify if the bottom of the just added ROW is below the top of the FOOTER
-            // We use getBoundingClientRect which is accurate for rendering
-            const rowRect = tr.getBoundingClientRect();
-            const footerRect = currentPageObj.el.querySelector('footer').getBoundingClientRect();
-            
-            // If Row Bottom > Footer Top - Padding (e.g. 5px safety)
-            if (rowRect.bottom > (footerRect.top - 5)) {
-                // Overflow detected!
-                currentTbody.removeChild(tr); // Take it back
-                
-                // Create New Page
+
+            // Measure Overflow
+            const trRect = tr.getBoundingClientRect();
+            // If the bottom of this row exceeds the footer safety limit
+            if (trRect.bottom > currentFooterTop) {
+                // Remove row from this page
+                currentTbody.removeChild(tr);
+                i--; // Retry this row on next page
+
+                // Create Next Page
                 currentPageIndex++;
                 currentPageObj = createNewPage(currentPageIndex);
                 container.appendChild(currentPageObj.el);
                 currentTbody = currentPageObj.tbody;
                 
-                // Add to new page
-                currentTbody.appendChild(tr);
+                // Recalculate limit for new page
+                // We need to wait a tick for layout sometimes, but since it's same structure, we can estimate or measure
+                currentFooterTop = getFooterTopLimit(currentPageObj.el);
             }
-        });
+        }
 
-        // Add Footer Summary to LAST page if exists
+        // --- ENFORCE MINIMUM 3 PAGES ---
+        if (!window.isSearching) {
+            while (currentPageIndex < 3) {
+                currentPageIndex++;
+                currentPageObj = createNewPage(currentPageIndex);
+                container.appendChild(currentPageObj.el);
+            }
+        }
+
+        // --- FOOTER SUMMARY LOGIC ---
+        // Try adding summary to the last page. If it overflows, create a new page.
+        const lastPage = container.lastElementChild;
+        const lastWrapper = lastPage.querySelector('.page-content-wrapper');
         const summaryHtml = `
             <div class="card" style="margin-top: auto; margin-bottom: 5px; background-color: #fafafa;">
                 <div class="section-header"><span class="section-num">✓</span><span class="section-title">نهاية السجل</span></div>
                 <div class="txt-content" style="padding: 10px;" contenteditable="true" id="footerSummary"></div>
             </div>`;
         
-        // Find last page content wrapper
-        const lastPage = container.lastElementChild;
-        const lastWrapper = lastPage.querySelector('.page-content-wrapper');
-        
-        // Try appending summary, if overflow, make new page
         const summaryDiv = document.createElement('div');
         summaryDiv.innerHTML = summaryHtml;
         lastWrapper.appendChild(summaryDiv);
         
         // Check overflow for summary
-        const summaryRect = summaryDiv.getBoundingClientRect();
-        const footerRect = lastPage.querySelector('footer').getBoundingClientRect();
-        
-        if (summaryRect.bottom > (footerRect.top - 5)) {
+        if (summaryDiv.getBoundingClientRect().bottom > getFooterTopLimit(lastPage)) {
             lastWrapper.removeChild(summaryDiv);
-            // Create spillover page just for summary
+            // Create new page for summary
             currentPageIndex++;
-            currentPageObj = createNewPage(currentPageIndex);
-            container.appendChild(currentPageObj.el);
-            currentPageObj.el.querySelector('.page-content-wrapper').appendChild(summaryDiv);
+            const summaryPage = createNewPage(currentPageIndex);
+            container.appendChild(summaryPage.el);
+            summaryPage.el.querySelector('.page-content-wrapper').appendChild(summaryDiv);
         }
 
         // Update Page Numbers
@@ -366,11 +372,21 @@
             p.querySelector('.page-number').innerText = `صفحة ${idx + 1} من ${allPages.length}`;
         });
 
-        // Restore Data into DOM elements
         restoreDomData();
         window.renumberTables();
         updateToolbar();
     };
+
+    function getFooterTopLimit(pageEl) {
+        // Returns the Y coordinate where the safe content area ends
+        // Page Top + Page Height (in px) - Footer Margin - Footer Height - Buffer
+        const pageRect = pageEl.getBoundingClientRect();
+        const footerEl = pageEl.querySelector('footer');
+        const footerRect = footerEl.getBoundingClientRect();
+        
+        // Safety buffer of 5px above footer
+        return footerRect.top - 5; 
+    }
 
     function createNewPage(index) {
         const template = document.getElementById('page-structure');
@@ -378,7 +394,6 @@
         const el = clone.querySelector('.page');
         el.id = `page-${index}`;
         
-        // Header Customization
         if (index === 1) {
             el.querySelector('.page-sub-header').innerText = 'ملخص المشروع والدراسات الأولية (HBU)';
             el.querySelector('.year-badge').classList.remove('hidden');
@@ -396,37 +411,7 @@
         dashArea.appendChild(template.content.cloneNode(true));
     }
 
-    // --- SEARCH LOGIC ---
-    window.handleSearch = (text) => {
-        text = text.trim().toLowerCase();
-        const clearBtn = document.getElementById('clearSearchBtn');
-        
-        if (text.length > 0) {
-            window.isSearching = true;
-            clearBtn.style.display = 'block';
-            
-            // Map rows to include original index for editing
-            const mappedRows = window.globalRows.map((r, i) => ({...r, originalIndex: i}));
-            
-            window.filteredRows = mappedRows.filter(row => {
-                if(row.type === 'header') return false; // Hide headers during search usually, or keep if text matches
-                const searchStr = `${row.event} ${row.tag} ${row.date}`.toLowerCase();
-                return searchStr.includes(text);
-            });
-        } else {
-            window.isSearching = false;
-            clearBtn.style.display = 'none';
-            window.filteredRows = [];
-        }
-        renderPages();
-    };
-
-    window.clearSearch = () => {
-        document.getElementById('searchInput').value = '';
-        window.handleSearch('');
-    };
-
-    // --- TEMPLATE & ACTIONS ---
+    // --- TEMPLATES & ACTIONS ---
     window.renderRowTemplate = (index, row) => `
         <td class="relative">
             <span class="row-index"></span>
@@ -447,196 +432,80 @@
     window.insertRowAt = (index) => {
         const newRow = { type: 'data', tag: 'جديد', tagClass: 'bg-gray-100 text-gray-800', event: 'وصف البند الجديد...', date: '--/--/----' };
         globalRows.splice(index, 0, newRow);
-        
-        // If searching, clear search to show context
-        if(window.isSearching) clearSearch();
-        else renderPages();
+        if(window.isSearching) clearSearch(); else renderPages();
     };
     
     window.deleteGlobalRow = (index) => {
         if(confirm('هل أنت متأكد من حذف هذا السطر؟')) {
             globalRows.splice(index, 1);
-            // Re-calc selection
             const newSet = new Set();
             window.selectedIndices.forEach(i => { if (i < index) newSet.add(i); else if (i > index) newSet.add(i - 1); });
             window.selectedIndices = newSet;
-            
-            if(window.isSearching) {
-                // Re-run search filter
-                window.handleSearch(document.getElementById('searchInput').value);
-            } else {
-                renderPages();
-            }
+            if(window.isSearching) window.handleSearch(document.getElementById('searchInput').value); else renderPages();
         }
     };
+
+    // --- SEARCH LOGIC ---
+    window.handleSearch = (text) => {
+        text = text.trim().toLowerCase();
+        const clearBtn = document.getElementById('clearSearchBtn');
+        if (text.length > 0) {
+            window.isSearching = true;
+            clearBtn.style.display = 'block';
+            const mappedRows = window.globalRows.map((r, i) => ({...r, originalIndex: i}));
+            window.filteredRows = mappedRows.filter(row => {
+                if(row.type === 'header') return false; 
+                const searchStr = `${row.event} ${row.tag} ${row.date}`.toLowerCase();
+                return searchStr.includes(text);
+            });
+        } else {
+            window.isSearching = false;
+            clearBtn.style.display = 'none';
+            window.filteredRows = [];
+        }
+        renderPages();
+    };
+    window.clearSearch = () => { document.getElementById('searchInput').value = ''; window.handleSearch(''); };
 
     // --- SELECTION LOGIC ---
-    window.toggleSelection = (e, index) => {
-        if (window.selectedIndices.has(index)) window.selectedIndices.delete(index);
-        else window.selectedIndices.add(index);
-        renderPages();
-    };
-
-    window.toggleHeaderSelection = (e, headerIndex) => {
-        e.stopPropagation();
-        const isSelected = window.selectedIndices.has(headerIndex);
-        const targetState = !isSelected;
-        if (targetState) window.selectedIndices.add(headerIndex);
-        else window.selectedIndices.delete(headerIndex);
-        for (let i = headerIndex + 1; i < window.globalRows.length; i++) {
-            if (window.globalRows[i].type === 'header') break;
-            if (targetState) window.selectedIndices.add(i);
-            else window.selectedIndices.delete(i);
-        }
-        renderPages();
-    };
-
+    window.toggleSelection = (e, index) => { if (window.selectedIndices.has(index)) window.selectedIndices.delete(index); else window.selectedIndices.add(index); renderPages(); };
+    window.toggleHeaderSelection = (e, headerIndex) => { e.stopPropagation(); const isSelected = window.selectedIndices.has(headerIndex); const targetState = !isSelected; if (targetState) window.selectedIndices.add(headerIndex); else window.selectedIndices.delete(headerIndex); for (let i = headerIndex + 1; i < window.globalRows.length; i++) { if (window.globalRows[i].type === 'header') break; if (targetState) window.selectedIndices.add(i); else window.selectedIndices.delete(i); } renderPages(); };
     window.clearSelection = () => { window.selectedIndices.clear(); renderPages(); };
-    window.updateToolbar = () => {
-        const toolbar = document.getElementById('selectionToolbar');
-        const count = window.selectedIndices.size;
-        document.getElementById('selCount').innerText = count;
-        toolbar.style.display = count > 0 ? 'flex' : 'none';
-    };
+    window.updateToolbar = () => { const toolbar = document.getElementById('selectionToolbar'); const count = window.selectedIndices.size; document.getElementById('selCount').innerText = count; toolbar.style.display = count > 0 ? 'flex' : 'none'; };
+    window.deleteSelectedRows = () => { if(!confirm('هل أنت متأكد من حذف البنود المحددة؟')) return; const indices = Array.from(window.selectedIndices).sort((a,b) => b-a); indices.forEach(idx => globalRows.splice(idx, 1)); clearSelection(); };
+    window.moveSelectedRows = (direction) => { if(window.isSearching) { alert('لا يمكن نقل الأسطر أثناء البحث.'); return; } const indices = Array.from(window.selectedIndices).sort((a,b) => direction === -1 ? a-b : b-a); let moved = false; indices.forEach(idx => { const target = idx + direction; if (target >= 0 && target < globalRows.length && !window.selectedIndices.has(target)) { [globalRows[idx], globalRows[target]] = [globalRows[target], globalRows[idx]]; window.selectedIndices.delete(idx); window.selectedIndices.add(target); moved = true; } }); if(moved) renderPages(); };
 
-    window.deleteSelectedRows = () => {
-        if(!confirm('هل أنت متأكد من حذف البنود المحددة؟')) return;
-        const indices = Array.from(window.selectedIndices).sort((a,b) => b-a);
-        indices.forEach(idx => globalRows.splice(idx, 1));
-        clearSelection();
-    };
+    window.renumberTables = () => { let count = 1; document.querySelectorAll('tbody tr').forEach(row => { if (row.classList.contains('stream-header')) return; const idx = row.querySelector('.row-index'); if(idx) idx.innerText = count++; }); };
 
-    window.moveSelectedRows = (direction) => {
-        if(window.isSearching) { alert('لا يمكن نقل الأسطر أثناء البحث. الرجاء إلغاء البحث أولاً.'); return; }
-        const indices = Array.from(window.selectedIndices).sort((a,b) => direction === -1 ? a-b : b-a);
-        let moved = false;
-        indices.forEach(idx => {
-            const target = idx + direction;
-            if (target >= 0 && target < globalRows.length && !window.selectedIndices.has(target)) {
-                [globalRows[idx], globalRows[target]] = [globalRows[target], globalRows[idx]];
-                window.selectedIndices.delete(idx);
-                window.selectedIndices.add(target);
-                moved = true;
-            }
-        });
-        if(moved) renderPages();
-    };
-
-    window.renumberTables = () => {
-        let count = 1;
-        document.querySelectorAll('tbody tr').forEach(row => {
-            if (row.classList.contains('stream-header')) return;
-            const idx = row.querySelector('.row-index');
-            if(idx) idx.innerText = count++;
-        });
-    };
-
-    // --- AUTH & HELPERS ---
-    function checkPassword() {
-        if (document.getElementById('passwordInput').value === "masar") {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('appContent').style.display = 'flex';
-            // Trigger render to measure heights correctly after display:flex
-            setTimeout(renderPages, 100); 
-        } else { document.getElementById('loginError').classList.remove('hidden'); }
-    }
+    // --- HELPERS ---
+    function checkPassword() { if (document.getElementById('passwordInput').value === "masar") { document.getElementById('loginOverlay').style.display = 'none'; document.getElementById('appContent').style.display = 'flex'; setTimeout(renderPages, 100); } else { document.getElementById('loginError').classList.remove('hidden'); } }
     document.getElementById('passwordInput')?.addEventListener('keypress', e => { if (e.key === 'Enter') checkPassword(); });
 
-    // Helper: Restore innerText of dynamic elements from Data Object
     function restoreDomData() {
         if(!window.currentDashboardData) return;
         const d = window.currentDashboardData;
         const safeSet = (id, val, isHTML=false) => { let e=document.getElementById(id); if(e) isHTML?e.innerHTML=val:e.innerText=val; };
-        
-        safeSet('scopeText', d.scope, true);
-        safeSet('keyComponents', d.keyComponents, true);
-        safeSet('startDate', d.startDate);
-        safeSet('lastUpdate', d.lastUpdate);
-        safeSet('statusText', d.status);
-        safeSet('yearRange', d.yearRange);
-        
-        const fSum = document.getElementById('footerSummary');
-        if(fSum) {
-            fSum.innerText = d.footerSummary || '';
-            fSum.onblur = function() { if(window.currentDashboardData) window.currentDashboardData.footerSummary = this.innerText; };
-        }
-
+        safeSet('scopeText', d.scope, true); safeSet('keyComponents', d.keyComponents, true); safeSet('startDate', d.startDate); safeSet('lastUpdate', d.lastUpdate); safeSet('statusText', d.status); safeSet('yearRange', d.yearRange);
+        const fSum = document.getElementById('footerSummary'); if(fSum) { fSum.innerText = d.footerSummary || ''; fSum.onblur = function() { if(window.currentDashboardData) window.currentDashboardData.footerSummary = this.innerText; }; }
         const stkGrid = document.getElementById('stkGrid'); if(stkGrid){ stkGrid.innerHTML=''; (d.stakeholders||[]).forEach(s=>window.addStakeholder(s.text, s.color)); }
         const achList = document.getElementById('achList'); if(achList){ achList.innerHTML=''; (d.achievements||[]).forEach(a=>window.addAchievement(a.text, a.state)); }
     }
 
-    // Dashboard Helpers
-    window.addStakeholder = (text = "جهة جديدة", color = "bg-blue-500") => {
-        const div = document.createElement('div'); div.className = "stk-item";
-        div.innerHTML = `<span class="dot ${color}" onclick="cycleColor(this)"></span><span contenteditable="true">${text}</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.closest('.stk-item').remove()">x</div></div>`;
-        document.getElementById('stkGrid').appendChild(div);
-    };
-    window.addAchievement = (text = "إنجاز جديد", state = "done") => {
-        const icons = { done: '✓', sync: '⟳', pending: '○' }, classes = { done: 'text-green-500 font-bold', sync: 'text-blue-500', pending: 'text-gray-400' };
-        const div = document.createElement('div'); div.className = "ach-item";
-        div.innerHTML = `<span class="status-icon ${classes[state]}" onclick="cycleStatus(this)" data-state="${state}">${icons[state]}</span><span contenteditable="true">${text}</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.closest('.ach-item').remove()">x</div></div>`;
-        document.getElementById('achList').appendChild(div);
-    };
-    window.cycleColor = dot => {
-        const colors = ['bg-blue-500', 'bg-purple-500', 'bg-green-500', 'bg-red-500', 'bg-orange-500', 'bg-yellow-600', 'bg-teal-600'];
-        let current = [...dot.classList].find(c => colors.includes(c));
-        dot.classList.replace(current, colors[(colors.indexOf(current) + 1) % colors.length]);
-    };
-    window.cycleStatus = icon => {
-        const states = ['done', 'sync', 'pending'], icons = { done: '✓', sync: '⟳', pending: '○' }, classes = { done: 'text-green-500 font-bold', sync: 'text-blue-500', pending: 'text-gray-400' };
-        let next = states[(states.indexOf(icon.dataset.state) + 1) % states.length];
-        icon.dataset.state = next; icon.innerText = icons[next]; icon.className = "status-icon " + classes[next];
-    };
+    // Dashboard UI
+    window.addStakeholder = (text = "جهة جديدة", color = "bg-blue-500") => { const div = document.createElement('div'); div.className = "stk-item"; div.innerHTML = `<span class="dot ${color}" onclick="cycleColor(this)"></span><span contenteditable="true">${text}</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.closest('.stk-item').remove()">x</div></div>`; document.getElementById('stkGrid').appendChild(div); };
+    window.addAchievement = (text = "إنجاز جديد", state = "done") => { const icons = { done: '✓', sync: '⟳', pending: '○' }, classes = { done: 'text-green-500 font-bold', sync: 'text-blue-500', pending: 'text-gray-400' }; const div = document.createElement('div'); div.className = "ach-item"; div.innerHTML = `<span class="status-icon ${classes[state]}" onclick="cycleStatus(this)" data-state="${state}">${icons[state]}</span><span contenteditable="true">${text}</span><div class="item-controls no-print"><div class="btn-mini btn-del" onclick="this.closest('.ach-item').remove()">x</div></div>`; document.getElementById('achList').appendChild(div); };
+    window.cycleColor = dot => { const colors = ['bg-blue-500', 'bg-purple-500', 'bg-green-500', 'bg-red-500', 'bg-orange-500', 'bg-yellow-600', 'bg-teal-600']; let current = [...dot.classList].find(c => colors.includes(c)); dot.classList.replace(current, colors[(colors.indexOf(current) + 1) % colors.length]); };
+    window.cycleStatus = icon => { const states = ['done', 'sync', 'pending'], icons = { done: '✓', sync: '⟳', pending: '○' }, classes = { done: 'text-green-500 font-bold', sync: 'text-blue-500', pending: 'text-gray-400' }; let next = states[(states.indexOf(icon.dataset.state) + 1) % states.length]; icon.dataset.state = next; icon.innerText = icons[next]; icon.className = "status-icon " + classes[next]; };
 
-    // DatePicker
+    // DatePicker & Tags
     let curIdxForDate = null, pDate = new Date();
-    window.openDatePicker = (c, idx) => {
-        curIdxForDate = idx !== undefined ? idx : c.id; 
-        const txt = c.innerText.trim();
-        if (txt.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) { const p = txt.split('/'); pDate = new Date(p[2], p[1]-1, p[0]); } else { pDate = new Date(); }
-        document.querySelectorAll('.custom-datepicker').forEach(e => e.remove());
-        const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'custom-datepicker no-print';
-        div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
-        document.body.appendChild(div); renderCal(div);
-    };
-    function renderCal(div) {
-        const y = pDate.getFullYear(), m = pDate.getMonth();
-        const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-        const days = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
-        let h = `<div class="calendar-header"><span onclick="window.chM(-1)"><i class="fa-solid fa-chevron-right"></i></span><span>${months[m]} ${y}</span><span onclick="window.chM(1)"><i class="fa-solid fa-chevron-left"></i></span></div><div class="calendar-grid">`;
-        days.forEach(d => h += `<div class="day-name">${d}</div>`);
-        const dim = new Date(y, m + 1, 0).getDate();
-        for(let i=0; i<new Date(y, m, 1).getDay(); i++) h += `<div></div>`;
-        for(let d=1; d<=dim; d++) h += `<div class="day-cell" onclick="window.setD(${d})">${d}</div>`;
-        div.innerHTML = h + '</div>';
-    }
+    window.openDatePicker = (c, idx) => { curIdxForDate = idx !== undefined ? idx : c.id; const txt = c.innerText.trim(); if (txt.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) { const p = txt.split('/'); pDate = new Date(p[2], p[1]-1, p[0]); } else { pDate = new Date(); } document.querySelectorAll('.custom-datepicker').forEach(e => e.remove()); const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'custom-datepicker no-print'; div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px'; document.body.appendChild(div); renderCal(div); };
+    function renderCal(div) { const y = pDate.getFullYear(), m = pDate.getMonth(); const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]; const days = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"]; let h = `<div class="calendar-header"><span onclick="window.chM(-1)"><i class="fa-solid fa-chevron-right"></i></span><span>${months[m]} ${y}</span><span onclick="window.chM(1)"><i class="fa-solid fa-chevron-left"></i></span></div><div class="calendar-grid">`; days.forEach(d => h += `<div class="day-name">${d}</div>`); const dim = new Date(y, m + 1, 0).getDate(); for(let i=0; i<new Date(y, m, 1).getDay(); i++) h += `<div></div>`; for(let d=1; d<=dim; d++) h += `<div class="day-cell" onclick="window.setD(${d})">${d}</div>`; div.innerHTML = h + '</div>'; }
     window.chM = d => { pDate.setMonth(pDate.getMonth() + d); renderCal(document.querySelector('.custom-datepicker')); };
-    window.setD = d => { 
-        const ds = `${String(d).padStart(2,'0')}/${String(pDate.getMonth()+1).padStart(2,'0')}/${pDate.getFullYear()}`;
-        if (typeof curIdxForDate === 'number') window.updateRowDate(curIdxForDate, ds);
-        else {
-             // For dashboard items
-             const el = document.getElementById(curIdxForDate);
-             if(el) {
-                 el.innerText = ds;
-                 if(window.currentDashboardData) window.currentDashboardData[curIdxForDate] = ds;
-             }
-        }
-        document.querySelectorAll('.custom-datepicker').forEach(e => e.remove()); 
-    };
+    window.setD = d => { const ds = `${String(d).padStart(2,'0')}/${String(pDate.getMonth()+1).padStart(2,'0')}/${pDate.getFullYear()}`; if (typeof curIdxForDate === 'number') window.updateRowDate(curIdxForDate, ds); else { const el = document.getElementById(curIdxForDate); if(el) { el.innerText = ds; if(window.currentDashboardData) window.currentDashboardData[curIdxForDate] = ds; } } document.querySelectorAll('.custom-datepicker').forEach(e => e.remove()); };
 
-    // Tags
     let curIdxForTag = null;
-    window.openTagSelector = (c, idx) => {
-        curIdxForTag = idx;
-        const tags = [{t:"Colliers",c:"bg-blue-100 text-blue-800"},{t:"لجنة مسار",c:"bg-purple-100 text-purple-800"},{t:"الفريق الداخلي",c:"bg-green-100 text-green-800"},{t:"لجنة الاستثمار",c:"bg-emerald-100 text-emerald-800"},{t:"المستشار القانوني",c:"bg-red-100 text-red-800"},{t:"المشغلين",c:"bg-orange-100 text-orange-800"},{t:"JLL",c:"bg-indigo-100 text-indigo-800"},{t:"Wisefields",c:"bg-rose-100 text-rose-800"}];
-        document.querySelectorAll('.tag-selector-menu').forEach(e => e.remove());
-        const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'tag-selector-menu no-print';
-        div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px';
-        let h = '<div class="p-2 flex flex-wrap gap-1 max-h-40 overflow-auto">';
-        tags.forEach(t => h += `<span class="tag cursor-pointer ${t.c}" onclick="window.updateRowTag(${idx}, '${t.t}', '${t.c}'); document.querySelector('.tag-selector-menu').remove();">${t.t}</span>`);
-        div.innerHTML = h + '</div>'; document.body.appendChild(div);
-    };
+    window.openTagSelector = (c, idx) => { curIdxForTag = idx; const tags = [{t:"Colliers",c:"bg-blue-100 text-blue-800"},{t:"لجنة مسار",c:"bg-purple-100 text-purple-800"},{t:"الفريق الداخلي",c:"bg-green-100 text-green-800"},{t:"لجنة الاستثمار",c:"bg-emerald-100 text-emerald-800"},{t:"المستشار القانوني",c:"bg-red-100 text-red-800"},{t:"المشغلين",c:"bg-orange-100 text-orange-800"},{t:"JLL",c:"bg-indigo-100 text-indigo-800"},{t:"Wisefields",c:"bg-rose-100 text-rose-800"}]; document.querySelectorAll('.tag-selector-menu').forEach(e => e.remove()); const r = c.getBoundingClientRect(); const div = document.createElement('div'); div.className = 'tag-selector-menu no-print'; div.style.top = (window.scrollY + r.bottom + 5) + 'px'; div.style.left = (window.scrollX + r.left) + 'px'; let h = '<div class="p-2 flex flex-wrap gap-1 max-h-40 overflow-auto">'; tags.forEach(t => h += `<span class="tag cursor-pointer ${t.c}" onclick="window.updateRowTag(${idx}, '${t.t}', '${t.c}'); document.querySelector('.tag-selector-menu').remove();">${t.t}</span>`); div.innerHTML = h + '</div>'; document.body.appendChild(div); };
     document.addEventListener('mousedown', e => { if (!e.target.closest('td') && !e.target.closest('.custom-datepicker') && !e.target.closest('.info-val')) document.querySelectorAll('.tag-selector-menu, .custom-datepicker').forEach(e => e.remove()); });
 </script>
 
@@ -785,7 +654,6 @@
         const btn = document.getElementById('mainSaveBtn'); const old = btn.innerHTML;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري المزامنة...';
         try {
-            // Re-capture dashboard data from DOM before saving
             const dashData = {
                 scope: document.getElementById('scopeText').innerHTML,
                 keyComponents: document.getElementById('keyComponents').innerHTML,
@@ -798,10 +666,7 @@
                 achievements: [...document.querySelectorAll('.ach-item')].map(a => ({ text: a.querySelector('span[contenteditable]').innerText, state: a.querySelector('.status-icon').dataset.state }))
             };
 
-            const data = {
-                dashboard: dashData,
-                rows: window.globalRows
-            };
+            const data = { dashboard: dashData, rows: window.globalRows };
             await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'report_v1', 'latest'), data);
             btn.innerHTML = 'تم الحفظ ✓'; setTimeout(() => btn.innerHTML = old, 2000);
         } catch(e) { console.error(e); alert("خطأ!"); btn.innerHTML = old; }
