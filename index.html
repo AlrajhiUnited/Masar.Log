@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سجل متابعة مشروع مسار - النسخة الاحترافية (محرك آمن V3)</title>
+    <title>سجل متابعة مشروع مسار - النسخة المنضبطة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -35,7 +35,7 @@
             height: 297mm; /* A4 Standard */
             background-color: #FFFFFF; 
             position: relative; 
-            padding: 10mm 12mm 15mm 12mm; /* الهوامش الأساسية */
+            padding: 10mm 12mm 20mm 12mm; /* Increased bottom padding to protect footer */
             box-sizing: border-box; 
             display: flex; 
             flex-direction: column; 
@@ -44,7 +44,6 @@
             margin-bottom: 20px; 
         }
         
-        /* منطقة المحتوى القابلة للتمدد */
         .page-content-wrapper { flex-grow: 1; display: flex; flex-direction: column; width: 100%; }
         
         header { border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 8px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: flex-end; height: 65px; overflow: hidden; }
@@ -53,39 +52,39 @@
         h1 { font-size: 1.4rem; font-weight: 800; color: #111; line-height: 1.2; }
         h2 { font-size: 0.85rem; color: var(--gold-main); font-weight: 700; margin-top: 2px; }
         
-        /* Dashboard */
-        .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; flex-shrink: 0; }
-        .col-stack { display: flex; flex-direction: column; gap: 6px; }
-        .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px 10px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); position: relative; }
-        .section-header { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px solid #f3f4f6; }
-        .section-num { background: var(--gold-main); color: white; font-weight: 800; font-size: 0.75rem; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
-        .section-title { font-size: 0.8rem; font-weight: 800; color: #2d3748; }
-        .txt-content { font-size: 0.65rem; color: #4a5568; line-height: 1.5; }
-        .highlight-box { background-color: #FEFCE8; border: 1px solid #FEF08A; padding: 4px; border-radius: 4px; margin-top: 4px; font-size: 0.65rem; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 5px; }
-        .info-box { background: #FAFAFA; border: 1px solid #f0f0f0; border-radius: 4px; padding: 4px; text-align: center; }
-        .info-val { font-size: 0.7rem; font-weight: 800; color: #1F2937; display: block; }
-        .info-lbl { font-size: 0.55rem; color: #6B7280; }
-        .status-bar { background: #FEFCE8; border: 1px dashed #EAB308; border-radius: 4px; padding: 3px; text-align: center; color: #854D0E; font-weight: 700; font-size: 0.65rem; }
+        /* Dashboard - More Compact */
+        .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; flex-shrink: 0; }
+        .col-stack { display: flex; flex-direction: column; gap: 4px; }
+        .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); position: relative; }
+        .section-header { display: flex; align-items: center; gap: 4px; margin-bottom: 3px; padding-bottom: 2px; border-bottom: 1px solid #f3f4f6; }
+        .section-num { background: var(--gold-main); color: white; font-weight: 800; font-size: 0.7rem; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+        .section-title { font-size: 0.75rem; font-weight: 800; color: #2d3748; }
+        .txt-content { font-size: 0.6rem; color: #4a5568; line-height: 1.4; }
+        .highlight-box { background-color: #FEFCE8; border: 1px solid #FEF08A; padding: 3px; border-radius: 4px; margin-top: 3px; font-size: 0.6rem; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 4px; }
+        .info-box { background: #FAFAFA; border: 1px solid #f0f0f0; border-radius: 4px; padding: 3px; text-align: center; }
+        .info-val { font-size: 0.65rem; font-weight: 800; color: #1F2937; display: block; }
+        .info-lbl { font-size: 0.5rem; color: #6B7280; }
+        .status-bar { background: #FEFCE8; border: 1px dashed #EAB308; border-radius: 4px; padding: 2px; text-align: center; color: #854D0E; font-weight: 700; font-size: 0.6rem; }
 
-        /* Interactive Items */
-        .stk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-        .stk-item { background: white; border: 1px solid #E5E7EB; border-radius: 4px; padding: 4px 6px; font-size: 0.65rem; font-weight: 700; display: flex; align-items: center; gap: 5px; position: relative; }
-        .ach-item { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; color: #4B5563; position: relative; padding: 3px 0; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
-        .status-icon { cursor: pointer; width: 16px; text-align: center; flex-shrink: 0; font-size: 0.75rem; }
+        /* Interactive Items - Compact */
+        .stk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+        .stk-item { background: white; border: 1px solid #E5E7EB; border-radius: 4px; padding: 3px 5px; font-size: 0.6rem; font-weight: 700; display: flex; align-items: center; gap: 4px; position: relative; }
+        .ach-item { display: flex; align-items: center; gap: 5px; font-size: 0.6rem; color: #4B5563; position: relative; padding: 2px 0; }
+        .dot { width: 7px; height: 7px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
+        .status-icon { cursor: pointer; width: 14px; text-align: center; flex-shrink: 0; font-size: 0.7rem; }
         .item-controls { position: absolute; left: 2px; top: 50%; transform: translateY(-50%); display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s; }
         .stk-item:hover .item-controls, .ach-item:hover .item-controls { opacity: 1; }
-        .btn-mini { width: 14px; height: 14px; border-radius: 3px; font-size: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .btn-mini { width: 12px; height: 12px; border-radius: 3px; font-size: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .btn-del { background: #fee2e2; color: #ef4444; }
-        .add-mini-btn { font-size: 0.6rem; color: var(--gold-dark); cursor: pointer; text-align: center; margin-top: 6px; border: 1px dashed #ddd; border-radius: 4px; padding: 3px; transition: 0.2s; }
+        .add-mini-btn { font-size: 0.55rem; color: var(--gold-dark); cursor: pointer; text-align: center; margin-top: 4px; border: 1px dashed #ddd; border-radius: 4px; padding: 2px; transition: 0.2s; }
         .add-mini-btn:hover { background: #fafafa; border-color: var(--gold-main); }
 
-        /* Tables */
+        /* Tables - Compact */
         .matrix-container { background: transparent; display: flex; flex-direction: column; width: 100%; }
-        table { width: 100%; border-collapse: separate; border-spacing: 0 4px; margin-bottom: 5px; }
-        thead tr { background: var(--gold-main); height: 28px; }
-        thead th { color: white !important; font-weight: 800; font-size: 0.7rem; padding: 0 6px; text-align: center; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 2px; margin-bottom: 4px; } /* Tight spacing */
+        thead tr { background: var(--gold-main); height: 24px; }
+        thead th { color: white !important; font-weight: 800; font-size: 0.65rem; padding: 0 4px; text-align: center; }
         
         tbody tr { background: white; transition: background 0.2s; position: relative; page-break-inside: avoid; }
         tbody tr.selected { background-color: #ecfdf5 !important; border-left: 2px solid #10b981; }
@@ -93,26 +92,26 @@
         
         td { 
             border-bottom: 1px solid #f1f5f9; 
-            padding: 5px 8px; 
+            padding: 2px 6px; /* Very tight padding */
             vertical-align: middle; 
-            font-size: 0.65rem; 
-            min-height: 28px; 
+            font-size: 0.6rem; 
+            min-height: 24px; 
             position: relative; 
         }
         
         td:nth-child(1) { width: 5%; font-weight: 800; color: var(--gold-dark); background: #fafafa; border-left: 1px solid #f1f5f9; text-align: center; overflow: visible; }
-        tr.stream-header td { background-color: #fcfbf7; border-bottom: 1px solid #D4AF37; color: var(--gold-dark); font-weight: 800; padding: 6px 4px; }
+        tr.stream-header td { background-color: #fcfbf7; border-bottom: 1px solid #D4AF37; color: var(--gold-dark); font-weight: 800; padding: 4px 4px; }
         
-        .row-select-box { width: 12px; height: 12px; border: 1px solid #cbd5e1; border-radius: 3px; cursor: pointer; display: inline-block; vertical-align: middle; margin-left: 4px; transition: 0.2s; }
+        .row-select-box { width: 10px; height: 10px; border: 1px solid #cbd5e1; border-radius: 3px; cursor: pointer; display: inline-block; vertical-align: middle; margin-left: 4px; transition: 0.2s; }
         .row-select-box:hover { border-color: #10b981; }
         tr.selected .row-select-box { background-color: #10b981; border-color: #10b981; position: relative; }
-        tr.selected .row-select-box::after { content: '✓'; color: white; font-size: 8px; position: absolute; top: -2px; left: 2px; }
+        tr.selected .row-select-box::after { content: '✓'; color: white; font-size: 8px; position: absolute; top: -2px; left: 1px; }
 
         td:nth-child(2) { width: 18%; text-align: right; }
-        td:nth-child(3) { width: 60%; text-align: right; color: #2d3748; line-height: 1.4; }
+        td:nth-child(3) { width: 60%; text-align: right; color: #2d3748; line-height: 1.35; }
         td:nth-child(4) { width: 17%; text-align: center; color: #4a5568; font-family: 'Arial', sans-serif !important; direction: ltr; }
         
-        .tag { font-size: 0.6rem; padding: 2px 10px; border-radius: 9999px; font-weight: 700; display: inline-block; white-space: nowrap; border: 1px solid transparent; }
+        .tag { font-size: 0.55rem; padding: 1px 8px; border-radius: 9999px; font-weight: 700; display: inline-block; white-space: nowrap; border: 1px solid transparent; }
 
         /* Action Buttons */
         .action-btn-group { 
@@ -264,7 +263,7 @@
 
     // --- STRICT PAGINATION LOGIC (NO RECURSIVE LOOP RISK) ---
     window.renderPages = async function() {
-        // Wait for next frame to ensure login overlay is gone and layout is computable
+        // Wait for layout
         await new Promise(r => requestAnimationFrame(r));
         
         const container = document.getElementById('pages-container');
@@ -278,20 +277,22 @@
         
         if (currentPageIndex === 1) {
             injectDashboard(currentPageObj.el);
-            // Allow dashboard to render before measuring
             await new Promise(r => setTimeout(r, 0));
         }
 
         let currentTbody = currentPageObj.tbody;
-        // Pre-calculate safe limit based on page geometry (approx)
-        // We use dynamic measurement inside loop for accuracy
         
+        // Strict Pixel Limit Calculation
+        // A4 Height (px at 96dpi) = 1122px
+        // Footer (10mm + padding) approx 80px from bottom
+        // We set a SAFE BOTTOM LIMIT. Any row crossing this goes to next page.
+        // This prevents the row from even touching the footer area.
+        const PAGE_HEIGHT_PX = 1122;
+        const FOOTER_ZONE_PX = 100; // 25mm approx
+        const SAFE_BOTTOM_LIMIT = PAGE_HEIGHT_PX - FOOTER_ZONE_PX;
+
         for (let i = 0; i < rowsToRender.length; i++) {
-            // Safety break
-            if (currentPageIndex > MAX_SAFE_PAGES) {
-                console.error("Safety limit reached. Stopping pagination to prevent crash.");
-                break;
-            }
+            if (currentPageIndex > MAX_SAFE_PAGES) break;
 
             const row = rowsToRender[i];
             const actualIndex = window.isSearching ? row.originalIndex : i;
@@ -309,35 +310,28 @@
                 tr.innerHTML = window.renderRowTemplate(actualIndex, row);
             }
 
-            // Append tentatively
+            // Append to measure
             currentTbody.appendChild(tr);
 
-            // Measure
-            const trRect = tr.getBoundingClientRect();
-            const footerTop = getFooterTopLimit(currentPageObj.el);
+            // Measure position relative to the page top
+            // We use offsetTop + offsetHeight relative to the page content wrapper
+            const rowBottom = tr.getBoundingClientRect().bottom;
+            const pageRect = currentPageObj.el.getBoundingClientRect();
+            const relativeBottom = rowBottom - pageRect.top;
             
             // Check Overflow
-            if (trRect.bottom > footerTop) {
-                // If this is the FIRST item on the page, we CANNOT move it.
-                // Moving it to a new page would result in the same overflow on the new page, causing infinite loop.
-                if (currentTbody.rows.length > 1) {
-                    // It's not the first item. Move it to a new page.
-                    currentTbody.removeChild(tr);
-                    
-                    currentPageIndex++;
-                    currentPageObj = createNewPage(currentPageIndex);
-                    container.appendChild(currentPageObj.el);
-                    currentTbody = currentPageObj.tbody;
-                    
-                    // Add to new page
-                    currentTbody.appendChild(tr);
-                    
-                    // NOTE: We do NOT check overflow again here. 
-                    // If it overflows the new page (and it's the first item), we let it be.
-                } else {
-                    // It is the first/only item and it is huge. Let it overflow.
-                    console.warn(`Row ${i} is too tall for a single page.`);
-                }
+            if (relativeBottom > SAFE_BOTTOM_LIMIT) {
+                // Remove from current
+                currentTbody.removeChild(tr);
+                
+                // Create New Page
+                currentPageIndex++;
+                currentPageObj = createNewPage(currentPageIndex);
+                container.appendChild(currentPageObj.el);
+                currentTbody = currentPageObj.tbody;
+                
+                // Add to new page
+                currentTbody.appendChild(tr);
             }
         }
 
@@ -363,9 +357,10 @@
         summaryDiv.innerHTML = summaryHtml;
         lastWrapper.appendChild(summaryDiv);
         
-        if (summaryDiv.getBoundingClientRect().bottom > getFooterTopLimit(lastPage)) {
-            // Move summary only if we can (wrapper has other things)
-            // But summary is usually last. Just check if we need new page.
+        const summaryBottom = summaryDiv.getBoundingClientRect().bottom;
+        const pageRect = lastPage.getBoundingClientRect();
+        
+        if ((summaryBottom - pageRect.top) > SAFE_BOTTOM_LIMIT) {
             lastWrapper.removeChild(summaryDiv);
             currentPageIndex++;
             const summaryPage = createNewPage(currentPageIndex);
@@ -383,20 +378,6 @@
         window.renumberTables();
         updateToolbar();
     };
-
-    function getFooterTopLimit(pageEl) {
-        const footerEl = pageEl.querySelector('footer');
-        const footerRect = footerEl.getBoundingClientRect();
-        // Return top of footer minus 5px padding
-        // If footer is not visible (0), calculate based on A4 height in pixels (approx 1122px)
-        if (footerRect.top === 0) {
-            const pageRect = pageEl.getBoundingClientRect();
-            // 297mm * 3.78 px/mm = ~1122px. Footer is at bottom.
-            // Safety: use page bottom - 60px
-            return pageRect.top + 1060; 
-        }
-        return footerRect.top - 5; 
-    }
 
     function createNewPage(index) {
         const template = document.getElementById('page-structure');
@@ -571,7 +552,7 @@
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام الخيارات بعد إضافة ملاحظات اللجنة', date:'25/05/2025'},
             {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'طلب خيار مشتق من الثالث (3A)', date:'25/05/2025'},
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام الخيار المشتق (3A)', date:'25/05/2025'},
-            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد الاجتماع (3) مع لجنة الدعم (المضي بـ 3A)', date:'28/05/2025'},
+            {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'عقد اجتماع (3) مع لجنة الدعم (المضي بـ 3A)', date:'28/05/2025'},
             {tag:'لجنة مسار', tagClass:'bg-purple-100 text-purple-800', event:'صدور موافقة اللجنة على (3A) مع تحاليل الحساسية', date:'01/06/2025'},
             {tag:'Colliers', tagClass:'bg-blue-100 text-blue-800', event:'استلام مسودة الدراسة النهائية متضمنة (3A)', date:'04/06/2025'},
             {tag:'لجنة الاستثمار', tagClass:'bg-emerald-100 text-emerald-800', event:'عقد الاجتماع (4) مع لجنة الاستثمار (مراجعة النموذج)', date:'23/06/2025'},
