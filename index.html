@@ -35,18 +35,18 @@
             height: 297mm; /* A4 Standard */
             background-color: #FFFFFF; 
             position: relative; 
-            padding: 10mm 12mm 25mm 12mm; /* الهوامش */
+            padding: 10mm 12mm 25mm 12mm; /* مساحة أمان سفلية */
             box-sizing: border-box; 
             display: flex; 
             flex-direction: column; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-            overflow: visible; /* Changed from hidden to visible to fix logo clipping if any */
+            overflow: visible; /* منع القص */
             margin-bottom: 20px; 
         }
         
-        .page-content-wrapper { flex-grow: 1; display: flex; flex-direction: column; width: 100%; }
+        .page-content-wrapper { flex-grow: 1; display: flex; flex-direction: column; width: 100%; position: relative; }
         
-        /* Header Fix for Logo */
+        /* إصلاح الترويسة والشعار */
         header { 
             border-bottom: 2px solid #f0f0f0; 
             padding-bottom: 5px; 
@@ -54,18 +54,17 @@
             flex-shrink: 0; 
             display: flex; 
             justify-content: space-between; 
-            align-items: flex-end; 
-            height: auto; 
-            min-height: 75px; /* Increased height */
-            overflow: visible; /* No clipping */
+            align-items: center; /* توسيط عمودي لمنع القص */
+            min-height: 85px; /* زيادة الارتفاع */
+            padding-top: 15px; /* حماية علوية للشعار */
         }
         
         footer { position: absolute; bottom: 10mm; left: 12mm; right: 12mm; height: 10mm; border-top: 1px solid #eee; padding-top: 5px; font-size: 0.65rem; color: #999; display: flex; justify-content: space-between; align-items: center; background-color: white; z-index: 50; }
         
-        h1 { font-size: 1.4rem; font-weight: 800; color: #111; line-height: 1.2; }
+        h1 { font-size: 1.4rem; font-weight: 800; color: #111; line-height: 1.2; margin-bottom: 5px; }
         h2 { font-size: 0.85rem; color: var(--gold-main); font-weight: 700; margin-top: 2px; }
         
-        /* Dashboard - More Compact */
+        /* Dashboard - Compact */
         .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; flex-shrink: 0; }
         .col-stack { display: flex; flex-direction: column; gap: 4px; }
         .card { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; display: flex; flex-direction: column; justify-content: flex-start; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.02); position: relative; }
@@ -95,7 +94,7 @@
 
         /* Tables - Compact */
         .matrix-container { background: transparent; display: flex; flex-direction: column; width: 100%; }
-        table { width: 100%; border-collapse: separate; border-spacing: 0 2px; margin-bottom: 4px; } /* Tight spacing */
+        table { width: 100%; border-collapse: separate; border-spacing: 0 2px; margin-bottom: 4px; }
         thead tr { background: var(--gold-main); height: 24px; }
         thead th { color: white !important; font-weight: 800; font-size: 0.65rem; padding: 0 4px; text-align: center; }
         
@@ -103,15 +102,7 @@
         tbody tr.selected { background-color: #ecfdf5 !important; border-left: 2px solid #10b981; }
         tbody tr:hover { background-color: #f9fafb; }
         
-        td { 
-            border-bottom: 1px solid #f1f5f9; 
-            padding: 2px 6px; /* Very tight padding */
-            vertical-align: middle; 
-            font-size: 0.6rem; 
-            min-height: 24px; 
-            position: relative; 
-        }
-        
+        td { border-bottom: 1px solid #f1f5f9; padding: 2px 6px; vertical-align: middle; font-size: 0.6rem; min-height: 24px; position: relative; }
         td:nth-child(1) { width: 5%; font-weight: 800; color: var(--gold-dark); background: #fafafa; border-left: 1px solid #f1f5f9; text-align: center; overflow: visible; }
         tr.stream-header td { background-color: #fcfbf7; border-bottom: 1px solid #D4AF37; color: var(--gold-dark); font-weight: 800; padding: 4px 4px; }
         
@@ -127,11 +118,7 @@
         .tag { font-size: 0.55rem; padding: 1px 8px; border-radius: 9999px; font-weight: 700; display: inline-block; white-space: nowrap; border: 1px solid transparent; }
 
         /* Action Buttons */
-        .action-btn-group { 
-            position: absolute; right: -45px; top: 50%; transform: translateY(-50%); 
-            display: flex; gap: 3px; opacity: 0; transition: opacity 0.2s; z-index: 100;
-            background: white; padding: 2px; border-radius: 4px;
-        }
+        .action-btn-group { position: absolute; right: -45px; top: 50%; transform: translateY(-50%); display: flex; gap: 3px; opacity: 0; transition: opacity 0.2s; z-index: 100; background: white; padding: 2px; border-radius: 4px; }
         tbody tr:hover .action-btn-group { opacity: 1; }
         .row-btn { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; font-size: 10px; border: 1px solid transparent; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .delete-btn { color: #b91c1c; background: #fee2e2; border-color: #fca5a5; }
@@ -214,8 +201,8 @@
     <div class="page">
         <header>
             <div class="page-header-content"><h1>سجل متابعة مشروع مسار</h1><h2 class="page-sub-header"></h2></div>
-            <div class="text-left flex flex-col items-end header-logo-area pt-2">
-                <img src="img/Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/180x50/white/DAA520?text=ALRAJHI+Invest'" class="h-12 object-contain mb-1">
+            <div class="text-left flex flex-col items-end header-logo-area">
+                <img src="img/Alrajhi Logo Presentation.png" onerror="this.src='https://placehold.co/180x50/white/DAA520?text=ALRAJHI+Invest'" class="h-14 object-contain mb-1">
                 <div class="flex gap-1 year-badge hidden"><span class="text-[0.65rem] bg-[#F2D06B] px-3 py-0.5 rounded-full text-white font-bold" contenteditable="true" id="yearRange">2025 - 2026</span></div>
             </div>
         </header>
@@ -272,9 +259,8 @@
     window.isSearching = false;
     window.selectedIndices = new Set();
     window.userId = null;
-    const MAX_SAFE_PAGES = 100;
 
-    // --- STRICT PAGINATION LOGIC ---
+    // --- BULLETPROOF PAGINATION ENGINE ---
     window.renderPages = async function() {
         await new Promise(r => requestAnimationFrame(r));
         
@@ -283,25 +269,29 @@
 
         const rowsToRender = window.isSearching ? window.filteredRows : window.globalRows;
         
+        // مسافة الأمان: 1010 بكسل يضمن بقاء مسافة كبيرة قبل التذييل ويقطع الصفحة عند البند 27 تقريباً
+        const SAFE_LIMIT_PX = 1010; 
+
         let currentPageIndex = 1;
         let currentPageObj = createNewPage(currentPageIndex);
         container.appendChild(currentPageObj.el);
         
         if (currentPageIndex === 1) {
             injectDashboard(currentPageObj.el);
-            await new Promise(r => setTimeout(r, 0));
+            // انتظار قصير ليأخذ الداشبورد حجمه الحقيقي
+            await new Promise(r => setTimeout(r, 20));
         }
 
         let currentTbody = currentPageObj.tbody;
+        let currentTable = currentPageObj.el.querySelector('table');
+        let wrapper = currentPageObj.el.querySelector('.page-content-wrapper');
         
-        // --- SAFE LIMIT SET TO 250mm ---
-        // This is a conservative limit to ensure item 28+ always move to next page.
-        const SAFE_LIMIT_MM = 250;
-        const MM_TO_PX = 3.7795;
-        const SAFE_LIMIT_PX = SAFE_LIMIT_MM * MM_TO_PX;
+        // حساب المساحة المسموحة للجدول بدقة (باستخدام offsetHeight الآمنة)
+        let tableTopRel = wrapper.offsetTop + currentTable.offsetTop;
+        let maxTbodyHeight = SAFE_LIMIT_PX - tableTopRel - 30; // 30px للهيدر الخاص بالجدول
 
         for (let i = 0; i < rowsToRender.length; i++) {
-            if (currentPageIndex > MAX_SAFE_PAGES) break;
+            if (currentPageIndex > 50) break; // حماية إضافية من أي أخطاء غير متوقعة
 
             const row = rowsToRender[i];
             const actualIndex = window.isSearching ? row.originalIndex : i;
@@ -319,31 +309,31 @@
                 tr.innerHTML = window.renderRowTemplate(actualIndex, row);
             }
 
-            // Append to measure
             currentTbody.appendChild(tr);
 
-            // MEASURE POSITION
-            const rowRect = tr.getBoundingClientRect();
-            const pageRect = currentPageObj.el.getBoundingClientRect();
-            const relativeBottom = rowRect.bottom - pageRect.top;
-            
-            // CHECK OVERFLOW
-            if (relativeBottom > SAFE_LIMIT_PX) {
-                // Remove from current page
-                currentTbody.removeChild(tr);
-                
-                // Create New Page
-                currentPageIndex++;
-                currentPageObj = createNewPage(currentPageIndex);
-                container.appendChild(currentPageObj.el);
-                currentTbody = currentPageObj.tbody;
-                
-                // Add to new page
-                currentTbody.appendChild(tr);
+            // التحقق من طول الجدول الداخلي بدلاً من إحداثيات الشاشة المعقدة
+            if (currentTbody.offsetHeight > maxTbodyHeight) {
+                // تمنع نقل السطر إذا كان هو الوحيد بالصفحة (لتفادي الصفحات الفارغة)
+                if (currentTbody.rows.length > 1) {
+                    currentTbody.removeChild(tr);
+                    i--; // تراجع خطوة ليعاد رسم السطر في الصفحة التالية
+                    
+                    currentPageIndex++;
+                    currentPageObj = createNewPage(currentPageIndex);
+                    container.appendChild(currentPageObj.el);
+                    
+                    currentTbody = currentPageObj.tbody;
+                    currentTable = currentPageObj.el.querySelector('table');
+                    wrapper = currentPageObj.el.querySelector('.page-content-wrapper');
+                    
+                    // إعادة حساب المساحة للصفحة الجديدة (بدون داشبورد)
+                    tableTopRel = wrapper.offsetTop + currentTable.offsetTop;
+                    maxTbodyHeight = SAFE_LIMIT_PX - tableTopRel - 30;
+                }
             }
         }
 
-        // --- ENFORCE MINIMUM 3 PAGES ---
+        // إجبار النظام على 3 صفحات كحد أدنى كما طلبت
         if (!window.isSearching) {
             while (currentPageIndex < 3) {
                 currentPageIndex++;
@@ -352,7 +342,7 @@
             }
         }
 
-        // --- FOOTER SUMMARY LOGIC ---
+        // --- إضافة الملخص في نهاية آخر صفحة ---
         const lastPage = container.lastElementChild;
         const lastWrapper = lastPage.querySelector('.page-content-wrapper');
         const summaryHtml = `
@@ -365,10 +355,11 @@
         summaryDiv.innerHTML = summaryHtml;
         lastWrapper.appendChild(summaryDiv);
         
-        const summaryRect = summaryDiv.getBoundingClientRect();
-        const lastPageRect = lastPage.getBoundingClientRect();
+        // التحقق من مساحة الملخص
+        await new Promise(r => setTimeout(r, 0));
+        const summaryBottomRel = lastWrapper.offsetTop + summaryDiv.offsetTop + summaryDiv.offsetHeight;
         
-        if ((summaryRect.bottom - lastPageRect.top) > SAFE_LIMIT_PX) {
+        if (summaryBottomRel > SAFE_LIMIT_PX) {
             lastWrapper.removeChild(summaryDiv);
             currentPageIndex++;
             const summaryPage = createNewPage(currentPageIndex);
@@ -376,7 +367,7 @@
             summaryPage.el.querySelector('.page-content-wrapper').appendChild(summaryDiv);
         }
 
-        // Update Page Numbers
+        // تحديث أرقام الصفحات
         const allPages = document.querySelectorAll('.page');
         allPages.forEach((p, idx) => {
             p.querySelector('.page-number').innerText = `صفحة ${idx + 1} من ${allPages.length}`;
